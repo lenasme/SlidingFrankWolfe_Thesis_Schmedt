@@ -9,7 +9,7 @@ def plot_primal_dual_results(u, eta_bar):
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(7, 14))
 
     grid_size = u.shape[0]
-    h = 2 / grid_size
+    h = 1 / grid_size
 
     eta_avg = eta_bar  / h ** 2
 
