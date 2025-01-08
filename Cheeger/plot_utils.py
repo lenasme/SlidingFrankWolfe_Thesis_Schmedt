@@ -11,6 +11,8 @@ def plot_primal_dual_results(u, eta_bar):
     grid_size = u.shape[0]
     h = 2 / grid_size
 
+    # 2/grid_size oder 1/grid_size... eigentlich ja Gebiet [0,1] nicht [-1,1].
+    
     eta_avg = eta_bar  / h ** 2
 
     v_abs_max = np.max(np.abs(eta_avg))
