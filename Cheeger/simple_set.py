@@ -108,9 +108,7 @@ class SimpleSet:
         max_y = max(y_values) 
 
         res = 2*(max_x - min_x) +2*(max_y - min_y)
-        ###
-        print(res)
-        ###
+    
         
         return res
 
