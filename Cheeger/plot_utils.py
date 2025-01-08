@@ -54,7 +54,7 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
        # im = ax.contourf(y_grid, -x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
         # original:
-         im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
+        im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
         fig.colorbar(im, ax=ax)
     # original:
     x_curve = np.append(simple_set.boundary_vertices[:, 0], simple_set.boundary_vertices[0, 0])
