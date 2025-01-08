@@ -19,7 +19,7 @@ def plot_primal_dual_results(u, eta_bar):
 
     im = axs[0].imshow(eta_avg, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
     axs[0].axis('equal')
-    axs[0].axis('off')
+    axs[0].axis('on') # vorher off
     fig.colorbar(im, ax=axs[0])
 
     v_abs_max = np.max(np.abs(u))
