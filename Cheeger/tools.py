@@ -475,12 +475,19 @@ def extract_contour(u):
                 # x, y = -1 + i * h, -1 + (j - 1) * h
                 
                 x, y =  i * h,  (j - 1) * h
+                
+                print(f"h: {h}")
+                print(f"x, y: ({x}, {y})")
+                
                 edges.append([[x, y], [x, y + h]])
             if np.abs(grad_v[i, j, 1]) > 0:
                 
                 # x, y = - 1 + (i - 1) * h, -1 + j * h
 
                 x, y =  (i - 1) * h,  j * h
+
+                print(f"h: {h}")
+                print(f"x, y: ({x}, {y})")
                 edges.append([[x, y], [x + h, y]])
 
     edges = np.array(edges)
