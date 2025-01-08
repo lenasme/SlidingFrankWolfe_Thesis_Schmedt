@@ -108,6 +108,10 @@ class SimpleSet:
         max_y = max(y_values) 
 
         res = 2*(max_x - min_x) +2*(max_y - min_y)
+        ###
+        print(res)
+        ###
+        
         return res
 
     def compute_weighted_area_tab(self, f, boundary_faces_only=False):
