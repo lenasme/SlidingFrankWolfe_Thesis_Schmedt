@@ -47,8 +47,8 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
 
         for i in range(x_grid.shape[0]):
             for j in range(x_grid.shape[1]):
-                #z_grid[i, j] = eta(np.array([x_grid[i, j], y_grid[i, j]]))
-                z_grid[i, j] = eta(np.array([2*x_grid[i, j]-1, 2*y_grid[i, j]-1]))
+                z_grid[i, j] = eta(np.array([x_grid[i, j], y_grid[i, j]]))
+                #z_grid[i, j] = eta(np.array([2*x_grid[i, j]-1, 2*y_grid[i, j]-1]))
         v_abs_max = np.max(np.abs(z_grid))
 
        # im = ax.contourf(y_grid, -x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
