@@ -137,7 +137,9 @@ class IntegrableFunction:
         #
         for i in range (grid_size):
             for j in range (grid_size):
-                scaled_array[i,j] *= (2/ grid_size)**2
+                scaled_array[i,j] *= (1/ grid_size)**2
+                
+        ### hier stand vorher scaled_array[i,j]*= (2/grid_size)**2, dadurch wird aber das Gebiet [-1,1]^2 impliziert
         #
         return scaled_array
 
