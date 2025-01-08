@@ -78,3 +78,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
         plot_simple_set(cheeger_set, eta=eta, display_inner_mesh=False)
 
     return cheeger_set, obj_tab, grad_norm_tab
+
+
+
+#def rectangular_cheeger 
