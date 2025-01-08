@@ -84,6 +84,12 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     boundary_vertices = resample(boundary_vertices, num_boundary_vertices_ld, point_density_ld)
     simple_set = SimpleSet(boundary_vertices, max_tri_area_ld)
 
+    ### test
+
+    plot_simple_set(simple_set, eta=eta, display_inner_mesh=False)
+
+    ###
+                      
     # perform the local descent step
     optimizer = CheegerOptimizer(step_size_ld, max_iter_ld, convergence_tol_ld, num_boundary_vertices_ld,
                                  point_density_ld, max_tri_area_ld, num_iter_resampling_ld, 0.1, 0.5)
