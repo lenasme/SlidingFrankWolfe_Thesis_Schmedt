@@ -364,6 +364,7 @@ def grad(u):
     update_grad(u, res)
     return res
 
+# hier eventuell prüfen, ob das für meine Anwendung so bleiben kann oder geändert werden muss... -div(phi)
 
 @jit(nopython=True, parallel=True)
 def update_adj_grad(phi, res):
