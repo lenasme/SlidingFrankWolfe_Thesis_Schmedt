@@ -64,16 +64,21 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
 
     boundary_vertices = extract_contour(u)
 
-    x= boundary_vertices[:,0]
-    y= boundary_vertices [:,1]
 
-    plt.figure(figsize=(8, 6))
-    plt.plot(x, y, marker="o", linestyle="-", color="blue")
-    plt.title("Pfad der Punkte")
-    plt.xlabel("x-Koordinaten")
-    plt.ylabel("y-Koordinaten")
-    plt.grid(True)
-    plt.show()
+    ### Kontrolle, ob erste Kontur passt
+                      
+    #x= boundary_vertices[:,0]
+    #y= boundary_vertices [:,1]
+
+    #plt.figure(figsize=(8, 6))
+    #plt.plot(x, y, marker="o", linestyle="-", color="blue")
+    #plt.title("Pfad der Punkte")
+    #plt.xlabel("x-Koordinaten")
+    #plt.ylabel("y-Koordinaten")
+    #plt.grid(True)
+    #plt.show()
+    ###
+
                       
     # initial set for the local descent
     boundary_vertices = resample(boundary_vertices, num_boundary_vertices_ld, point_density_ld)
