@@ -87,7 +87,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     ### test
 
     plot_simple_set(simple_set, eta=eta, display_inner_mesh=False)
-
+    print(simple_set.boundary_vertices)
     ###
                       
     # perform the local descent step
