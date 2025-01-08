@@ -75,9 +75,9 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
         ax.triplot(triangulation, color='black', alpha=0.3)
 
     ax.axis('equal')
-    ax.axis('off')
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    ax.axis('on') #vorher off
+    ax.set_xlim(-1, 1)
+    ax.set_ylim(-1, 1)
 
     #ax.set_xlim(-1, 1)
     #ax.set_ylim(-1, 1)
