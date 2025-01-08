@@ -9,7 +9,7 @@ def plot_primal_dual_results(u, eta_bar):
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(7, 14))
 
     grid_size = u.shape[0]
-    h = 2 / grid_size
+    h = 1 / grid_size
 
     # 2/grid_size oder 1/grid_size... eigentlich ja Gebiet [0,1] nicht [-1,1].
     
@@ -36,8 +36,12 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
     fig, ax = plt.subplots(figsize=(7, 7))
 
     if eta is not None:
-        x = np.arange(-1.0, 1.0, 0.01)
-        y = np.arange(-1.0, 1.0, 0.01)
+        #x = np.arange(-1.0, 1.0, 0.01)
+        #y = np.arange(-1.0, 1.0, 0.01)
+        
+        x = np.arange(0, 1.0, 0.01)
+        y = np.arange(0, 1.0, 0.01)
+        
         x_grid, y_grid = np.meshgrid(x, y)
         z_grid = np.zeros_like(x_grid)
 
@@ -72,8 +76,12 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
 
     ax.axis('equal')
     ax.axis('off')
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    #ax.set_xlim(-1, 1)
+    #ax.set_ylim(-1, 1)
+    
     plt.show()
 
 
@@ -106,8 +114,12 @@ def plot_simple_functions(u1, u2, display_inner_mesh=False, boundary_color='blac
 
     ax.axis('equal')
     ax.axis('off')
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
+    
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    
+    #ax.set_xlim(-1, 1)
+    #ax.set_ylim(-1, 1)
 
     if save_path is not None:
         plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=0)
