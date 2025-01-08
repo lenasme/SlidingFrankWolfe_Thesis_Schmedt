@@ -26,7 +26,7 @@ def plot_primal_dual_results(u, eta_bar):
 
     im = axs[1].imshow(u, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
     axs[1].axis('equal')
-    axs[1].axis('off')
+    axs[1].axis('on') # vorher off
     fig.colorbar(im, ax=axs[1])
 
     plt.show()
