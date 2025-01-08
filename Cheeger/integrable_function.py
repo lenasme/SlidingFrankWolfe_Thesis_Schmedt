@@ -136,9 +136,9 @@ class IntegrableFunction:
         scaled_array = zoom(self.eta, scaling_factor, order=1)  # Bilineare Interpolation
         #
 
-        min_val = np.min(scaled_array)
-        max_val = np.max(scaled_array)
-        scaled_array = (scaled_array - min_val) / (max_val - min_val)
+        #min_val = np.min(scaled_array)
+        #max_val = np.max(scaled_array)
+        #scaled_array = (scaled_array - min_val) / (max_val - min_val)
         
         for i in range (grid_size):
             for j in range (grid_size):
