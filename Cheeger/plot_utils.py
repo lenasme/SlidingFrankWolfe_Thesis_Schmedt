@@ -56,7 +56,7 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
     # x_curve = np.append(simple_set.boundary_vertices[:, 0], simple_set.boundary_vertices[0, 0])
     # y_curve = np.append(simple_set.boundary_vertices[:, 1], simple_set.boundary_vertices[0, 1])
 
-    x_curve = np.append(simple_set.boundary_vertices[::-1, 1], simple_set.boundary_vertices[0, 1])
+    x_curve = np.append(simple_set.boundary_vertices[:, 1], simple_set.boundary_vertices[0, 1])
     y_curve = np.append(simple_set.boundary_vertices[:, 0], simple_set.boundary_vertices[0, 0])
 
 
