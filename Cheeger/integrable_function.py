@@ -57,8 +57,8 @@ class IntegrableFunction:
         """
         self.eta = eta
         self.grid_size = eta.shape
-        x = np.linspace(-1, 1, self.grid_size[0])
-        y = np.linspace(-1, 1, self.grid_size[1])
+        x = np.linspace(0, 1, self.grid_size[0])
+        y = np.linspace(0, 1, self.grid_size[1])
         self.interpolator = RegularGridInterpolator((x, y), eta, bounds_error = False, fill_value = 0.0)
 
     def __call__(self, x):
