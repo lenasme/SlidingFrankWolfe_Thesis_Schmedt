@@ -95,7 +95,10 @@ class CheegerOptimizer:
 
         while not convergence and iteration < self.max_iter:
             gradient = self.state.compute_gradient(f)
-            grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
+            
+            #grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
+            
+            grad_norm_tab.append(np.sum(np.linalg.norm(gradient, ord=1, axis=-1)))
             obj_tab.append(self.state.obj)
 
             print(obj_tab[-1])
