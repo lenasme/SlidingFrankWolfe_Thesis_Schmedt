@@ -84,7 +84,7 @@ class CheegerOptimizer:
 
         return iteration, max_displacement
 
-    def run(self, f, initial_set, verbose=True):
+    def run(self, f, initial_set, verbose=False):
         convergence = False
         obj_tab = []
         grad_norm_tab = []
