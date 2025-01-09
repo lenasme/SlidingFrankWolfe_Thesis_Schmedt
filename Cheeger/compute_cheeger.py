@@ -115,8 +115,8 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
 
 
                       
-    y_values = [v[0] for v in cheeger_set.boundary_vertices]
-    x_values = [v[1] for v in cheeger_set.boundary_vertices]
+    x_values = [v[0] for v in cheeger_set.boundary_vertices]
+    y_values = [v[1] for v in cheeger_set.boundary_vertices]
     x_min= np.clip(min(x_values), 0,1)
     x_max= np.clip(max(x_values), 0,1)
     y_min= np.clip(min(y_values), 0,1)
