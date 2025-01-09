@@ -58,9 +58,9 @@ def plot_simple_set(simple_set, eta=None, display_inner_mesh=False, boundary_col
         fig.colorbar(im, ax=ax)
 
         #test
-        print("x_grid range:", np.min(x_grid), np.max(x_grid))
-        print("y_grid range:", np.min(y_grid), np.max(y_grid))
-        print("z_grid range:", np.min(z_grid), np.max(z_grid))
+        #print("x_grid range:", np.min(x_grid), np.max(x_grid))
+        #print("y_grid range:", np.min(y_grid), np.max(y_grid))
+        #print("z_grid range:", np.min(z_grid), np.max(z_grid))
 
     # original:
     x_curve = np.append(simple_set.boundary_vertices[:, 0], simple_set.boundary_vertices[0, 0])
