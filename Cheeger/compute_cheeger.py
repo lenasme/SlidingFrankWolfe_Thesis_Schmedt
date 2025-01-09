@@ -105,6 +105,14 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     if plot_results_ld:
         plot_simple_set(cheeger_set, eta=eta, display_inner_mesh=False)
 
+      ###
+        weighted_area = cheeger_set.compute_weighted_area(eta)      
+        perimeter = cheeger_set.compute_perimeter()
+        print("integral:", weighted_area)
+        print("perimeter:", perimeter)
+        print("objective:", perimeter / np.abs(weighted_area))
+      ###
+                      
     return cheeger_set, obj_tab, grad_norm_tab
 
 
