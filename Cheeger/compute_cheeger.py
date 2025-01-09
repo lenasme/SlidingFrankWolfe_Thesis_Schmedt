@@ -91,9 +91,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
 
     weighted_area = simple_set.compute_weighted_area(eta)      
     perimeter = simple_set.compute_perimeter()
-    print("integral:", weighted_area)
-    print("perimeter:", perimeter)
-    print("objective:", perimeter / np.abs(weighted_area))
+    print("integral fixed mesh:", weighted_area)
+    print("perimeter fixed mesh:", perimeter)
+    print("objective fixed mesh:", perimeter / np.abs(weighted_area))
     ###
                       
     # perform the local descent step
@@ -108,9 +108,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
       ###
         weighted_area = cheeger_set.compute_weighted_area(eta)      
         perimeter = cheeger_set.compute_perimeter()
-        print("integral:", weighted_area)
-        print("perimeter:", perimeter)
-        print("objective:", perimeter / np.abs(weighted_area))
+        print("integral local descent:", weighted_area)
+        print("perimeter local descent:", perimeter)
+        print("objective local descent:", perimeter / np.abs(weighted_area))
       ###
                       
     return cheeger_set, obj_tab, grad_norm_tab
