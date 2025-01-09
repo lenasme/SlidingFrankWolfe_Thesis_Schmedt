@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 from .simple_set import SimpleSet
 from .optimizer import CheegerOptimizer
@@ -125,7 +126,12 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("x_min", x_min, "x_max", x_max, "y_min", y_min, "y_max", y_max )
 
     rectangle_boundary_vertices= np.array([[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
-    rectangle_set = SimpleSet(rectangle_boundary_vertices) 
+
+    
+                      
+    rectangle_set = SimpleSet(rectangle_boundary_vertices)
+
+    
                       
     plot_simple_set(rectangle_set, eta=eta, display_inner_mesh=False)
                       
