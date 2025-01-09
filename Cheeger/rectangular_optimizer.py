@@ -10,5 +10,5 @@ def objective(boundary_vertices, eta):
   y_max = boundary_vertices[2][1]
   if x_max <= x_min or y_max <= y_min:
     return np.inf
-  objective = rect_set.compute_perimeter() /  np.abs(rect_set.compute_weighted_area(eta) )
-  return objective
+  res = rect_set.compute_perimeter() /  np.abs(rect_set.compute_weighted_area(eta) )
+  return res
