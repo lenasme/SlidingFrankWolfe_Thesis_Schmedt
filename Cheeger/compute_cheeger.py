@@ -126,9 +126,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
    
     print("x_min", x_min, "x_max", x_max, "y_min", y_min, "y_max", y_max )
 
-    rectangle_boundary_vertices= np.array([[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
+    rectangle_boundary_vertices= np.array([x_min, x_max, y_min, y_max])
 
-    result = minimize(objective, rectangle_boundary_vertices, args=(eta,), bounds=[(0,1),(0,1)]*4)
+    result = minimize(objective, rectangle_boundary_vertices, args=(eta,), bounds=[(0,1),(0,1), (0,1), (0,1)])
                       
     #rectangle_set = SimpleSet(rectangle_boundary_vertices)
 
