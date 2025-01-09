@@ -117,7 +117,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     x_max= np.max(cheeger_set.boundary_vertices[0])
     y_min= np.min(cheeger_set.boundary_vertices[1])
     y_max= np.max(cheeger_set.boundary_vertices[1]) 
-
+    print(cheeger_set.boundary_vertices)
     print("x_min", x_min, "x_max", x_max, "y_min", y_min, "y_max", y_max )
                       
     return cheeger_set, obj_tab, grad_norm_tab
