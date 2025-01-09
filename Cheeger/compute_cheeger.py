@@ -93,7 +93,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     perimeter = simple_set.compute_perimeter()
     print("integral:", weighted_area)
     print("perimeter:", perimeter)
-    print("objective":, perimeter / np.abs(weighted_area))
+    print("objective:", perimeter / np.abs(weighted_area))
     ###
                       
     # perform the local descent step
