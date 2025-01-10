@@ -144,8 +144,11 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("Optimales Objective:", optimal_objective)
                       
     opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
-    opt_rect_set = SimpleSet(opt_rectangle_boundary_vertices)                  
+    opt_rect_set = SimpleSet(opt_rectangle_boundary_vertices)      
+    
     plot_simple_set(opt_rect_set, eta=eta, display_inner_mesh=False)
+    print("Perimeter:", opt_rect_set.compute_perimeter())
+    print("Value integral :", opt_rect_set.compute_weighted_area(eta))
                       
     return cheeger_set, obj_tab, grad_norm_tab
 
