@@ -99,26 +99,29 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     ###
                       
     # perform the local descent step
-    optimizer = CheegerOptimizer(step_size_ld, max_iter_ld, convergence_tol_ld, num_boundary_vertices_ld,
-                                 point_density_ld, max_tri_area_ld, num_iter_resampling_ld, 0.1, 0.5)
+#    optimizer = CheegerOptimizer(step_size_ld, max_iter_ld, convergence_tol_ld, num_boundary_vertices_ld,
+ #                                point_density_ld, max_tri_area_ld, num_iter_resampling_ld, 0.1, 0.5)
 
-    cheeger_set, obj_tab, grad_norm_tab = optimizer.run(eta, simple_set)
+  #  cheeger_set, obj_tab, grad_norm_tab = optimizer.run(eta, simple_set)
 
-    if plot_results_ld:
-        plot_simple_set(cheeger_set, eta=eta, display_inner_mesh=False)
+   # if plot_results_ld:
+   #     plot_simple_set(cheeger_set, eta=eta, display_inner_mesh=False)
 
       ###
-        weighted_area = cheeger_set.compute_weighted_area(eta)      
-        perimeter = cheeger_set.compute_perimeter()
-        print("integral local descent:", weighted_area)
-        print("perimeter local descent:", perimeter)
-        print("objective local descent:", perimeter / np.abs(weighted_area))
+    #    weighted_area = cheeger_set.compute_weighted_area(eta)      
+     #   perimeter = cheeger_set.compute_perimeter()
+     #   print("integral local descent:", weighted_area)
+     #   print("perimeter local descent:", perimeter)
+     #   print("objective local descent:", perimeter / np.abs(weighted_area))
       ###
 
 
                       
-    x_values = [v[0] for v in cheeger_set.boundary_vertices]
-    y_values = [v[1] for v in cheeger_set.boundary_vertices]
+    #x_values = [v[0] for v in cheeger_set.boundary_vertices]
+    #y_values = [v[1] for v in cheeger_set.boundary_vertices]
+    x_values = [v[0] for v in simple_set.boundary_vertices]
+    y_values = [v[1] for v in simple_set.boundary_vertices]                 
+
     x_min= np.clip(min(x_values), 0,1)
     x_max= np.clip(max(x_values), 0,1)
     y_min= np.clip(min(y_values), 0,1)
@@ -150,7 +153,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("Perimeter:", opt_rect_set.compute_perimeter())
     print("Value integral :", opt_rect_set.compute_weighted_area(eta))
                       
-    return cheeger_set, obj_tab, grad_norm_tab
+    return simple_set, obj_tab, grad_norm_tab
 
 
 
