@@ -133,7 +133,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     #rectangle_set = SimpleSet(rectangle_boundary_vertices)
 
     optimal_rectangle = result.x
+    optimal_objective = result.fun
     print("Optimales Rechteck:", optimal_rectangle)
+    print("Optimales Objective:", optimal_objective)
                       
     #plot_simple_set(rectangle_set, eta=eta, display_inner_mesh=False)
                       
