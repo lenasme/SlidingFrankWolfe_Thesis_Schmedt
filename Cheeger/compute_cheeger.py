@@ -153,7 +153,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("Perimeter:", opt_rect_set.compute_perimeter())
     print("Value integral :", opt_rect_set.compute_weighted_area(eta))
                       
-    return simple_set, obj_tab, grad_norm_tab
+    return simple_set, obj_tab, grad_norm_tab, opt_rect_set
 
 
 
