@@ -15,4 +15,4 @@ def objective(boundary_vertices, eta):
   rectangle_boundary_vertices= np.array([[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
   rect_set = SimpleSet(rectangle_boundary_vertices)
   res = rect_set.compute_perimeter() /  np.abs(rect_set.compute_weighted_area(eta) )
-  return res
+  return res, rect_set
