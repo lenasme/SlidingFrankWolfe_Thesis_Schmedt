@@ -131,6 +131,8 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     rectangle_set = SimpleSet(rectangle_boundary_vertices)
 
     print("Starting value objective rectangular:", rectangle_set.compute_perimeter() /  np.abs(rectangle_set.compute_weighted_area(eta)))
+    print("Starting perimeter:", rectangle_set.compute_perimeter())
+    print("Starting area value integral:", np.abs(rectangle_set.compute_weighted_area(eta)))
                       
     result = minimize(objective, outer_vertices, args=(eta,), bounds=[(0,1),(0,1), (0,1), (0,1)])
                       
