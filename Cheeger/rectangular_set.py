@@ -10,7 +10,13 @@ class RectangularSet:
 		rolled_boundary_vertices = np.roll(boundary_vertices, -1, axis=0)
 		self.is_clockwise = (np.sum((rolled_boundary_vertices[:, 0] - boundary_vertices[:, 0]) *
 									(rolled_boundary_vertices[:, 1] + boundary_vertices[:, 1])) > 0)
+		self.mesh_vertices = None
+        self.mesh_faces = None
+        self.mesh_boundary_faces_indices = None
 
+        # creation of the inner mesh
+        self.create_mesh(boundary_vertices, max_tri_area)
+		
 	@property
 	def boundary_vertices_indices(self):
 		return np.arange(self.num_boundary_vertices)
