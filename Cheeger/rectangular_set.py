@@ -3,7 +3,7 @@ import numpy as np
 
 class RectangularSet:
 
-	def __init__(self, boundary_vertices):
+	def __init__(self, boundary_vertices, max_tri_area=None):
 		self.num_boundary_vertices = len(boundary_vertices)
 
 		# the curve is clockwise if and only if the sum over the edges of (x2-x1)(y2+y1) is positive
