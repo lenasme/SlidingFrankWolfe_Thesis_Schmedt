@@ -6,6 +6,7 @@ from .optimizer import CheegerOptimizer
 from .tools import run_primal_dual, extract_contour, resample
 from .plot_utils import plot_primal_dual_results, plot_simple_set
 from .rectangular_optimizer import objective
+from .rectangular_set import RectangularSet
 
 
 def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=None, plot_results_fm=False,
