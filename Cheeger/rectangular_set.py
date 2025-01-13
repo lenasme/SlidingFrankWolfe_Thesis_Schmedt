@@ -96,7 +96,7 @@ class RectangularSet:
 		integral = np.sum(Z) * dx * dy
 		return integral
 
-	 def create_mesh(self, boundary_vertices, max_tri_area):
+	def create_mesh(self, boundary_vertices, max_tri_area):
 		"""
 		Create the inner mesh of the set
 
