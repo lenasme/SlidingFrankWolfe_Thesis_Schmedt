@@ -1,6 +1,7 @@
+
 import numpy as np
 
-class RectangularSet:<
+class RectangularSet:
 
 	def __init__(self, boundary_vertices):
 		self.num_boundary_vertices = len(boundary_vertices)
