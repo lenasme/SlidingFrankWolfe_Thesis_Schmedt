@@ -96,6 +96,45 @@ class RectangularSet:
 		integral = np.sum(Z) * dx * dy
 		return integral
 
+	 def create_mesh(self, boundary_vertices, max_tri_area):
+        """
+        Create the inner mesh of the set
+
+        Parameters
+        ----------
+        boundary_vertices : array, shape (N, 2)
+            Each row contains the two coordinates of a boundary vertex
+        max_tri_area : float
+            Maximum triangle area for the inner mesh
+
+        """
+        mesh = triangulate(boundary_vertices, max_triangle_area=max_tri_area)
+
+        self.mesh_vertices = mesh['vertices']
+        self.mesh_faces = mesh['triangles']
+
+        # TODO: comment
+        orientations = self.compute_mesh_faces_orientation()
+        indices = np.where(orientations < 0)[0]
+        for i in range(len(indices)):
+            index = indices[i]
+            tmp_face = self.mesh_faces[index].copy()
+            self.mesh_faces[index, 1] = tmp_face[index, 2]
+            self.mesh_faces[index, 2] = tmp_face[index, 1]
+
+        assert np.alltrue(orientations > 0)
+
+        boundary_faces_indices = []
+
+        for i in range(len(self.mesh_faces)):
+            # find the faces which have at least one vertex among the boundary vertices (the indices of boundary
+            # vertices in self.vertices are 0,1,...,self.num_boundary_vertices-1)
+            if len(np.intersect1d(np.arange(self.num_boundary_vertices), self.mesh_faces[i])) > 0:
+                boundary_faces_indices.append(i)
+
+        self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)
+
+
 
 
 
