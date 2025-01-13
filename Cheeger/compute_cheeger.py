@@ -131,7 +131,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
 
     outer_vertices= np.array([x_min, x_max, y_min, y_max])
     rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
-    rectangle_set = SimpleSet(rectangle_boundary_vertices)
+    rectangle_set = RectangularSet(rectangle_boundary_vertices)
 
     print("Starting value objective rectangular:", rectangle_set.compute_perimeter() /  np.abs(rectangle_set.compute_weighted_area(eta)))
     print("Starting perimeter:", rectangle_set.compute_perimeter())
@@ -147,7 +147,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("Optimales Objective:", optimal_objective)
                       
     opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
-    opt_rect_set = SimpleSet(opt_rectangle_boundary_vertices)      
+    opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
     
     plot_simple_set(opt_rect_set, eta=eta, display_inner_mesh=False)
     print("Perimeter:", opt_rect_set.compute_perimeter())
