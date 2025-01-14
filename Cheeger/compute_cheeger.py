@@ -1,4 +1,6 @@
 import numpy as np
+import time
+
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 from .simple_set import SimpleSet
@@ -137,10 +139,12 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     print("Starting value objective rectangular:", rectangle_set.compute_perimeter_rec() /  np.abs(rectangle_set.compute_weighted_area_rec(eta)))
     print("Starting perimeter:", rectangle_set.compute_perimeter_rec())
     print("Starting area value integral:", np.abs(rectangle_set.compute_weighted_area_rec(eta)))
-                      
+
+    start = time.time()
+
     result = minimize(objective, outer_vertices, args=(eta,), bounds=[(0,1),(0,1), (0,1), (0,1)] , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
                       
-    
+    end = time.time()
 
     optimal_rectangle = result.x
     optimal_objective = result.fun
@@ -151,6 +155,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
     
     plot_rectangular_set(opt_rect_set, eta=eta, display_inner_mesh=False)
+    print("Die Berechnung des Rechtecks hat ", end - start, " Sekunden gedauert." )
     print("Perimeter:", opt_rect_set.compute_perimeter_rec())
     print("Value integral :", opt_rect_set.compute_weighted_area_rec(eta))
     print("Objective:", opt_rect_set.compute_perimeter_rec()/ np.abs(opt_rect_set.compute_weighted_area_rec(eta)))
