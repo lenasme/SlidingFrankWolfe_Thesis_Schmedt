@@ -1,5 +1,6 @@
 
 import numpy as np
+from .tools import winding, triangulate
 
 class RectangularSet:
 
