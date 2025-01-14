@@ -89,10 +89,10 @@ class RectangularSet:
 		dx = (max_x - min_x) / (num_points - 1)
 		dy = (max_y - min_y) / (num_points - 1)
 
-		X, Y = np.meshgrid(x, y)
+		#X, Y = np.meshgrid(x, y)
 
-		Z = f(X, Y)
-
+		#Z = f(X, Y)
+		Z = f(x[:, None], y[None, :])
 		# Approximation des Integrals
 		integral = np.sum(Z) * dx * dy
 		return integral
