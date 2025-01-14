@@ -45,6 +45,19 @@ class SimpleFunction:
     def support_boundary_vertices(self):
         return [atom.support.boundary_vertices for atom in self.atoms]
 
+
+    
+    def transform_into_image(self, grid_size):
+        x = np.linspace(0, 1, grid_size)
+        y = np.linspace(0, 1, grid_size)
+
+        X, Y = np.meshgrid(x,y)
+        grid = np.stack([X,Y], axis = -1)
+
+        image = np.array([[self((xi, yi)) for xi, yi in row] for row in grid])
+        return image
+
+
     #obs: observation
     # f: eta?
     def compute_obs(self, f, version=0):
