@@ -98,12 +98,12 @@ class RectangularSet:
 		return integral
 
 	def compute_mesh_faces_orientation(self):
-    	faces = self.mesh_vertices[self.mesh_faces]
-        diff1 = faces[:, 1] - faces[:, 0]
-        diff2 = faces[:, 2] - faces[:, 1]
-        res = np.sign(np.cross(diff1, diff2)).astype('int')
+		faces = self.mesh_vertices[self.mesh_faces]
+		diff1 = faces[:, 1] - faces[:, 0]
+		diff2 = faces[:, 2] - faces[:, 1]
+		res = np.sign(np.cross(diff1, diff2)).astype('int')
 
-        return res
+		return res
 	
 	
 	
