@@ -134,9 +134,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
     rectangle_set = RectangularSet(rectangle_boundary_vertices)
 
-    print("Starting value objective rectangular:", rectangle_set.compute_perimeter() /  np.abs(rectangle_set.compute_weighted_area(eta)))
-    print("Starting perimeter:", rectangle_set.compute_perimeter())
-    print("Starting area value integral:", np.abs(rectangle_set.compute_weighted_area(eta)))
+    print("Starting value objective rectangular:", rectangle_set.compute_perimeter_rec() /  np.abs(rectangle_set.compute_weighted_area_rec(eta)))
+    print("Starting perimeter:", rectangle_set.compute_perimeter_rec())
+    print("Starting area value integral:", np.abs(rectangle_set.compute_weighted_area_rec(eta)))
                       
     result = minimize(objective, outer_vertices, args=(eta,), bounds=[(0,1),(0,1), (0,1), (0,1)] , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-10, 'gtol': 1e-8})
                       
@@ -150,9 +150,9 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
     opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
     
-    plot_simple_set(opt_rect_set, eta=eta, display_inner_mesh=False)
-    print("Perimeter:", opt_rect_set.compute_perimeter())
-    print("Value integral :", opt_rect_set.compute_weighted_area(eta))
+    plot_rectangular_set(opt_rect_set, eta=eta, display_inner_mesh=False)
+    print("Perimeter:", opt_rect_set.compute_perimeter_rec())
+    print("Value integral :", opt_rect_set.compute_weighted_area_rec(eta))
                       
     #return simple_set, obj_tab, grad_norm_tab, opt_rect_set
     return simple_set, opt_rect_set
