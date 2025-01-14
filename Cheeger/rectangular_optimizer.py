@@ -1,6 +1,6 @@
 import numpy as np
 
-from .simple_set import SimpleSet
+from .rectangular_set import RectangularSet
 
 def objective(boundary_vertices, eta):
   x_min = boundary_vertices[0]
@@ -13,6 +13,6 @@ def objective(boundary_vertices, eta):
     penalty = 1e6 + (x_min - x_max) ** 2 + (y_min - y_max) ** 2
     return penalty
   rectangle_boundary_vertices= np.array([[x_min, y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
-  rect_set = SimpleSet(rectangle_boundary_vertices)
-  res = rect_set.compute_perimeter() /  np.abs(rect_set.compute_weighted_area(eta) )
+  rect_set = RectangularSet(rectangle_boundary_vertices)
+  res = rect_set.compute_perimeter_rec() /  np.abs(rect_set.compute_weighted_area_rec(eta) )
   return res
