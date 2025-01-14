@@ -61,16 +61,24 @@ class IntegrableFunction:
         y = np.linspace(0, 1, self.grid_size[1])
         self.interpolator = RegularGridInterpolator((x, y), eta, bounds_error = False, fill_value = 0.0)
 
-    def __call__(self, x):
+    def __call__(self, x, y=None):
         """
         Interpoliert die Werte für die Eingabe `x` unter Verwendung des Interpolators.
         """
-        if x.ndim == 1:
-            # Falls `x` ein einzelner Punkt ist
-            return self.interpolator((x[0], x[1]))
-        else:
-            # Falls `x` mehrere Punkte sind
-            return np.array([self.interpolator((x_i[0], x_i[1])) for x_i in x])
+        if y is None:
+            if x.ndim == 1:
+                # Falls `x` ein einzelner Punkt ist
+                return self.interpolator((x[0], x[1]))
+            else:
+                # Falls `x` mehrere Punkte sind
+                return np.array([self.interpolator((x_i[0], x_i[1])) for x_i in x])
+        else: 
+            # Falls `x` und `y` als separate Arrays (z. B. von np.meshgrid) übergeben werden
+            points = np.stack((x.ravel(), y.ravel()), axis=-1)  # Kombiniere X und Y zu Punkten
+            values = np.array([self.interpolator((p[0], p[1])) for p in points])  # Werte interpolieren
+            return values.reshape(x.shape)  # Zurück zur ursprünglichen Form bringen
+
+
 
 
     def eval_aux(self, x):
