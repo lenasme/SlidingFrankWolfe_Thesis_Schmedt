@@ -153,6 +153,7 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
     plot_rectangular_set(opt_rect_set, eta=eta, display_inner_mesh=False)
     print("Perimeter:", opt_rect_set.compute_perimeter_rec())
     print("Value integral :", opt_rect_set.compute_weighted_area_rec(eta))
+    print("Objective:", opt_rect_set.compute_perimeter_rec()/ np.abs(opt_rect_set.compute_weighted_area_rec(eta)))
                       
     #return simple_set, obj_tab, grad_norm_tab, opt_rect_set
     return simple_set, opt_rect_set
