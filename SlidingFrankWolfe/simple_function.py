@@ -120,13 +120,14 @@ class SimpleFunction:
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
         obs = self.compute_obs(cut_f, grid_size, version=1)
+        print(obs)
         
         #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
         mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
         #mat = mat.T
-        #mat = mat.reshape((self.num_atoms, -1)).T
-        #mat = mat.reshape((-1, mat.shape[-1]))
-        mat = mat.reshape((grid_size**2, self.num_atoms)).T  # oder (N, 1)
+        mat = mat.reshape((self.num_atoms, -1)).T
+        mat = mat.reshape((-1, mat.shape[-1]))
+        #mat = mat.reshape((grid_size**2, self.num_atoms)).T  # oder (N, 1)
 
         mat = mat.real
         y= y.real
