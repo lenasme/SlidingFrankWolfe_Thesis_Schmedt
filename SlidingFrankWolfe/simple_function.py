@@ -126,7 +126,10 @@ class SimpleFunction:
 
         mat = mat.real
         y= y.real
-        
+
+        print("mat shape:", mat.shape)
+        print("y shape:", y.shape)
+
         tol = tol_factor * np.linalg.norm(y)**2 / y.size
         perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
 
