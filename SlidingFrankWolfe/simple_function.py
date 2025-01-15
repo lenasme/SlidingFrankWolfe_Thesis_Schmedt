@@ -91,7 +91,7 @@ class SimpleFunction:
         if version == 0:
             comined_image = np.zeros((grid_size, grid_size))
             for atom in self.atoms:
-                atom_image = atom.support.transform_into_image(grid_size)
+                atom_image = atom.transform_into_image(grid_size)
                 combined_image += atom.weight * atom_image
             truncated_transform = Trunc_Fourier(combined_image, cut_f)
             return np.real(truncated_transform)
@@ -99,7 +99,7 @@ class SimpleFunction:
         elif version == 1:
             observation = []
             for atom in self.atoms:
-                atom_image = atom.support.transform_into_image(grid_size)
+                atom_image = atom.transform_into_image(grid_size)
                 truncated_transform = Trunc_Fourier(atom.weight * atom_image, cut_f)
                 observations.append(np.real(truncated_transform))
             return np.array(observations)
