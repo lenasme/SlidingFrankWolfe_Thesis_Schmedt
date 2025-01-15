@@ -100,7 +100,7 @@ class SimpleFunction:
             return np.real(truncated_transform)
 
         elif version == 1:
-            observation = []
+            observations = []
             for atom in self.atoms:
                 atom_simple_function = SimpleFunction(atom)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
