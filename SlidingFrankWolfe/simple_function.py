@@ -113,8 +113,8 @@ class SimpleFunction:
 
     def extend_support(self, simple_set):
         new_atom = WeightedIndicatorFunction(0, simple_set)
-        if not isinstance(self.atoms, list):
-            self.atoms = []
+        #if not isinstance(self.atoms, list):
+         #   self.atoms = []
         self.atoms.append(new_atom)
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
