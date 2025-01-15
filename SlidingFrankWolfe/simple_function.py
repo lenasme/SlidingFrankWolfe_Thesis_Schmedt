@@ -123,7 +123,8 @@ class SimpleFunction:
         
         mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
         mat = mat.reshape((self.num_atoms, -1)).T
-
+        mat = mat.reshape((-1, mat.shape[-1]))
+        
         mat = mat.real
         y= y.real
 
