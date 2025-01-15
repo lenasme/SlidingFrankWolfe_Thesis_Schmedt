@@ -1,7 +1,7 @@
 import numpy as np
 
 from celer import Lasso
-from ground_truth import Trunc_Fourier
+from Setup.ground_truth import Trunc_Fourier
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
