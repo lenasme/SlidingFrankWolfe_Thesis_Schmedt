@@ -104,7 +104,7 @@ class SimpleFunction:
                 observations.append(np.real(truncated_transform))
             return np.array(observations)
         else:
-            raise: ValueError("Invalid version specified. Use version=0 or version=1.")
+            raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
 
     def extend_support(self, simple_set):
