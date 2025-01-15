@@ -124,6 +124,9 @@ class SimpleFunction:
         mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
         mat = mat.reshape((self.num_atoms, -1)).T
 
+        mat = mat.real
+        y= y.real
+        
         tol = tol_factor * np.linalg.norm(y)**2 / y.size
         perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
 
