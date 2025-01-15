@@ -1,6 +1,7 @@
 import numpy as np
 
 from celer import Lasso
+from ground_truth import Trunc_Fourier
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
@@ -59,36 +60,61 @@ class SimpleFunction:
 
 
     #obs: observation
-    # f: eta?
-    def compute_obs(self, f, version=0):
+    # f: u?
+    #def compute_obs(self, f, version=0):
+    #    if self.num_atoms == 0:
+    #        return np.zeros(f.grid_size)
+
+        #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
+        #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
+        #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size))
+    #        for i in range(self.num_atoms):
+     #       support_i = self.atoms[i].support
+      #      meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
+
+       # f._triangle_aux(meshes, obs)
+#
+ #       if version == 1:
+  #          res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
+   #     else:
+    #        res = np.zeros(f.grid_size)
+     #       for i in range(self.num_atoms):
+      #          res += self.atoms[i].weight * np.sum(obs[i], axis=0)
+
+       # return res
+
+
+    def compute_obs(self, cut_f, grid_size, version=0):
         if self.num_atoms == 0:
-            return np.zeros(f.grid_size)
+            return np.zeros((grid_size , grid_size))
 
-        max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
-        meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
-        obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size))
+        if version == 0:
+            comined_image = np.zeros((grid_size, grid_size))
+            for atom in self.atoms:
+                atom_image = atom.support.transform_into_image(grid_size)
+                combined_image += atom.weight * atom_image
+            truncated_transform = Trunc_Fourier(combined_image, cut_f)
+            return np.real(truncated_transform)
 
-        for i in range(self.num_atoms):
-            support_i = self.atoms[i].support
-            meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-
-        f._triangle_aux(meshes, obs)
-
-        if version == 1:
-            res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
+        elif version == 1:
+            observation = []
+            for atom in self.atoms:
+                atom_image = atom.support.transform_into_image(grid_size)
+                truncated_transform = Trunc_Fourier(atom.weight * atom_image, cut_f)
+                observations.append(np.real(truncated_transform))
+            return np.array(observations)
         else:
-            res = np.zeros(f.grid_size)
-            for i in range(self.num_atoms):
-                res += self.atoms[i].weight * np.sum(obs[i], axis=0)
+            raise: ValueError("Invalid version specified. Use version=0 or version=1.")
 
-        return res
 
     def extend_support(self, simple_set):
         new_atom = WeightedIndicatorFunction(0, simple_set)
         self.atoms.append(new_atom)
 
-    def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
-        obs = self.compute_obs(phi, version=1)
+    #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
+    def fit_weights(self, y, cut_f, grid_size, tol_factor=1e-4):
+        #obs = self.compute_obs(phi, version=1)
+        obs = Trunc_Fourier(self.transform_into_image(grid_size, cut_f))
         mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
         mat = mat.reshape((self.num_atoms, -1)).T
 
