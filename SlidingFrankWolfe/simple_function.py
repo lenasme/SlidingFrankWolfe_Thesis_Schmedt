@@ -136,7 +136,9 @@ class SimpleFunction:
         tol = tol_factor * np.linalg.norm(y)**2 / y.size
         perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
         print(perimeters)
-        lasso = Lasso(alpha=reg_param/y.size, fit_intercept=False, tol=tol, weights=perimeters)
+        
+        #lasso = Lasso(alpha=reg_param/y.size, fit_intercept=False, tol=tol, weights=perimeters)
+        lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
         new_weights = lasso.coef_
