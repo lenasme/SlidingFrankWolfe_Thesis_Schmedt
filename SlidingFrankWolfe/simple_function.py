@@ -130,6 +130,7 @@ class SimpleFunction:
         mat = mat.real
         y= y.real
 
+        print(mat)
         print("mat shape:", mat.shape)
         print("y shape:", y.shape)
 
