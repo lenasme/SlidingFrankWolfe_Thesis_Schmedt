@@ -137,7 +137,8 @@ class SimpleFunction:
         print("y shape:", y.shape)
 
         tol = tol_factor * np.linalg.norm(y)**2 / y.size
-        perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
+       # perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
+        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
         print(perimeters)
         
         lasso = Lasso(alpha=reg_param/y.size, fit_intercept=False, tol=tol, weights=perimeters)
