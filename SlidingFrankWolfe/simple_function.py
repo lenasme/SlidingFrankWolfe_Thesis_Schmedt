@@ -130,7 +130,7 @@ class SimpleFunction:
         mat = mat.real
         y= y.real
 
-        print(mat)
+        
         print("mat shape:", mat.shape)
         print("y shape:", y.shape)
 
@@ -143,6 +143,7 @@ class SimpleFunction:
         lasso.fit(mat, y.reshape(-1))
 
         new_weights = lasso.coef_
+        print(new_weights)
         self.atoms = [WeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
         # TODO: clean zero weight condition
