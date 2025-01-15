@@ -88,10 +88,11 @@ class SimpleFunction:
 
     def compute_obs(self, cut_f, grid_size, version=0):
         if self.num_atoms == 0:
+            print("atoms Liste ist leer")
             return np.zeros((grid_size , grid_size))
 
         if version == 0:
-            comined_image = np.zeros((grid_size, grid_size))
+            combined_image = np.zeros((grid_size, grid_size))
             for atom in self.atoms:
                 atom_simple_function = SimpleFunction(atom)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
@@ -111,8 +112,8 @@ class SimpleFunction:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
 
-    def extend_support(self, rectangular_set):
-        new_atom = WeightedIndicatorFunction(0, rectangular_set)
+    def extend_support(self, rectangular_set, weight = 0.5):
+        new_atom = WeightedIndicatorFunction(weight, rectangular_set)
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
@@ -120,6 +121,7 @@ class SimpleFunction:
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
         obs = self.compute_obs(cut_f, grid_size, version=1)
+
         print(obs)
         
         #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
