@@ -118,7 +118,7 @@ class SimpleFunction:
         self.atoms.append(new_atom)
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
-    def fit_weights(self, y, cut_f, grid_size, tol_factor=1e-4):
+    def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
         obs = self.compute_obs(cut_f, grid_size, version=1)
         
         mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
