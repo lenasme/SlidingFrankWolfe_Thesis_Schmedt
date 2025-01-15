@@ -20,8 +20,8 @@ class WeightedIndicatorFunction:
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
     def __init__(self, atoms):
-        if isinstance(atoms, WeightedIndicatorFunction):
-            atoms = [atoms]
+        #if isinstance(atoms, WeightedIndicatorFunction):
+         #   atoms = [atoms]
         self.atoms = atoms
 
     def __call__(self, x):
