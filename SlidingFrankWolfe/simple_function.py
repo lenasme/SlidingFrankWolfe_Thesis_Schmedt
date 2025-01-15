@@ -20,8 +20,8 @@ class WeightedIndicatorFunction:
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
     def __init__(self, atoms):
-        #if isinstance(atoms, WeightedIndicatorFunction):
-         #   atoms = [atoms]
+        if isinstance(atoms, WeightedIndicatorFunction):
+            atoms = [atoms]
         self.atoms = atoms
 
     def __call__(self, x):
@@ -111,8 +111,8 @@ class SimpleFunction:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
 
-    def extend_support(self, simple_set):
-        new_atom = WeightedIndicatorFunction(0, simple_set)
+    def extend_support(self, rectangular_set):
+        new_atom = WeightedIndicatorFunction(0, rectangular_set)
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
