@@ -30,9 +30,36 @@ class RectangularSet:
 	def mesh_boundary_faces(self):
 		return self.mesh_faces[self.mesh_boundary_faces_indices]
 
+	@property
+	def minimal_x(self):
+		x_values = [v[0] for v in self.boundary_vertices]
+		min_x = min(x_values)
+		return min_x
+
+	@property
+	def maximal_x(self):
+		x_values = [v[0] for v in self.boundary_vertices]
+		max_x = max(x_values)
+		return max_x
+
+	@property
+	def minimal_y(self):
+		y_values = [v[1] for v in self.boundary_vertices]
+		min_y = min(y_values)
+		return min_y
+
+	@property
+	def maximal_y(self):
+		y_values = [v[1] for v in self.boundary_vertices]
+		max_y = max(y_values)
+		return max_y
+
+
 	@boundary_vertices.setter
 	def boundary_vertices(self, new_boundary_vertices):
 		self.mesh_vertices[self.boundary_vertices_indices] = new_boundary_vertices
+
+	
 
 	def contains(self, x):
 		"""
@@ -51,6 +78,11 @@ class RectangularSet:
 		"""
 		# The point is inside the set if and only if its winding number is non zero
 		return winding(x, self.boundary_vertices) != 0
+
+
+	def compute_area_rec(self):
+		res = np.abs(self.maximal_x - self.minimal_x) * np.abs(self.maximal_y - self.minimal_y)
+		return res
 
 	def compute_perimeter_rec(self):
 		"""
