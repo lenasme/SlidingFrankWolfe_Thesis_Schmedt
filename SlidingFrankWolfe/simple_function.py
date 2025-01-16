@@ -164,6 +164,12 @@ class SimpleFunction:
 
 
     def linear_fit_weights(self, gamma, M):
+        scaled_atoms = [
+            ZeroWeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
+            for atom in self.atoms[:-1]]
+        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, self.atoms[-1].weight * (gamma * M/ self.atoms[-1].compute_perimeter_rec() ))
+        return SimpleFunction([scaled_atoms, new_atom])
+
 
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
