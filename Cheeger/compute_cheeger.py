@@ -132,11 +132,11 @@ def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=Non
    
     print("x_min", x_min, "x_max", x_max, "y_min", y_min, "y_max", y_max )
 
-    #outer_vertices= np.array([x_min, x_max, y_min, y_max])
-    #rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
+    outer_vertices= np.array([x_min, x_max, y_min, y_max])
+    rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
 
-    outer_vertices= np.array([1-x_max, 1-x_min, y_min, y_max])
-    rectangle_boundary_vertices= np.array([[1-x_max,y_min], [1-x_max, y_max], [1-x_min, y_max], [1-x_min, y_min]])
+    #outer_vertices= np.array([1-x_max, 1-x_min, y_min, y_max])
+    #rectangle_boundary_vertices= np.array([[1-x_max,y_min], [1-x_max, y_max], [1-x_min, y_max], [1-x_min, y_min]])
     rectangle_set = RectangularSet(rectangle_boundary_vertices)
 
     print("Starting value objective rectangular:", rectangle_set.compute_perimeter_rec() /  np.abs(rectangle_set.compute_weighted_area_rec(eta)))
