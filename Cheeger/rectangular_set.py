@@ -79,8 +79,11 @@ class RectangularSet:
 		x_values = [v[0] for v in self.boundary_vertices]
 		y_values = [v[1] for v in self.boundary_vertices]
 
-		min_x = min(x_values)
-		max_x = max(x_values)
+		min_x = 1-max(x_values)
+		max_x = 1-min(x_values)
+
+		#min_x = min(x_values)
+		#max_x = max(x_values)
 		min_y = min(y_values)
 		max_y = max(y_values) 
 
