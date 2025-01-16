@@ -141,14 +141,14 @@ class SimpleFunction:
         tol = tol_factor * np.linalg.norm(y)**2 / y.size
        # perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
         perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
-        print(perimeters)
+        print("Perimeter:", perimeters)
         
         lasso = Lasso(alpha=reg_param/y.size, fit_intercept=False, tol=tol, weights=perimeters)
-        #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
+        #lasso = Lasso(alpha=-reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
         new_weights = lasso.coef_
-        print(new_weights)
+        print("new weights:", new_weights)
         self.atoms = [WeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
         # TODO: clean zero weight condition
