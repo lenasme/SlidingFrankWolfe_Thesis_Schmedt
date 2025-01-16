@@ -76,15 +76,24 @@ class IntegrableFunction:
                 return np.array([self.interpolator((p[0], p[1])) for p in points])
         else: 
             print("bei call in y neq None gelandet")
-            if x.shape != y.shape:
-                raise ValueError("x and y must have the same shape")
+            #if x.shape != y.shape:
+             #   raise ValueError("x and y must have the same shape")
             # Falls `x` und `y` als separate Arrays (z. B. von np.meshgrid) übergeben werden
-            points = np.stack((x.ravel(), y.ravel()), axis=-1)  # Kombiniere X und Y zu Punkten
-            try:
-                values = self.interpolator(points)
-            except TypeError:
-                values = np.array([self.interpolator((p[0], p[1])) for p in points])  # Werte interpolieren
-            return values.reshape(x.shape)  # Zurück zur ursprünglichen Form bringen
+
+            if x.ndim == 2 and y.ndim == 2 and x.shape[1] == 1 and y.shape[0] == 1:
+                x_mesh, y_mesh = np.meshgrid(x[:, 0], y[0, :], indexing='ij')
+            elif x.shape == y.shape:
+                x_mesh, y_mesh = x, y
+            else:
+                raise ValueError("x and y must have compatible shapes")
+
+
+            points = np.stack((x_mesh.ravel(), y_mesh.ravel()), axis=-1)  # Kombiniere X und Y zu Punkten
+            #try:
+            values = self.interpolator(points)
+            #except TypeError:
+                #values = np.array([self.interpolator((p[0], p[1])) for p in points])  # Werte interpolieren
+            return values.reshape(x_mesh.shape)  # Zurück zur ursprünglichen Form bringen
 
 
 
