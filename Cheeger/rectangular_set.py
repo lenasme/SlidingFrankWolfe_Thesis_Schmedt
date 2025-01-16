@@ -79,11 +79,11 @@ class RectangularSet:
 		x_values = [v[0] for v in self.boundary_vertices]
 		y_values = [v[1] for v in self.boundary_vertices]
 
-		min_x = 1-max(x_values)
-		max_x = 1-min(x_values)
+		#min_x = 1-max(x_values)
+		#max_x = 1-min(x_values)
 
-		#min_x = min(x_values)
-		#max_x = max(x_values)
+		min_x = min(x_values)
+		max_x = max(x_values)
 		min_y = min(y_values)
 		max_y = max(y_values) 
 
@@ -95,7 +95,8 @@ class RectangularSet:
 		#X, Y = np.meshgrid(x, y)
 
 		#Z = f(X, Y)
-		Z = f(x[:, None], y[None, :])
+		#Z = f(x[:, None], y[None, :])
+		Z = np.array([[f(xi, yi) for yi in y] for xi in x])
 		# Approximation des Integrals
 		integral = np.sum(Z) * dx * dy
 		return integral
