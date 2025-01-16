@@ -32,10 +32,10 @@ class ZeroWeightedIndicatorFunction:
 
     def __call__(self, x):
         if self.support.contains(x):
-            return 1 - self.support.compute_area_rec / 1 
+            return 1 - self.support.compute_area_rec() / 1 
 
         else:
-            return 0 - self.support.compute_area_rec / 1 
+            return 0 - self.support.compute_area_rec() / 1 
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
