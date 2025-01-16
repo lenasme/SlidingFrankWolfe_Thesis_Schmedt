@@ -96,7 +96,7 @@ class RectangularSet:
 
 		#Z = f(X, Y)
 		Z = f(x[:, None], y[None, :])
-		print("Z shape:", Z.shape)
+		#print("Z shape:", Z.shape)
 		#Z = np.array([[f(xi, yi) for yi in y] for xi in x])
 		# Approximation des Integrals
 		integral = np.sum(Z) * dx * dy
