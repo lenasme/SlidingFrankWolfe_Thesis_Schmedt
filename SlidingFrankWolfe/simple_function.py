@@ -11,16 +11,38 @@ class WeightedIndicatorFunction:
         self.support = simple_set
 
     def __call__(self, x):
+        #x_values = [v[0] for v in self.boundary_vertices]
+        #y_values = [v[1] for v in self.boundary_vertices]
+
+        #min_x = min(x_values)
+        #max_x = max(x_values)
+        #min_y = min(y_values)
+        #max_y = max(y_values)
+
+        #area = np.abs(x_max - x_min) * np.abs(y_max - y_min)
+        
         if self.support.contains(x):
-            return self.weight
+            return self.weight #- area
         else:
-            return 0
+            return 0 #- area
+
+class ZeroWeightedIndicatorFunction:
+    def __init__(self, simple_set):
+        self.support = simple_set
+
+    def __call__(self, x):
+        if self.support.contains(x):
+            return 1 - self.support.compute_area() / 1 
+
+        else:
+            return 0 - self.support.compute_area() / 1 
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
     def __init__(self, atoms):
-        if isinstance(atoms, WeightedIndicatorFunction):
+        ### zero
+        if isinstance(atoms, ZeroWeightedIndicatorFunction):
             atoms = [atoms]
         self.atoms = atoms
 
@@ -113,7 +135,8 @@ class SimpleFunction:
 
 
     def extend_support(self, rectangular_set, weight = 0.5):
-        new_atom = WeightedIndicatorFunction(weight, rectangular_set)
+        ### zero
+        new_atom = ZeroWeightedIndicatorFunction(weight, rectangular_set)
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
@@ -149,7 +172,10 @@ class SimpleFunction:
 
         new_weights = lasso.coef_
         print("new weights:", new_weights)
-        self.atoms = [WeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
+        ### zero
+        self.atoms = [ZeroWeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
         # TODO: clean zero weight condition
+
+ 
 
