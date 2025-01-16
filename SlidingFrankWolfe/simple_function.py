@@ -27,15 +27,16 @@ class WeightedIndicatorFunction:
             return 0 #- area
 
 class ZeroWeightedIndicatorFunction:
-    def __init__(self, simple_set):
+    def __init__(self, simple_set, weight = 1.0):
         self.support = simple_set
+        self.weight = weight
 
     def __call__(self, x):
         if self.support.contains(x):
-            return 1 - self.support.compute_area_rec() / 1 
+            return self.weight * (1 - self.support.compute_area_rec() / 1 )
 
         else:
-            return 0 - self.support.compute_area_rec() / 1 
+            return self.weight * (0 - self.support.compute_area_rec() / 1 )
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
@@ -52,6 +53,19 @@ class SimpleFunction:
         for f in self.atoms:
             res += f(x)
         return res
+
+
+    #def __mul__(self, scalar):
+     #   """
+      #  Skaliert die SimpleFunction mit einem Skalar.
+       # """
+        #if not isinstance(scalar, (int, float)):
+         #   raise ValueError("SimpleFunction can only be multiplied by a scalar.")
+        #scaled_atoms = [
+         #   ZeroWeightedIndicatorFunction(atom.support, atom.weight * scalar)
+          #  for atom in self.atoms
+        #]
+        #return SimpleFunction(scaled_atoms)
 
     @property
     def num_atoms(self):
@@ -147,6 +161,10 @@ class SimpleFunction:
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
+
+
+    def linear_fit_weights(self, gamma, M):
+
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
