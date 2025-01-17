@@ -1,7 +1,7 @@
 import numpy as np
 
 from celer import Lasso
-from Setup.ground_truth import EtaObservation
+
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
@@ -123,6 +123,8 @@ class SimpleFunction:
 
 
     def compute_obs(self, cut_f, grid_size, version=0):
+        from Setup.ground_truth import EtaObservation
+        
         if self.num_atoms == 0:
             print("atoms Liste ist leer")
             return np.zeros((grid_size , grid_size))
