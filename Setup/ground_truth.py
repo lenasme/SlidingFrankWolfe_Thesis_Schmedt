@@ -2,7 +2,7 @@ import numpy as np
 
 import random
 import itertools
-from SlidingFrankWolfe.rectangular_set import RectangularSet 
+from  Cheeger.rectangular_set import RectangularSet 
 #import matpy as mp
 #import matplotlib.pyplot as plt
 
