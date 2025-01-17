@@ -21,13 +21,13 @@ class GroundTruth:
         i = 0
         pointlist = []    
         while i < maxtries * npoints and len(pointlist) < npoints:
-            M = np.random.randint(2 , self.maxjumps + 1)
+            M = np.random.randint(2 , self.max_jumps + 1)
             # select random points. note: equal points will be rejected below
             points_x = np.sort(np.random.randint(0 , self.imgsz,size=(M)))
             difs = np.concatenate( [points_x[1:] - points_x[0:-1], np.array([(self.imgsz - points_x[-1]) + points_x[0] ])],axis=0)
 
             if delta_bin[0] <= difs.min()/float(self.imgsz) < delta_bin[1]:
-                N = np.random.randint(2 , self.maxjumps + 1)
+                N = np.random.randint(2 , self.max_jumps + 1)
                 points_y = np.sort(np.random.randint(0 , self.imgsz, size=(N)))
                 difs = np.concatenate( [points_y[1:] - points_y[0:-1], np.array([self.imgsz - points_y[-1] + points_y[0] ])],axis=0)
 
