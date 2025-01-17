@@ -25,7 +25,8 @@ def simple_function_diff(u,v):
 
 
 def plot_simple_function_aux(f, ax, m):
-    ax.fill([0,1,1,0], [0,0,1,1], color=m.to_rgba(0))
+    offset_value = -sum(atom.weight * atom.support.compute_area_rec() for atom in f.atoms)
+    ax.fill([0,1,1,0], [0,0,1,1], color=m.to_rgba(offset_value))
 
     n=f.num_atoms
     idx_set = set(list(range(n)))
@@ -33,7 +34,7 @@ def plot_simple_function_aux(f, ax, m):
     for k in range (1, n+1):
         for indices in itertools.combinations(idx_set, k):
             p= Polygon([(0,0),(1,0),(1,1),(0,1)])
-            weight = 0
+            weight = offset_value
             for i in indices:
                 points_i = f.atoms[i].support.boundary_vertices
                 p_i = Polygon([tuple(points_i[k]) for k in range(len(points_i))])
