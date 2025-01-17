@@ -332,111 +332,97 @@ class GroundTruth:
 
 
 
+class EtaObservation:
+    def __init__(self, cut_f, reg_par, variance= 0.1):
+        self.cut_f = cut_f
+        self.variance = variance
+        self.reg_par = reg_par
 
-
-
-
-
-
-
-
-
-
-
-###
-#Define measurement operator: Truncated Fourier Transform
-###
-
-# No noise
-
-def Trunc_Fourier ( image,cut_f):
-    N,M = image.shape
-    fourier_transform = np.fft.fft2(image)/(np.sqrt(image.shape[0]*image.shape[1])) # orthogonal
-    
-    # Truncated:
-    mask = np.zeros(fourier_transform.shape)
-    
-    for i in range(-cut_f + 1,cut_f):
-        for j in range(-cut_f + 1,cut_f):
-        
-            mask[i,j] = 1.0
+    # image: u aus der jeweiligen iteration
+    def trunc_fourier(self, image):
+        N,M = image.shape
+        fourier_transform = np.fft.fft2(image)/(np.sqrt(N * M)) # orthogonal
+        # Truncated:
+        mask = np.zeros(fourier_transform.shape)
+        for i in range(-self.cut_f + 1,self.cut_f):
+            for j in range(-self.cut_f + 1, self.cut_f):
+                mask[i,j] = 1.0
             
-    truncated_transform = fourier_transform * mask
+        truncated_transform = fourier_transform * mask
     
-    # Symmetrization
-    tmp = np.zeros(truncated_transform.shape,dtype=complex)
+        # Symmetrization
+        tmp = np.zeros(truncated_transform.shape,dtype=complex)
    
-    for i in range(0,N):
-        for j in range(0,M):
-            tmp[i,j] = 0.5*(truncated_transform[i,j] + truncated_transform[-i,-j].conj()) # variance
+        for i in range(0,N):
+            for j in range(0,M):
+                tmp[i,j] = 0.5*(truncated_transform[i,j] + truncated_transform[-i,-j].conj()) # variance
 
-    truncated_transform = tmp
-    return truncated_transform
+        return tmp
 
 
-# with noise
-
-def Trunc_Fourier_Noise (image, cut_f,  variance):
-    N,M = image.shape
-    fourier_transform = np.fft.fft2(image)/(np.sqrt(image.shape[0]*image.shape[1])) # orthogonal
+    #image: ground_truth zur berechnung von f_noisy
+    def trunc_fourier_noise (self, image):
+        N,M = image.shape
+        fourier_transform = np.fft.fft2(image)/(np.sqrt(N * M)) # orthogonal
     
     
-    ncoeff = float((2*(cut_f-1) + 1)*(2*(cut_f-1) + 1))
-    variance = 0.1        
-    
-    fourier_transform.real += np.random.normal(loc=0.0,scale=np.sqrt(2*variance/ncoeff),size= fourier_transform.shape)
-    fourier_transform.imag += np.random.normal(loc=0.0,scale=np.sqrt(2*variance/ncoeff),size= fourier_transform.shape)
+        ncoeff = float((2*(self.cut_f-1) + 1)*(2*(self.cut_f-1) + 1))
+         
+        fourier_transform.real += np.random.normal(loc=0.0, scale=np.sqrt(2*self.variance/ncoeff), size= fourier_transform.shape)
+        fourier_transform.imag += np.random.normal(loc=0.0, scale=np.sqrt(2*self.variance/ncoeff), size= fourier_transform.shape)
 
-    # Truncated:
-    mask = np.zeros(fourier_transform.shape)
+        # Truncated:
+        mask = np.zeros(fourier_transform.shape)
     
-    for i in range(-cut_f + 1,cut_f):
-        for j in range(-cut_f + 1,cut_f):
+        for i in range(-self.cut_f + 1, self.cut_f):
+            for j in range(-self.cut_f + 1, self.cut_f):
         
-            mask[i,j] = 1.0
+                mask[i,j] = 1.0
             
-    truncated_transform = fourier_transform * mask
+        truncated_transform = fourier_transform * mask
     
-    # Symmetrization
-    tmp = np.zeros(truncated_transform.shape,dtype=complex)
+        # Symmetrization
+        tmp = np.zeros(truncated_transform.shape, dtype=complex)
    
-    for i in range(0,N):
-        for j in range(0,M):
-            tmp[i,j] = 0.5*(truncated_transform[i,j] + truncated_transform[-i,-j].conj()) # variance
+        for i in range(0,N):
+            for j in range(0,M):
+                tmp[i,j] = 0.5*(truncated_transform[i,j] + truncated_transform[-i,-j].conj()) # variance
 
-    truncated_transform = tmp
-    return truncated_transform
+        return tmp
+
+    @staticmethod
+    def preadjoint_trunc_fourier ( freq ):
+        N,M = freq.shape
+        back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
+        return back_transf
+    
+    @staticmethod
+    def preadjoint_trunc_fourier_vanish_int ( freq ):
+        N,M = freq.shape
+        back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
+        back_transf = back_transf - 1/(N*M) * np.sum(back_transf)
+        return back_transf
+    
+
+    def f_noisy (self, ground_truth):
+        return self.trunc_fourier_noise (ground_truth)
 
 
-# preadjoint operators:
-
-def Preadjoint_Trunc_Fourier ( freq ):
-    N,M = freq.shape
-    back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
-    return back_transf
-
-def Preadjoint_Trunc_Fourier_vanish_int ( freq ):
-    N,M = freq.shape
-    back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
-    back_transf = back_transf - 1/(N*M) * np.sum(back_transf)
-    return back_transf
-
-
-###
 # ingredients of eta = -1/alpha (K^#(Ku-f))
-###
 
-def f_delta (ground_truth, cut_f,  variance):
-    return Trunc_Fourier_Noise (ground_truth, cut_f,  variance)
+    def eta (self, image, ground_truth):
+        # image: aktuelles rekonstruiertes Bild einer Iteration
+        # f_delta 
+        return -1 / self.reg_par * ( self.preadjoint_trunc_fourier(  self.trunc_fourier(image) - self.f_noisy(ground_truth)) )
 
-def Eta (image, f_delta, reg_par, cut_f):
+
+    def eta_vanish_int (self, image, ground_truth):
     # image: aktuelles rekonstruiertes Bild einer Iteration
     # f_delta 
-    return -1/reg_par * ( Preadjoint_Trunc_Fourier(  Trunc_Fourier(image, cut_f) - f_delta) )
+        return -1 / self.reg_par * ( self.preadjoint_trunc_fourier_vanish_int( self.trunc_fourier(image) - self.f_noisy(ground_truth)) )
 
-def Eta_vanish_int (image, f_delta, reg_par, cut_f):
-    # image: aktuelles rekonstruiertes Bild einer Iteration
-    # f_delta 
-    return -1/reg_par * ( Preadjoint_Trunc_Fourier_vanish_int(  Trunc_Fourier(image, cut_f) - f_delta) )
+
+
+
 
 
