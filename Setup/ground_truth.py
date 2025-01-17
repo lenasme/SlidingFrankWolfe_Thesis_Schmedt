@@ -333,7 +333,7 @@ class GroundTruth:
 
 
 class EtaObservation:
-    def __init__(self, cut_f, reg_par, variance= 0.1):
+    def __init__(self, cut_f, reg_par= 2 , variance= 0.1):
         self.cut_f = cut_f
         self.variance = variance
         self.reg_par = reg_par
