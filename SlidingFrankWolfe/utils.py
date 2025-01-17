@@ -35,7 +35,7 @@ def plot_simple_function_aux(f, ax, m):
             p= Polygon([(0,0),(1,0),(1,1),(0,1)])
             weight = 0
             for i in indices:
-                point_i = f.atoms[i].support.boundary_vertices
+                points_i = f.atoms[i].support.boundary_vertices
                 p_i = Polygon([tuple(points_i[k]) for k in range(len(points_i))])
                 p=p.intersection(p_i)
                 weight += f.atoms[i].weight
