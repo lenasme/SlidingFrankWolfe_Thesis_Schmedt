@@ -1,7 +1,7 @@
 import numpy as np
 
 from celer import Lasso
-from Setup.ground_truth import Trunc_Fourier
+from Setup.ground_truth import EtaObservation
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
@@ -129,19 +129,21 @@ class SimpleFunction:
 
         if version == 0:
             combined_image = np.zeros((grid_size, grid_size))
+            fourier = EtaObservation(cut_f)
             for atom in self.atoms:
                 atom_simple_function = SimpleFunction(atom)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
                 combined_image += atom.weight * atom_image
-            truncated_transform = Trunc_Fourier(combined_image, cut_f)
+            truncated_transform = fourier.trunc_fourier(combined_image)
             return np.real(truncated_transform)
 
         elif version == 1:
             observations = []
+            fourier = EtaObservation(cut_f)
             for atom in self.atoms:
                 atom_simple_function = SimpleFunction(atom)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
-                truncated_transform = Trunc_Fourier(atom.weight * atom_image, cut_f)
+                truncated_transform = fourier.trunc_fourier(atom.weight * atom_image)
                 observations.append(np.real(truncated_transform))
             return np.array(observations)
         else:
