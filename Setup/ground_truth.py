@@ -7,6 +7,8 @@ from  Cheeger.rectangular_set import RectangularSet
 #import matplotlib.pyplot as plt
 
 
+
+
 class GroundTruth:
     def __init__(self, imgsz=120, max_jumps=4, seed=None):
         self.imgsz = imgsz
@@ -350,13 +352,76 @@ class GroundTruth:
                 ymin = vertical_points[j]
                 ymax = vertical_points[j + 1]
                 boundaries = np.array([ [xmin, ymin] ,[ xmax, ymin] , [xmax, ymax], [xmin,ymax] ])
-                print(boundaries)
                 # Erstelle ein RectangularSet
                 rectangular_set = RectangularSet( boundaries )
                 rectangular_sets.append(rectangular_set)
 
         return rectangular_sets
 
+
+    def to_simple_function(self, jump_points, values):
+        """
+        Wandelt den Ground Truth in eine SimpleFunction um.
+        :param delta_bin: Eingabewert für die Methode get_jump_points_bin.
+        :return: Eine Instanz der Klasse SimpleFunction.
+        :raises ValueError: Wenn delta_bin nicht angegeben wurde.
+        """
+
+        rectangular_sets = self.create_rectangular_sets(jump_points)
+        
+
+        atoms = []
+        rect_weight_pairs = assign_values_to_rectangles(rectangular_sets, extend_data_periodically(values))
+        for pair in rect_weight_pairs:
+            # Gewicht anpassen, falls benötigt
+            indicator_function = ZeroWeightedIndicatorFunction(simple_set= pair[0], weight=pair[1])
+            atoms.append(indicator_function)
+
+        return SimpleFunction(atoms)
+
+
+def extend_data_periodically(data):
+    
+    rows, cols = data.shape
+    
+    # Erstelle eine neue Matrix mit zusätzlichem Rand
+    extended_data = np.zeros((rows + 1, cols + 1))
+
+    # Fülle die zentrale Matrix
+    extended_data[1:, 1:] = data
+
+    # Fülle die periodischen Ränder
+    extended_data[0, 1:] = data[-1, :]  # Untere Zeile mit oberer Zeile
+    extended_data[1:, 0] = data[:, -1]  # Rechte Spalte mit linker Spalte
+    extended_data[0, 0] = data[-1, -1]  # Ecke rechts unten mit (0,0)
+
+    return extended_data
+
+
+def assign_values_to_rectangles(rectangles, data):
+    """
+    Ordnet den Rechtecken Werte aus einer Datenmatrix zu.
+    
+    :param rectangles: Liste von RectangularSet-Objekten, die Rechtecke beschreiben.
+    :param data: 2D-Numpy-Array mit Werten für jedes Rechteck.
+    :return: Liste von Tupeln (RectangularSet, Wert).
+    """
+    if len(rectangles) != data.size:
+        raise ValueError("Die Anzahl der Rechtecke muss mit der Anzahl der Werte in 'data' übereinstimmen.")
+
+    rectangle_values = []
+    data_index = 0
+
+    for rect in rectangles:
+        # Wert aus der Datenmatrix abrufen
+        row, col = divmod(data_index, data.shape[1])
+        value = data[row, col]
+
+        # Rechteck und seinen Wert speichern
+        rectangle_values.append((rect, value))
+        data_index += 1
+
+    return rectangle_values
 
 
 class EtaObservation:
