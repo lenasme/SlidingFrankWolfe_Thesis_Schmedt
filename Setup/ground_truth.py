@@ -3,7 +3,7 @@ import numpy as np
 import random
 import itertools
 from  Cheeger.rectangular_set import RectangularSet 
-from SlidingFrankWolfe import simple_function
+from SlidingFrankWolfe.simple_function import ZeroWeightedIndicatorFunction, SimpleFunction
 #import matpy as mp
 #import matplotlib.pyplot as plt
 
