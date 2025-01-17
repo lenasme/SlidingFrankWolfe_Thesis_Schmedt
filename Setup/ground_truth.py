@@ -327,7 +327,7 @@ class GroundTruth:
         return img_van, data_van
 
 
-    def convert_into_simple_function(self):
+    #def convert_into_simple_function(self):
 
 # um den groundtruth als SimpleSet zu framen
     def create_rectangular_sets(self, jump_points):
