@@ -84,7 +84,7 @@ class GroundTruth:
 #test_grad: test wheteher the gradient is valid
     def test_grad(self, vals, show=False, verbose=False):
 
-        grad = grad_per(vals)
+        grad = self.grad_per(vals)
         gradx = grad[...,0]
         grady = grad[...,1]
 
@@ -254,7 +254,7 @@ class GroundTruth:
     
             grad_passed = self.test_grad(vals)[0]
         
-            grad_mag = np.abs(grad_per(vals)).sum()/(N*M)
+            grad_mag = np.abs(self.grad_per(vals)).sum()/(N*M)
             if grad_mag < eps:
                 grad_passed = False
                 print('Dedected zero gradient - retrying')
