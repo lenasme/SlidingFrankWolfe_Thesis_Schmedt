@@ -327,8 +327,33 @@ class GroundTruth:
         return img_van, data_van
 
 
+    def convert_into_simple_function(self):
 
+# um den groundtruth als SimpleSet zu framen
+    def create_rectangular_sets(self, jump_points):
+        """
+        Erstellt RectangularSet-Objekte aus den Jump Points.
+        :param jump_points: Liste von Sprungpunkten [[horizontal], [vertikal]].
+        :return: Liste von RectangularSet-Objekten.
+        """
+        # Extrahiere horizontale und vertikale Sprungpunkte
+        horizontal_points = [0] + sorted(jump_points[0]) + [self.imgsz]
+        vertical_points = [0] + sorted(jump_points[1]) + [self.imgsz]
 
+        # Erstelle die Rechtecke
+        rectangular_sets = []
+        for i in range(len(horizontal_points) - 1):
+            for j in range(len(vertical_points) - 1):
+                xmin = horizontal_points[i]
+                xmax = horizontal_points[i + 1]
+                ymin = vertical_points[j]
+                ymax = vertical_points[j + 1]
+
+                # Erstelle ein RectangularSet
+                rectangular_set = RectangularSet(np.array([[xmin, y_min],[ xmax, ymin], [xmax, ymax], [xmin,ymax]]))
+                rectangular_sets.append(rectangular_set)
+
+        return rectangular_sets
 
 
 
