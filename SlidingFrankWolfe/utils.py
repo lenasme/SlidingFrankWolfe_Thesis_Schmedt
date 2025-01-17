@@ -58,7 +58,7 @@ def plot_simple_function_aux(f, ax, m):
 
 
 def plot_simple_function(f, m, save_path = None):
-    fig, ax = plt.subplot(figsize = (7,7))
+    fig, ax = plt.subplots(figsize = (7,7))
     ax.set_aspect('equal')
 
     plot_simple_function_aux(f, ax, m)
