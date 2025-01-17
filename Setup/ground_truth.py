@@ -349,7 +349,7 @@ class GroundTruth:
                 xmax = horizontal_points[i + 1]
                 ymin = vertical_points[j]
                 ymax = vertical_points[j + 1]
-                boundaries = np.array([ [xmin, y_min] ,[ xmax, ymin] , [xmax, ymax], [xmin,ymax] ])
+                boundaries = np.array([ [xmin, ymin] ,[ xmax, ymin] , [xmax, ymax], [xmin,ymax] ])
                 # Erstelle ein RectangularSet
                 rectangular_set = RectangularSet( boundaries )
                 rectangular_sets.append(rectangular_set)
