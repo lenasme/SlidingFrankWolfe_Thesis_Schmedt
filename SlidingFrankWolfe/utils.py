@@ -43,17 +43,23 @@ def plot_simple_function_aux(f, ax, m):
 
             if not p.is_empty:
                 if p.geom_type == 'MultiPolygon':
-                    for q in list(p):
-                        coords = list(q.boundary.coords)
-                        x= np.array([coords[i][0] for i in range(len(coords))])
-                        y= np.array([coords[i][1] for i in range(len(coords))])
+                    #for q in list(p):
+                    for q in p.geoms:
+                        coords = list(q.exterior.coords)
+                        #x= np.array([coords[i][0] for i in range(len(coords))])
+                        #y= np.array([coords[i][1] for i in range(len(coords))])
+                        x = [coord[0] for coord in coords]
+                        y = [coord[1] for coord in coords]
 
                         ax.fill(x,y, color = m.to_rgba(weight))
 
                 else:
-                    coords = list(p.boundary.coords)
-                    x= np.array([coords[i][0] for i in range(len(coords))])
-                    y= np.array([coords[i][1] for i in range(len(coords))])
+                    #coords = list(p.boundary.coords)
+                    coords = list(p.exterior.coords)
+                    #x= np.array([coords[i][0] for i in range(len(coords))])
+                    #y= np.array([coords[i][1] for i in range(len(coords))])
+                    x = [coord[0] for coord in coords]
+                    y = [coord[1] for coord in coords]
 
                     ax.fill(x,y, color = m.to_rgba(weight))
 
