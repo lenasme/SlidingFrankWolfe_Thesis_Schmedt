@@ -379,7 +379,8 @@ class GroundTruth:
         for pair in rect_weight_pairs:
             print(pair)
             # Gewicht anpassen, falls benötigt
-            indicator_function = ZeroWeightedIndicatorFunction(simple_set= pair[0], weight=pair[1])
+            #indicator_function = ZeroWeightedIndicatorFunction(simple_set= pair[0], weight=pair[1])
+            indicator_function = ZeroWeightedIndicatorFunction( pair[0], pair[1])
             atoms.append(indicator_function)
 
         return SimpleFunction(atoms)
