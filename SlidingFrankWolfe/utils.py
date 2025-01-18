@@ -64,6 +64,7 @@ def plot_simple_function_aux(f, ax, m):
                     ax.fill(x,y, color = m.to_rgba(weight))
 
                 else:
+                    print("p.geom_type ist weder polygon noch multipolygon")
                     continue
 
 
