@@ -377,6 +377,7 @@ class GroundTruth:
         #for rect, weight in rect_weight_pairs:
          #   print(f"Rectangle: {rect.boundary_vertices}, Weight: {weight}")
         for pair in rect_weight_pairs:
+            print(pair)
             # Gewicht anpassen, falls benötigt
             indicator_function = ZeroWeightedIndicatorFunction(simple_set= pair[0], weight=pair[1])
             atoms.append(indicator_function)
