@@ -177,7 +177,7 @@ class SimpleFunction:
         new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, new_weight)
         print(new_weight)
         self.atoms = scaled_atoms.append(new_atom)
-        print(self.atoms)
+        print("die atome der angepasstenfunction:", self.atoms)
         #return SimpleFunction([scaled_atoms, new_atom])
 
 
