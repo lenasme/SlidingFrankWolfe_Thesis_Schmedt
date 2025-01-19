@@ -37,6 +37,10 @@ def plot_simple_function_aux(f, ax, m):
             weight = offset_value
             for i in indices:
                 points_i = f.atoms[i].support.boundary_vertices
+                #
+                if np.max(points_i) > 1:
+                    points_i = points_i / f.imgsz
+                #
                 p_i = Polygon([tuple(points_i[k]) for k in range(len(points_i))])
                 p=p.intersection(p_i)
                 weight += f.atoms[i].weight
