@@ -145,7 +145,7 @@ class SimpleFunction:
             observations = []
             fourier = EtaObservation(cut_f)
             for atom in self.atoms:
-                atom_simple_function = SimpleFunction(atom, imgsz = grig_size)
+                atom_simple_function = SimpleFunction(atom, imgsz = grid_size)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
                 truncated_transform = fourier.trunc_fourier(atom.weight * atom_image)
                 observations.append(np.real(truncated_transform))
