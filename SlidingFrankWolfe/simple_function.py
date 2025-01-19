@@ -176,7 +176,9 @@ class SimpleFunction:
         new_weight = self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec())
         new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, new_weight)
         print(new_weight)
-        return SimpleFunction([scaled_atoms, new_atom])
+        self.atoms = scaled_atoms.append(new_atom)
+        print(self.atoms)
+        #return SimpleFunction([scaled_atoms, new_atom])
 
 
 
