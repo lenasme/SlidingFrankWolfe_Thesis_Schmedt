@@ -179,11 +179,11 @@ def plot_simple_functions(u1, u2, display_inner_mesh=False, boundary_color='blac
     ax.axis('equal')
     ax.axis('off')
     
-   # ax.set_xlim(0, 1)
-   # ax.set_ylim(0, 1)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
     
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
+    #ax.set_xlim(-1, 1)
+    #ax.set_ylim(-1, 1)
 
     if save_path is not None:
         plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=0)
