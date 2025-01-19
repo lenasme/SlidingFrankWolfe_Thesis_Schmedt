@@ -207,7 +207,7 @@ class SimpleFunction:
         #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
-        new_weights = lasso.coef_
+        new_weights = -lasso.coef_
         print("new weights:", new_weights)
         ### zero
         self.atoms = [ZeroWeightedIndicatorFunction(self.atoms[i].support)
