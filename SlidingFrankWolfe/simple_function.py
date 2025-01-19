@@ -33,10 +33,11 @@ class ZeroWeightedIndicatorFunction:
 
     def __call__(self, x):
         if self.support.contains(x):
-            return self.weight * (1 - self.support.compute_area_rec() / 1 )
-
+            #return self.weight * (1 - self.support.compute_area_rec() / 1 )
+            return self.weight # * (1 - self.support.compute_area_rec() / 1 )
         else:
-            return self.weight * (0 - self.support.compute_area_rec() / 1 )
+            #return self.weight * (0 - self.support.compute_area_rec() / 1 )
+            return 0
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
@@ -124,7 +125,7 @@ class SimpleFunction:
 
     def compute_obs(self, cut_f, grid_size, version=0):
         from Setup.ground_truth import EtaObservation
-        
+
         if self.num_atoms == 0:
             print("atoms Liste ist leer")
             return np.zeros((grid_size , grid_size))
