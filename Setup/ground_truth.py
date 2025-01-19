@@ -373,7 +373,7 @@ class GroundTruth:
 
         atoms = []
         rect_weight_pairs = assign_values_to_rectangles(rectangular_sets, extend_data_periodically(values))
-        print(rect_weight_pairs)
+        #print(rect_weight_pairs)
         #for rect, weight in rect_weight_pairs:
          #   print(f"Rectangle: {rect.boundary_vertices}, Weight: {weight}")
         for pair in rect_weight_pairs:
