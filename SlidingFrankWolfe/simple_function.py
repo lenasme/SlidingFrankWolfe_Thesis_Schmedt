@@ -135,7 +135,7 @@ class SimpleFunction:
             combined_image = np.zeros((grid_size, grid_size))
             fourier = EtaObservation(cut_f)
             for atom in self.atoms:
-                atom_simple_function = SimpleFunction(atom)
+                atom_simple_function = SimpleFunction(atom, imgsz= grid_size)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
                 combined_image += atom.weight * atom_image
             truncated_transform = fourier.trunc_fourier(combined_image)
@@ -145,7 +145,7 @@ class SimpleFunction:
             observations = []
             fourier = EtaObservation(cut_f)
             for atom in self.atoms:
-                atom_simple_function = SimpleFunction(atom)
+                atom_simple_function = SimpleFunction(atom, imgsz = grig_size)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
                 truncated_transform = fourier.trunc_fourier(atom.weight * atom_image)
                 observations.append(np.real(truncated_transform))
@@ -207,7 +207,7 @@ class SimpleFunction:
         #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
-        new_weights = -lasso.coef_
+        new_weights = lasso.coef_
         print("new weights:", new_weights)
         ### zero
         self.atoms = [ZeroWeightedIndicatorFunction(self.atoms[i].support)
