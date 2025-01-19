@@ -173,7 +173,9 @@ class SimpleFunction:
         scaled_atoms = [
             ZeroWeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
             for atom in self.atoms[:-1]]
-        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec() ))
+        new weight = self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec())
+        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, new_weight)
+        print(new_weight)
         return SimpleFunction([scaled_atoms, new_atom])
 
 
@@ -182,7 +184,7 @@ class SimpleFunction:
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
         obs = self.compute_obs(cut_f, grid_size, version=1)
 
-        print(obs)
+        #print(obs)
         
         #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
         mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
