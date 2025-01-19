@@ -42,7 +42,7 @@ class ZeroWeightedIndicatorFunction:
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
-    def __init__(self, atoms, imgsz = None):
+    def __init__(self, atoms, imgsz = 120):
         ### zero
         if isinstance(atoms, ZeroWeightedIndicatorFunction):
             atoms = [atoms]
