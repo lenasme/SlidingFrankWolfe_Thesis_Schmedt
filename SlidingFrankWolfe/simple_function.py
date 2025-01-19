@@ -210,7 +210,7 @@ class SimpleFunction:
         new_weights = lasso.coef_
         print("new weights:", new_weights)
         ### zero
-        self.atoms = [ZeroWeightedIndicatorFunction(self.atoms[i].support)
+        self.atoms = [ZeroWeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
         #self.atoms = [WeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
         #              for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
