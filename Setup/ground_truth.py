@@ -383,7 +383,7 @@ class GroundTruth:
             indicator_function = ZeroWeightedIndicatorFunction( pair[0], pair[1])
             atoms.append(indicator_function)
 
-        return SimpleFunction(atoms)
+        return SimpleFunction(atoms, imgsz = self.imgsz)
 
 
 def extend_data_periodically(data):
