@@ -211,12 +211,12 @@ class SimpleFunction:
         perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
         print("Perimeter:", perimeters)
         
-        lasso = Lasso(alpha=reg_param/y.size, fit_intercept=False, tol=tol, weights=perimeters)
+        lasso = Lasso(alpha=reg_param/(y.size * 1e2), fit_intercept=False, tol=tol, weights=perimeters)
         #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
         new_weights = lasso.coef_
-        print("new weights:", new_weights)
+        print("current weights:", new_weights)
         ### zero
         self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
@@ -225,4 +225,53 @@ class SimpleFunction:
         # TODO: clean zero weight condition
 
  
+    def fit_weights2(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
+        """
+        Berechnet Gewichte `a` durch Lasso-Regularisierung unter Berücksichtigung der Perimeter
+        als Regularisierungsgewichte.
+    
+        :param y: Zielvektor (z. B. gemessene Daten).
+        :param cut_f: Funktion, die die Transformation basierend auf `cut_f` erstellt.
+        :param grid_size: Größe des Gitters, auf dem gearbeitet wird.
+        :param reg_param: Regularisierungsparameter `alpha`.
+        :param tol_factor: Toleranzfaktor für die Konvergenz des Lasso-Verfahrens.
+        """
+        # Berechnung der Observationsmatrix `obs` (d. h. diskretisierte Darstellung von `K_E^0`).
+        obs = self.compute_obs(cut_f, grid_size, version=1)
+    
+        # Erstellung der Matrix aus `obs` für die Lasso-Eingabe.
+        mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
+        mat = mat.T  # Transponieren für die richtige Form (Zeilen: Datenpunkte, Spalten: Atome)
+        mat = mat.real
+        y = y.real
+
+        # Regularisierungstoleranz berechnen.
+        tol = tol_factor * np.linalg.norm(y)**2 / y.size
+
+        # Berechnung der Perimeter für die Regularisierung.
+        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
+        print("Perimeters:", perimeters)
+
+        # Normierung der Perimeter, um numerische Stabilität zu gewährleisten.
+        perimeters /= np.max(perimeters)
+
+        # Implementierung des Lasso-Verfahrens mit gewichteter Regularisierung.
+        from sklearn.linear_model import Lasso
+
+        lasso = Lasso(
+            alpha=reg_param / y.size,  # Regularisierungsparameter.
+            fit_intercept=False,       # Kein Bias.
+            tol=tol                    # Konvergenztoleranz.
+        )
+        lasso.fit(mat, y.reshape(-1))
+
+        # Aktualisiere Gewichte und filtere Null-Gewichte.
+        new_weights = lasso.coef_
+        print("Berechnete Gewichte:", new_weights)
+
+        self.atoms = [
+            ZeroWeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
+            for i in range(self.num_atoms)
+            if np.abs(new_weights[i]) > 1e-2
+        ]
 
