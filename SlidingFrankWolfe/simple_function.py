@@ -257,7 +257,7 @@ class SimpleFunction:
 
         weights_sqrt = np.sqrt(perimeters)
         scaled_mat = mat / weights_sqrt
-        scaled_y = y / weights_sqrt
+        scaled_y = y.reshape(-1) / weights_sqrt
 
         # Implementierung des Lasso-Verfahrens mit gewichteter Regularisierung.
         from sklearn.linear_model import Lasso
