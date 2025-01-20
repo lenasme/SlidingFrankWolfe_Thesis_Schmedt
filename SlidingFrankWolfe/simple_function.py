@@ -269,7 +269,8 @@ class SimpleFunction:
         new_weights = lasso.coef_
         print("Berechnete Gewichte:", new_weights)
         approx_y = mat @ lasso.coef_
-        error = np.linalg.norm(y - approx_y)
+        y_flat=y.reshape(-1)
+        error = np.linalg.norm(y_flat - approx_y)
         print("Approximation Error:", error)
 
 
