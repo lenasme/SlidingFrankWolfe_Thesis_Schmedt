@@ -255,6 +255,10 @@ class SimpleFunction:
         # Normierung der Perimeter, um numerische Stabilität zu gewährleisten.
         perimeters /= np.max(perimeters)
 
+        weights_sqrt = np.sqrt(perimeters)
+        scaled_mat = mat / weights_sqrt
+        scaled_y = y / weights_sqrt
+
         # Implementierung des Lasso-Verfahrens mit gewichteter Regularisierung.
         from sklearn.linear_model import Lasso
 
@@ -262,12 +266,12 @@ class SimpleFunction:
             alpha=reg_param / (y.size ) * 0.1,  # Regularisierungsparameter.
             fit_intercept=False,       # Kein Bias.
             tol=tol,
-            weights = perimeters                    # Konvergenztoleranz.
+            #weights = perimeters                    # Konvergenztoleranz.
         )
-        lasso.fit(mat, y.reshape(-1))
+        lasso.fit(scaled_mat, scaled_y.reshape(-1))
 
         # Aktualisiere Gewichte und filtere Null-Gewichte.
-        new_weights = lasso.coef_
+        new_weights = lasso.coef_/weights_sqrt
         print("Berechnete Gewichte:", new_weights)
         approx_y = mat @ lasso.coef_
         y_flat=y.reshape(-1)
