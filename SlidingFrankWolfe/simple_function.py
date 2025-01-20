@@ -265,7 +265,7 @@ class SimpleFunction:
         lasso = Lasso(
             alpha=reg_param / (y.size ) * 0.1,  # Regularisierungsparameter.
             fit_intercept=False,       # Kein Bias.
-            tol=tol,
+            tol=tol
             #weights = perimeters                    # Konvergenztoleranz.
         )
         lasso.fit(scaled_mat, scaled_y.reshape(-1))
