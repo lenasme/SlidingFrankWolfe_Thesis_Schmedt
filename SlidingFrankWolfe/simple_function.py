@@ -176,12 +176,12 @@ class SimpleFunction:
         new_weight = - self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec())
         print("self.atoms perimeter... größer als 4???", self.atoms[-1].support.compute_perimeter_rec())
         print("self.atoms.rect_area in weight berechnung:", self.atoms[-1].support.compute_weighted_area_rec(f))
-        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, 0.1*new_weight)
+        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, new_weight)
         print(new_weight)
         
         scaled_atoms.append(new_atom)
         self.atoms = scaled_atoms
-        print("die atome der angepasstenfunction:", self.atoms)
+        print("die gewichte:", self.weights)
         #return SimpleFunction([scaled_atoms, new_atom])
 
 
