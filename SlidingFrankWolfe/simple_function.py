@@ -5,7 +5,7 @@ from celer import Lasso
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
-    def __init__(self, weight, simple_set):
+    def __init__(self, simple_set, weight=0.5 ):
     # simple_set oder rectangular_set?
         self.weight = weight
         self.support = simple_set
