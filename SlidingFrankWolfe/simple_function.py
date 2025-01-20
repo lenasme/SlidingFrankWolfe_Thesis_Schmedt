@@ -268,6 +268,10 @@ class SimpleFunction:
         # Aktualisiere Gewichte und filtere Null-Gewichte.
         new_weights = lasso.coef_
         print("Berechnete Gewichte:", new_weights)
+        approx_y = mat @ lasso.coef_
+        error = np.linalg.norm(y - approx_y)
+        print("Approximation Error:", error)
+
 
         self.atoms = [
             ZeroWeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
