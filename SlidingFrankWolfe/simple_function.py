@@ -44,7 +44,8 @@ class ZeroWeightedIndicatorFunction:
 class SimpleFunction:
     def __init__(self, atoms, imgsz = 120):
         ### zero
-        if isinstance(atoms, ZeroWeightedIndicatorFunction):
+        #if isinstance(atoms, ZeroWeightedIndicatorFunction):
+        if isinstance(atoms, WeightedIndicatorFunction):
             atoms = [atoms]
         self.atoms = atoms
         self.imgsz = imgsz
@@ -164,6 +165,7 @@ class SimpleFunction:
     def extend_support(self, rectangular_set):
         ### zero
         new_atom = ZeroWeightedIndicatorFunction(rectangular_set)
+        new_atom = WeightedIndicatorFunction(rectangular_set)
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
@@ -171,7 +173,8 @@ class SimpleFunction:
 
     def linear_fit_weights(self, gamma, M, f):
         scaled_atoms = [
-            ZeroWeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
+            #ZeroWeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
+            WeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
             for atom in self.atoms[:-1]]
         new_weight = - self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec())
         print("self.atoms perimeter... größer als 4???", self.atoms[-1].support.compute_perimeter_rec())
@@ -218,10 +221,10 @@ class SimpleFunction:
         new_weights = lasso.coef_
         print("current weights:", new_weights)
         ### zero
-        self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
+        #self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
+         #             for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
+        self.atoms = [WeightedIndicatorFunction( self.atoms[i].support,new_weights[i])
                       for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
-        #self.atoms = [WeightedIndicatorFunction(new_weights[i], self.atoms[i].support)
-        #              for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
         # TODO: clean zero weight condition
 
  
@@ -280,9 +283,14 @@ class SimpleFunction:
         print("Approximation Error:", error)
 
 
+        #self.atoms = [
+         #   ZeroWeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
+          #  for i in range(self.num_atoms)
+           # if np.abs(new_weights[i]) > 1e-2
+        #]
+
         self.atoms = [
-            ZeroWeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
+            WeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
             for i in range(self.num_atoms)
             if np.abs(new_weights[i]) > 1e-2
         ]
-
