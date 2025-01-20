@@ -259,9 +259,10 @@ class SimpleFunction:
         from sklearn.linear_model import Lasso
 
         lasso = Lasso(
-            alpha=reg_param / y.size,  # Regularisierungsparameter.
+            alpha=reg_param / (y.size ) * 0.1,  # Regularisierungsparameter.
             fit_intercept=False,       # Kein Bias.
-            tol=tol                    # Konvergenztoleranz.
+            tol=tol,
+            weights = perimeters                    # Konvergenztoleranz.
         )
         lasso.fit(mat, y.reshape(-1))
 
