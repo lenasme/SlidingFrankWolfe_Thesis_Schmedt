@@ -39,6 +39,8 @@ class ZeroWeightedIndicatorFunction:
             return self.weight * (0 - self.support.compute_area_rec() / 1 )
             #return 0
 
+
+
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
@@ -100,6 +102,9 @@ class SimpleFunction:
         return image
 
 
+
+
+
     #obs: observation
     # f: u?
     #def compute_obs(self, f, version=0):
@@ -155,6 +160,37 @@ class SimpleFunction:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
 
+    def compute_phi_E(self, cut_f):
+        num_freqs = 2 * cut_f + 1  # Anzahl der Frequenzen in jede Richtung
+        phi_e_matrix = np.zeros((len(self.atoms), num_freqs ** 2))  # Matrix für Ergebnisse
+        dx = dy = 1 / (self.imgsz - 1)  # Diskretisierungsschritte
+
+        for atom_index, atom in enumerate(self.atoms):
+            # Transformiere das Atom in ein Bild
+            simple_func = SimpleFunction([atom], imgsz=self.imgsz)
+            test_func_im = simple_func.transform_into_image(self.imgsz)
+            
+            index = 0
+            for k1 in range(-cut_f , cut_f+1):
+                for k2 in range(-cut_f , cut_f+1):
+                    # Erstelle Gitter für (x, y)
+                    x = np.linspace(0, 1, self.imgsz)
+                    y = np.linspace(0, 1, self.imgsz)
+                    X, Y = np.meshgrid(x, y, indexing='ij')
+
+                    # Berechne cosinusbasierte Gewichtung
+                    cos_part = np.cos(2 * np.pi * (k1 * X + k2 * Y))
+
+                    # Berechne das gewichtete Integral
+                    weighted_integral = np.sum(test_func_im * cos_part) * dx * dy
+
+                    # Speichere das Ergebnis in der Matrix
+                    phi_e_matrix[atom_index, index] = weighted_integral
+                    index += 1
+
+        return phi_e_matrix
+
+
     #def extend_support(self, rectangular_set, weight = 0.5):
      
      #   new_atom = WeightedIndicatorFunction(weight, rectangular_set)
@@ -165,7 +201,7 @@ class SimpleFunction:
     def extend_support(self, rectangular_set):
         ### zero
         new_atom = ZeroWeightedIndicatorFunction(rectangular_set)
-        new_atom = WeightedIndicatorFunction(rectangular_set)
+        #new_atom = WeightedIndicatorFunction(rectangular_set)
         #if not isinstance(self.atoms, list):
          #   self.atoms = []
         self.atoms.append(new_atom)
@@ -187,7 +223,32 @@ class SimpleFunction:
         print("die gewichte:", self.weights)
         #return SimpleFunction([scaled_atoms, new_atom])
 
+    def fit_weights4(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
+        obs = self.compute_phi_E(cut_f)
 
+        
+        mat = obs
+        y= y.real
+
+        
+        print("mat shape:", mat.shape)
+        print("y shape:", y.shape)
+
+        tol = tol_factor * np.linalg.norm(y)**2 / y.size
+       # perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
+        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
+        print("Perimeter:", perimeters)
+        
+        lasso = Lasso(alpha=reg_param/(y.size ), fit_intercept=False, tol=tol, weights=perimeters)
+        #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
+        lasso.fit(mat, y.reshape(-1))
+
+        new_weights = lasso.coef_
+        print("current weights:", new_weights)
+        
+        self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
+                      for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
+        # TODO: clean zero weight condition
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
