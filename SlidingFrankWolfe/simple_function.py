@@ -1,7 +1,7 @@
 import numpy as np
 
 from celer import Lasso
-
+from numba import jit, prange
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
