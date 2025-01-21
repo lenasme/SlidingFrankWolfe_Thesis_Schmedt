@@ -71,15 +71,16 @@ def generate_fourier_aux_rect(grid, cut_f):
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
 class SimpleFunction:
-    def __init__(self, atoms, imgsz = 120):
+    def __init__(self, atoms, imgsz = 120, cut_f = 10):
         ### zero
         #if isinstance(atoms, ZeroWeightedIndicatorFunction):
         if isinstance(atoms, WeightedIndicatorFunction):
             atoms = [atoms]
         self.atoms = atoms
         self.imgsz = imgsz
+        self.cut_f = cut_f
         self.grid= self._create_grid()
-        self._fourier_aux = generate_fourier_aux_rect(self.grid, cut_f)
+        self._fourier_aux = generate_fourier_aux_rect(self.grid, self.cut_f)
 
     def __call__(self, x):
     # addiert die indikatorfunktionen an der jeweiligen Stelle x
