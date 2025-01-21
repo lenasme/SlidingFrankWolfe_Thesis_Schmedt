@@ -40,6 +40,33 @@ class ZeroWeightedIndicatorFunction:
             #return 0
 
 
+def generate_fourier_aux_rect(grid, cut_f):
+    k_vals = np.array([[k1, k2] for k1 in range(-cut_f, cut_f + 1) for k2 in range(-cut_f, cut_f + 1)])
+    num_freqs = len(k_vals)
+
+    @jit(nopython=True, parallel=True)
+    def aux(rectangles, res):
+        for i in range(len(rectangles)):  # Iteriere über Rechtecke
+            x_min, x_max, y_min, y_max = rectangles[i]
+
+            for f in range(num_freqs):  # Iteriere über Frequenzen
+                k1, k2 = k_vals[f]
+
+                # Berechne das Integral für x- und y-Richtungen
+                if k1 == 0:
+                    integral_x = x_max - x_min
+                else:
+                    integral_x = (np.sin(2 * np.pi * k1 * x_max) - np.sin(2 * np.pi * k1 * x_min)) / (2 * np.pi * k1)
+
+                if k2 == 0:
+                    integral_y = y_max - y_min
+                else:
+                    integral_y = (np.sin(2 * np.pi * k2 * y_max) - np.sin(2 * np.pi * k2 * y_min)) / (2 * np.pi * k2)
+
+                # Kombiniere die Integrale
+                res[i, f] = integral_x * integral_y
+
+    return aux
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
@@ -51,6 +78,8 @@ class SimpleFunction:
             atoms = [atoms]
         self.atoms = atoms
         self.imgsz = imgsz
+        self.grid= self._create_grid(imgsz)
+        self._fourier_aux = generate_fourier_aux(self.grid, cut_f)
 
     def __call__(self, x):
     # addiert die indikatorfunktionen an der jeweiligen Stelle x
@@ -59,6 +88,11 @@ class SimpleFunction:
             res += f(x)
         return res
 
+    def _create_grid(self):
+        """Erstelle ein Gitter von Punkten."""
+        x = np.linspace(0, 1, self.imgsz)
+        y = np.linspace(0, 1, self.imgsz)
+        return np.array([(xi, yi) for xi in x for yi in y])
 
     #def __mul__(self, scalar):
      #   """
@@ -159,6 +193,36 @@ class SimpleFunction:
         else:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
+    def compute_obs_fourier(self, f, cut_f, version=0):
+        if self.num_atoms == 0:
+            return np.zeros((f.grid_size, (2 * cut_f + 1)**2))
+
+        #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
+        #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
+        rectangles = np.array([[atom.support.minimal_x, atom.support.maximal_x, atom.support.minimal_y, atom.support.maximal_y ] for atom in self.atoms])
+        obs = np.zeros((self.num_atoms, f.grid_size, (2 * cut_f + 1)**2))
+        #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size, (2 * cut_f + 1)**2))
+
+        #for i in range(self.num_atoms):
+            #support_i = self.atoms[i].support
+            #meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
+
+        f._fourier_aux(rectangles, obs)
+
+        if version == 1:
+            # Version mit separaten Objekten je Dreieck
+            #res = [obs[i, :len(self.atoms[i].support.mesh_faces), :, :] for i in range(self.num_atoms)]
+            res = [obs[i] for i in range(self.num_atoms)]
+        else:
+            # Gewichtete Summe der Fourier-Basis für jedes Atom
+            res = np.zeros((f.grid_size, (2 * cut_f + 1)**2))
+            for i in range(self.num_atoms):
+                #res += self.atoms[i].weight * np.sum(obs[i], axis=0)
+                res += self.atoms[i].weight * obs[i]
+        return res
+
+
+
 
     def compute_phi_E(self, cut_f):
         num_freqs = 2 * cut_f + 1  # Anzahl der Frequenzen in jede Richtung
@@ -252,15 +316,15 @@ class SimpleFunction:
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        obs = self.compute_obs(cut_f, grid_size, version=1)
+        obs = self.compute_obs_fourier(cut_f, grid_size, version=1)
 
         #print(obs)
         
-        #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
-        mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
+        mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
+        #mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
         #mat = mat.T
         mat = mat.reshape((self.num_atoms, -1)).T
-        mat = mat.reshape((-1, mat.shape[-1]))
+        #mat = mat.reshape((-1, mat.shape[-1]))
         #mat = mat.reshape((grid_size**2, self.num_atoms)).T  # oder (N, 1)
 
         mat = mat.real
@@ -275,7 +339,7 @@ class SimpleFunction:
         perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
         print("Perimeter:", perimeters)
         
-        lasso = Lasso(alpha=reg_param/(y.size * 1e2), fit_intercept=False, tol=tol, weights=perimeters)
+        lasso = Lasso(alpha=reg_param/(y.size ), fit_intercept=False, tol=tol, weights=perimeters)
         #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
         lasso.fit(mat, y.reshape(-1))
 
