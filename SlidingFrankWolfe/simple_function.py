@@ -79,7 +79,7 @@ class SimpleFunction:
         self.atoms = atoms
         self.imgsz = imgsz
         self.grid= self._create_grid()
-        self._fourier_aux = generate_fourier_aux(self.grid, cut_f)
+        self._fourier_aux = generate_fourier_aux_rect(self.grid, cut_f)
 
     def __call__(self, x):
     # addiert die indikatorfunktionen an der jeweiligen Stelle x
