@@ -201,7 +201,7 @@ class SimpleFunction:
         #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
         rectangles = np.array([[atom.support.minimal_x, atom.support.maximal_x, atom.support.minimal_y, atom.support.maximal_y ] for atom in self.atoms])
-        obs = np.zeros((self.num_atoms, self.imgsz, (2 * cut_f + 1)**2))
+        obs = np.zeros((self.num_atoms,  (2 * cut_f + 1)**2, self.imgsz))
         #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size, (2 * cut_f + 1)**2))
 
         #for i in range(self.num_atoms):
