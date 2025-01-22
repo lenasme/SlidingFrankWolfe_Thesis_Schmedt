@@ -52,17 +52,18 @@ class SimpleFunction:
         if version == 0:
             combined_image = np.zeros((grid_size, grid_size))
             for atom in self.atoms:
-                atom_simple_function = SimpleFunction(atom, imgsz=grid_size)
-                atom_image = atom_simple_function.transform_into_image(grid_size)
+                atom_image = atom.support.transform_into_image(grid_size)
                 combined_image += atom.weight * atom_image
+                
 
-            truncated_transform = generate_fourier_aux_rect(grid, cut_f)
+            combined_image_flat = combined_image.reshape(-1, 2)
+            truncated_transform = generate_fourier_aux_rect(combined_image_flat, cut_f)
             return truncated_transform
         elif version == 1:
             obs = np.zeros((self.num_atoms, grid_size, grid_size), dtype=complex)
             for i, atom in enumerate(self.atoms):
-                atom_image = atom.transform_into_image(grid_size)
-                obs[i] = generate_fourier_aux_rect(atom_image, cut_f)
+                atom_image = atom.support.transform_into_image(grid_size)
+                obs[i] = generate_fourier_aux_rect(grid, cut_f)
             return obs
 
     def extend_support(self, simple_set):
