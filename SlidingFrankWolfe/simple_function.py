@@ -47,7 +47,7 @@ class SimpleFunction:
     def __init__(self, atoms, imgsz = 120, cut_f = 10):
         ### zero
         #if isinstance(atoms, ZeroWeightedIndicatorFunction):
-        if isinstance(atoms, WeightedIndicatorFunction):
+        if not isinstance(atoms, list):
             atoms = [atoms]
         self.atoms = atoms
         self.imgsz = imgsz
