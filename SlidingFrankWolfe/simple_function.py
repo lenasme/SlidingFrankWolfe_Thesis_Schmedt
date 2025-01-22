@@ -196,12 +196,12 @@ class SimpleFunction:
 
     def compute_obs_fourier(self, cut_f, version=0):
         if self.num_atoms == 0:
-            return np.zeros((self.imgsz, (2 * cut_f + 1)**2))
+            return np.zeros((self.imgsz**2, (2 * cut_f + 1)**2))
 
         #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
         rectangles = np.array([[atom.support.minimal_x, atom.support.maximal_x, atom.support.minimal_y, atom.support.maximal_y ] for atom in self.atoms])
-        obs = np.zeros((self.num_atoms,  (2 * cut_f + 1)**2, self.imgsz))
+        obs = np.zeros((self.num_atoms,  (2 * cut_f + 1)**2, self.imgsz**2))
         #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size, (2 * cut_f + 1)**2))
 
         #for i in range(self.num_atoms):
@@ -216,7 +216,7 @@ class SimpleFunction:
             res = [obs[i] for i in range(self.num_atoms)]
         else:
             # Gewichtete Summe der Fourier-Basis für jedes Atom
-            res = np.zeros((self.imgsz, (2 * cut_f + 1)**2))
+            res = np.zeros((self.imgsz**2, (2 * cut_f + 1)**2))
             for i in range(self.num_atoms):
                 #res += self.atoms[i].weight * np.sum(obs[i], axis=0)
                 res += self.atoms[i].weight * obs[i]
