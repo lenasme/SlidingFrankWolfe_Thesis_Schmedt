@@ -136,7 +136,7 @@ class SimpleFunction:
             combined_image = np.zeros((grid_size, grid_size))
             fourier = EtaObservation(cut_f)
             for atom in self.atoms:
-                atom_simple_function = SimpleFunction(atom, imgsz= grid_size)
+                atom_simple_function = SimpleFunction([atom], imgsz= grid_size)
                 atom_image = atom_simple_function.transform_into_image(grid_size)
                 combined_image += atom.weight * atom_image
             truncated_transform = fourier.trunc_fourier(combined_image)
