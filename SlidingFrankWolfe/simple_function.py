@@ -1,7 +1,7 @@
 import numpy as np
 
 from celer import Lasso
-from numba import jit, prange
+
 
 # erstellt die einzelnen Indikatorfunktionen
 class WeightedIndicatorFunction:
@@ -40,16 +40,6 @@ class ZeroWeightedIndicatorFunction:
             #return 0
 
 
-def generate_fourier_aux_rect(grid, cut_f):
-    k_vals = np.array([[k1, k2] for k1 in range(-cut_f, cut_f + 1) for k2 in range(-cut_f, cut_f + 1)])
-    num_freqs = len(k_vals)
-    fourier_matrix = np.zeros((len(grid), num_freqs), dtype=complex)
-
-    for i, x in enumerate(grid):
-        for j, k in enumerate(k_vals):
-            fourier_matrix[i, j] = np.exp(-2j * np.pi * np.dot(k, x))
-
-    return fourier_matrix
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
@@ -62,8 +52,7 @@ class SimpleFunction:
         self.atoms = atoms
         self.imgsz = imgsz
         self.cut_f = cut_f
-        self.grid= self._create_grid()
-        self._fourier_aux = generate_fourier_aux_rect(self.grid, self.cut_f)
+        
 
     def __call__(self, x):
     # addiert die indikatorfunktionen an der jeweiligen Stelle x
@@ -72,23 +61,9 @@ class SimpleFunction:
             res += f(x)
         return res
 
-    def _create_grid(self):
-        """Erstelle ein Gitter von Punkten."""
-        x = np.linspace(0, 1, self.imgsz)
-        y = np.linspace(0, 1, self.imgsz)
-        return np.array([(xi, yi) for xi in x for yi in y])
+    
 
-    #def __mul__(self, scalar):
-     #   """
-      #  Skaliert die SimpleFunction mit einem Skalar.
-       # """
-        #if not isinstance(scalar, (int, float)):
-         #   raise ValueError("SimpleFunction can only be multiplied by a scalar.")
-        #scaled_atoms = [
-         #   ZeroWeightedIndicatorFunction(atom.support, atom.weight * scalar)
-          #  for atom in self.atoms
-        #]
-        #return SimpleFunction(scaled_atoms)
+
 
     @property
     def num_atoms(self):
@@ -147,11 +122,7 @@ class SimpleFunction:
 
        # return res
 
-    def solve_lasso(self, grid, cut_f, y, alpha=1.0):
-        fourier_matrix = generate_fourier_aux_rect(grid, cut_f)
-        lasso = Lasso(alpha=alpha)
-        lasso.fit(fourier_matrix, y)
-        return lasso.coef_
+    
 
 
     def compute_obs(self, cut_f, grid_size, version=0):
@@ -183,66 +154,37 @@ class SimpleFunction:
         else:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
-    def compute_obs_fourier(self, cut_f, version=0):
-        if self.num_atoms == 0:
-            return np.zeros((self.imgsz**2, (2 * cut_f + 1)**2))
+    
 
-        #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
-        #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
-        rectangles = np.array([[atom.support.minimal_x, atom.support.maximal_x, atom.support.minimal_y, atom.support.maximal_y ] for atom in self.atoms])
-        obs = np.zeros((self.num_atoms,  (2 * cut_f + 1)**2, self.imgsz**2))
-        #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size, (2 * cut_f + 1)**2))
+    #def compute_phi_E(self, cut_f):
+     #   num_freqs = 2 * cut_f + 1  # Anzahl der Frequenzen in jede Richtung
+      #  phi_e_matrix = np.zeros((len(self.atoms), num_freqs ** 2))  # Matrix für Ergebnisse
+       # dx = dy = 1 / (self.imgsz - 1)  # Diskretisierungsschritte
 
-        #for i in range(self.num_atoms):
-            #support_i = self.atoms[i].support
-            #meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-
-        self._fourier_aux(rectangles, obs)
-
-        if version == 1:
-            # Version mit separaten Objekten je Dreieck
-            #res = [obs[i, :len(self.atoms[i].support.mesh_faces), :, :] for i in range(self.num_atoms)]
-            res = [obs[i] for i in range(self.num_atoms)]
-        else:
-            # Gewichtete Summe der Fourier-Basis für jedes Atom
-            res = np.zeros((self.imgsz**2, (2 * cut_f + 1)**2))
-            for i in range(self.num_atoms):
-                #res += self.atoms[i].weight * np.sum(obs[i], axis=0)
-                res += self.atoms[i].weight * obs[i]
-        return res
-
-
-
-
-    def compute_phi_E(self, cut_f):
-        num_freqs = 2 * cut_f + 1  # Anzahl der Frequenzen in jede Richtung
-        phi_e_matrix = np.zeros((len(self.atoms), num_freqs ** 2))  # Matrix für Ergebnisse
-        dx = dy = 1 / (self.imgsz - 1)  # Diskretisierungsschritte
-
-        for atom_index, atom in enumerate(self.atoms):
+        #for atom_index, atom in enumerate(self.atoms):
             # Transformiere das Atom in ein Bild
-            simple_func = SimpleFunction([atom], imgsz=self.imgsz)
-            test_func_im = simple_func.transform_into_image(self.imgsz)
+         #   simple_func = SimpleFunction([atom], imgsz=self.imgsz)
+          #  test_func_im = simple_func.transform_into_image(self.imgsz)
             
-            index = 0
-            for k1 in range(-cut_f , cut_f+1):
-                for k2 in range(-cut_f , cut_f+1):
-                    # Erstelle Gitter für (x, y)
-                    x = np.linspace(0, 1, self.imgsz)
-                    y = np.linspace(0, 1, self.imgsz)
-                    X, Y = np.meshgrid(x, y, indexing='ij')
+           # index = 0
+            #for k1 in range(-cut_f , cut_f+1):
+             #   for k2 in range(-cut_f , cut_f+1):
+              #      # Erstelle Gitter für (x, y)
+               #     x = np.linspace(0, 1, self.imgsz)
+                #    y = np.linspace(0, 1, self.imgsz)
+                 #   X, Y = np.meshgrid(x, y, indexing='ij')
 
                     # Berechne cosinusbasierte Gewichtung
-                    cos_part = np.cos(2 * np.pi * (k1 * X + k2 * Y))
+                  #  cos_part = np.cos(2 * np.pi * (k1 * X + k2 * Y))
 
                     # Berechne das gewichtete Integral
-                    weighted_integral = np.sum(test_func_im * cos_part) * dx * dy
+                   # weighted_integral = np.sum(test_func_im * cos_part) * dx * dy
 
                     # Speichere das Ergebnis in der Matrix
-                    phi_e_matrix[atom_index, index] = weighted_integral
-                    index += 1
+                    #phi_e_matrix[atom_index, index] = weighted_integral
+                    #index += 1
 
-        return phi_e_matrix
+        #return phi_e_matrix
 
 
     #def extend_support(self, rectangular_set, weight = 0.5):
@@ -343,69 +285,4 @@ class SimpleFunction:
         # TODO: clean zero weight condition
 
  
-    def fit_weights2(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        """
-        Berechnet Gewichte `a` durch Lasso-Regularisierung unter Berücksichtigung der Perimeter
-        als Regularisierungsgewichte.
     
-        :param y: Zielvektor (z. B. gemessene Daten).
-        :param cut_f: Funktion, die die Transformation basierend auf `cut_f` erstellt.
-        :param grid_size: Größe des Gitters, auf dem gearbeitet wird.
-        :param reg_param: Regularisierungsparameter `alpha`.
-        :param tol_factor: Toleranzfaktor für die Konvergenz des Lasso-Verfahrens.
-        """
-        # Berechnung der Observationsmatrix `obs` (d. h. diskretisierte Darstellung von `K_E^0`).
-        obs = self.compute_obs(cut_f, grid_size, version=1)
-    
-        # Erstellung der Matrix aus `obs` für die Lasso-Eingabe.
-        mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
-        mat = mat.T  # Transponieren für die richtige Form (Zeilen: Datenpunkte, Spalten: Atome)
-        mat = mat.real
-        y = y.real
-
-        # Regularisierungstoleranz berechnen.
-        tol = tol_factor * np.linalg.norm(y)**2 / y.size
-
-        # Berechnung der Perimeter für die Regularisierung.
-        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
-        print("Perimeters:", perimeters)
-
-        # Normierung der Perimeter, um numerische Stabilität zu gewährleisten.
-        perimeters /= np.max(perimeters)
-
-        #weights_sqrt = np.sqrt(perimeters)
-        #scaled_mat = mat / weights_sqrt
-        #scaled_y = y.reshape(-1) / weights_sqrt
-
-        # Implementierung des Lasso-Verfahrens mit gewichteter Regularisierung.
-        from sklearn.linear_model import Lasso
-
-        lasso = Lasso(
-            alpha=reg_param / (y.size ) * 0.1,  # Regularisierungsparameter.
-            fit_intercept=False,       # Kein Bias.
-            tol=tol
-            #weights = perimeters                    # Konvergenztoleranz.
-        )
-        lasso.fit(mat, y.reshape(-1))
-        #lasso.fit(scaled_mat, scaled_y.reshape(-1))
-
-        # Aktualisiere Gewichte und filtere Null-Gewichte.
-        new_weights = lasso.coef_ #/weights_sqrt
-        print("Berechnete Gewichte:", new_weights)
-        approx_y = mat @ lasso.coef_
-        y_flat=y.reshape(-1)
-        error = np.linalg.norm(y_flat - approx_y)
-        print("Approximation Error:", error)
-
-
-        #self.atoms = [
-         #   ZeroWeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
-          #  for i in range(self.num_atoms)
-           # if np.abs(new_weights[i]) > 1e-2
-        #]
-
-        self.atoms = [
-            WeightedIndicatorFunction(self.atoms[i].support, new_weights[i])
-            for i in range(self.num_atoms)
-            if np.abs(new_weights[i]) > 1e-2
-        ]
