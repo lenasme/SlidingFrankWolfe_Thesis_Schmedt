@@ -43,30 +43,13 @@ class ZeroWeightedIndicatorFunction:
 def generate_fourier_aux_rect(grid, cut_f):
     k_vals = np.array([[k1, k2] for k1 in range(-cut_f, cut_f + 1) for k2 in range(-cut_f, cut_f + 1)])
     num_freqs = len(k_vals)
+    fourier_matrix = np.zeros((len(grid), num_freqs), dtype=complex)
 
-    #@jit(nopython=True, parallel=True)
-    def aux(rectangles, res):
-        for i in range(len(rectangles)):  # Iteriere über Rechtecke
-            x_min, x_max, y_min, y_max = rectangles[i]
+    for i, x in enumerate(grid):
+        for j, k in enumerate(k_vals):
+            fourier_matrix[i, j] = np.exp(-2j * np.pi * np.dot(k, x))
 
-            for f in range(num_freqs):  # Iteriere über Frequenzen
-                k1, k2 = k_vals[f]
-
-                # Berechne das Integral für x- und y-Richtungen
-                if k1 == 0:
-                    integral_x = x_max - x_min
-                else:
-                    integral_x = (np.sin(2 * np.pi * k1 * x_max) - np.sin(2 * np.pi * k1 * x_min)) / (2 * np.pi * k1)
-
-                if k2 == 0:
-                    integral_y = y_max - y_min
-                else:
-                    integral_y = (np.sin(2 * np.pi * k2 * y_max) - np.sin(2 * np.pi * k2 * y_min)) / (2 * np.pi * k2)
-
-                # Kombiniere die Integrale
-                res[i, f] = integral_x * integral_y
-
-    return aux
+    return fourier_matrix
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
 # atoms werden instanzen von WeightedIndicatorFunction sein
@@ -163,6 +146,12 @@ class SimpleFunction:
       #          res += self.atoms[i].weight * np.sum(obs[i], axis=0)
 
        # return res
+
+    def solve_lasso(grid, cut_f, y, alpha=1.0):
+        fourier_matrix = generate_fourier_aux_rect(grid, cut_f)
+        lasso = Lasso(alpha=alpha)
+        lasso.fit(fourier_matrix, y)
+        return lasso.coef_
 
 
     def compute_obs(self, cut_f, grid_size, version=0):
