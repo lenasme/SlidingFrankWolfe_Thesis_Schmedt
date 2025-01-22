@@ -248,7 +248,7 @@ class SimpleFunction:
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        obs = self.compute_obs_fourier(cut_f, version=1)
+        obs = self.compute_obs(cut_f, grid_size, version=1)
 
         #print(obs)
         
