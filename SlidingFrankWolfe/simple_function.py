@@ -253,11 +253,11 @@ class SimpleFunction:
 
         #print(obs)
         
-        mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
-        #mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
+        #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
+        mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
         #mat = mat.T
         mat = mat.reshape((self.num_atoms, -1)).T
-        #mat = mat.reshape((-1, mat.shape[-1]))
+        mat = mat.reshape((-1, mat.shape[-1]))
         #mat = mat.reshape((grid_size**2, self.num_atoms)).T  # oder (N, 1)
 
         mat = mat.real
