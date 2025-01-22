@@ -44,12 +44,12 @@ def generate_fourier_aux_rect(grid, cut_f):
     k_vals = np.array([[k1, k2] for k1 in range(-cut_f, cut_f + 1) for k2 in range(-cut_f, cut_f + 1)])
     num_freqs = len(k_vals)
 
-    @jit(nopython=True, parallel=True)
+    #@jit(nopython=True, parallel=True)
     def aux(rectangles, res):
-        for i in prange(len(rectangles)):  # Iteriere über Rechtecke
+        for i in range(len(rectangles)):  # Iteriere über Rechtecke
             x_min, x_max, y_min, y_max = rectangles[i]
 
-            for f in prange(num_freqs):  # Iteriere über Frequenzen
+            for f in range(num_freqs):  # Iteriere über Frequenzen
                 k1, k2 = k_vals[f]
 
                 # Berechne das Integral für x- und y-Richtungen
