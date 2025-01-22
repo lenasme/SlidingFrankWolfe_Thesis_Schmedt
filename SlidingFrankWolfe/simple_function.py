@@ -147,7 +147,7 @@ class SimpleFunction:
 
        # return res
 
-    def solve_lasso(grid, cut_f, y, alpha=1.0):
+    def solve_lasso(self, grid, cut_f, y, alpha=1.0):
         fourier_matrix = generate_fourier_aux_rect(grid, cut_f)
         lasso = Lasso(alpha=alpha)
         lasso.fit(fourier_matrix, y)
