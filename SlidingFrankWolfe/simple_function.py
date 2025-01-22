@@ -194,21 +194,21 @@ class SimpleFunction:
         else:
             raise ValueError("Invalid version specified. Use version=0 or version=1.")
 
-    def compute_obs_fourier(self, f, cut_f, version=0):
+    def compute_obs_fourier(self, cut_f, version=0):
         if self.num_atoms == 0:
-            return np.zeros((f.grid_size, (2 * cut_f + 1)**2))
+            return np.zeros((self.imgsz, (2 * cut_f + 1)**2))
 
         #max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         #meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
         rectangles = np.array([[atom.support.minimal_x, atom.support.maximal_x, atom.support.minimal_y, atom.support.maximal_y ] for atom in self.atoms])
-        obs = np.zeros((self.num_atoms, f.grid_size, (2 * cut_f + 1)**2))
+        obs = np.zeros((self.num_atoms, self.imgsz, (2 * cut_f + 1)**2))
         #obs = np.zeros((self.num_atoms, max_num_triangles, f.grid_size, (2 * cut_f + 1)**2))
 
         #for i in range(self.num_atoms):
             #support_i = self.atoms[i].support
             #meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
 
-        f._fourier_aux(rectangles, obs)
+        self._fourier_aux(rectangles, obs)
 
         if version == 1:
             # Version mit separaten Objekten je Dreieck
@@ -216,7 +216,7 @@ class SimpleFunction:
             res = [obs[i] for i in range(self.num_atoms)]
         else:
             # Gewichtete Summe der Fourier-Basis für jedes Atom
-            res = np.zeros((f.grid_size, (2 * cut_f + 1)**2))
+            res = np.zeros((self.imgsz, (2 * cut_f + 1)**2))
             for i in range(self.num_atoms):
                 #res += self.atoms[i].weight * np.sum(obs[i], axis=0)
                 res += self.atoms[i].weight * obs[i]
@@ -317,7 +317,7 @@ class SimpleFunction:
 
     #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
     def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        obs = self.compute_obs_fourier(cut_f, grid_size, version=1)
+        obs = self.compute_obs_fourier(cut_f, version=1)
 
         #print(obs)
         
