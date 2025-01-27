@@ -83,6 +83,7 @@ class RectangularSet:
 	def compute_area_rec(self):
 		res = np.abs(self.maximal_x - self.minimal_x) * np.abs(self.maximal_y - self.minimal_y)
 		return res
+	
 
 	def compute_perimeter_rec(self):
 		"""
@@ -103,36 +104,127 @@ class RectangularSet:
 		max_y = max(y_values) 
 
 		res = 2*(max_x - min_x) +2*(max_y - min_y)
-	
+		# hier umschreiben mit properties von oben self.minimal_x etc?
 		
 		return res
+	
+	def compute_perimeter_rec_gradient(self):
+		"""
+		Compute the "gradient" of the perimeter
 
-	def compute_weighted_area_rec(self, f, num_points=100):
-		x_values = [v[0] for v in self.boundary_vertices]
-		y_values = [v[1] for v in self.boundary_vertices]
+		Returns
+		-------
+		array, shape (N, 2)
+			Each row contains the two coordinates of the translation to apply at each boundary vertex
 
-		#min_x = 1-max(x_values)
-		#max_x = 1-min(x_values)
+		Notes
+		-----
+		See [1]_ (first variation of the perimeter)
 
-		min_x = min(x_values)
-		max_x = max(x_values)
-		min_y = min(y_values)
-		max_y = max(y_values) 
+		References
+		----------
+		.. [1] Maggi, F. (2012). Sets of finite perimeter and geometric variational problems: an introduction to
+			   Geometric Measure Theory (No. 135). Cambridge University Press.
 
-		x = np.linspace(min_x, max_x, num_points)
-		y = np.linspace(min_y, max_y, num_points)
-		dx = (max_x - min_x) / (num_points - 1)
-		dy = (max_y - min_y) / (num_points - 1)
+		"""
+		gradient = np.zeros_like(self.boundary_vertices)
 
-		#X, Y = np.meshgrid(x, y)
+		for i in range(self.num_boundary_vertices):
+			e1 = self.boundary_vertices[(i-1) % self.num_boundary_vertices] - self.boundary_vertices[i]
+			e2 = self.boundary_vertices[(i+1) % self.num_boundary_vertices] - self.boundary_vertices[i]
 
-		#Z = f(X, Y)
-		Z = f(x[:, None], y[None, :])
-		#print("Z shape:", Z.shape)
-		#Z = np.array([[f(xi, yi) for yi in y] for xi in x])
-		# Approximation des Integrals
-		integral = np.sum(Z) * dx * dy
-		return integral
+			# the i-th component of the gradient is -(ti_1 + ti_2) where ti_1 and ti_2 are the two tangent vectors
+			# going away from the i-th vertex TODO: clarify
+			gradient[i] = - (e1 / np.abs(e1).sum() + e2 / np.abs(e2).sum())
+
+		return gradient
+	
+
+	def compute_weighted_area_rec_tab(self, fourier, boundary_faces_only=False):
+		"""
+		Compute the integral of f on each face of the inner mesh
+
+		Parameters
+		----------
+		f : function
+			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
+		boundary_faces_only : bool
+			Whether to compute weighted areas only on boundary faces, defaut False
+
+		Returns
+		-------
+		array, shape (N,) or (N,D)
+			Value computed for the integral of f on each of the N triangles (if f takes values in dimension D, the shape
+			of the resulting array is (N, D))
+
+		"""
+		if boundary_faces_only:
+			triangles = self.mesh_vertices[self.mesh_boundary_faces]
+		else:
+			triangles = self.mesh_vertices[self.mesh_faces]
+
+		return fourier.integrate_on_triangles(triangles)
+	
+
+
+
+	def compute_weighted_area_rec(self, fourier):
+		# TODO: decide whether output type instability should be dealt with or not
+		"""
+		Compute the integral of f over the set
+
+		Parameters
+		----------
+		f : function
+			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
+
+		Returns
+		-------
+		float or array of shape (D,)
+			Value computed for the integral of f over the set (if f takes values in dimension D, the result will be an
+			array of shape (D,))
+		"""
+		return np.sum(self.compute_weighted_area_rec_tab(fourier))
+
+
+	def compute_weighted_area_rec_gradient(self, fourier, weights=None):
+		"""
+		Compute the "gradient" of the weighted area, for a given weight function
+
+		Parameters
+		----------
+		f : function
+			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
+
+		Returns
+		-------
+		array, shape
+
+		Notes
+		-----
+		Vectorized computations are really nasty here, mainly because f can be vector valued.
+
+		"""
+		# rotation matrix used to compute outward normals
+		rot = np.array([[0, -1], [1, 0]]) if self.is_clockwise else np.array([[0, 1], [-1, 0]])
+
+		rolled_vertices1 = np.roll(self.boundary_vertices, 1, axis=0)
+		rolled_vertices2 = np.roll(self.boundary_vertices, -1, axis=0)
+
+		if weights is None: # das sollte besser nicht eintreten, da imtegrate_on_polygonal_curve aus der klasse GaussianPolynomial aus cheeger und nicht aus SampledGaussianFilter kommt. Müsste sonst nochmal anpassen
+			weights = fourier.integrate_on_polygonal_curve(self.boundary_vertices)
+
+		normals1 = np.dot(self.boundary_vertices - rolled_vertices1, rot.T)
+		normals1 /= np.linalg.norm(normals1, axis=-1)[:, None]
+		normals2 = np.dot(rolled_vertices2 - self.boundary_vertices, rot.T)
+		normals2 /= np.linalg.norm(normals2, axis=-1)[:, None]
+
+		if weights.ndim == 2:
+			gradient = weights[:, 0, None] * normals1 + weights[:, 1, None] * normals2
+		else:
+			gradient = weights[:, :, 0, None] * normals1[:, None, :] + weights[:, :, 1, None] * normals2[:, None, :]
+
+		return gradient
 
 	def compute_mesh_faces_orientation(self):
 		faces = self.mesh_vertices[self.mesh_faces]
