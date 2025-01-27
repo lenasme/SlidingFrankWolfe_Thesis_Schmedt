@@ -11,7 +11,7 @@ from SlidingFrankWolfe.simple_function import ZeroWeightedIndicatorFunction, Sim
 
 
 class GroundTruth:
-    def __init__(self, imgsz=120, max_jumps=4, seed=None):
+    def __init__(self, imgsz=100, max_jumps=4, seed=None):
         self.imgsz = imgsz
         self.max_jumps = max_jumps
         self.seed = seed
