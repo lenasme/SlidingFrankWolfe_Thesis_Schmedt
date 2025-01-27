@@ -2,9 +2,9 @@ import numpy as np
 
 from math import copysign
 from .simple_function import SimpleFunction, WeightedIndicatorFunction
-from ..Cheeger.tools import resample
-from ..Cheeger.rectangular_set import RectangularSet
-from ..Cheeger.plot_utils import plot_simple_set
+from Cheeger.tools import resample
+from Cheeger.rectangular_set import RectangularSet
+from Cheeger.plot_utils import plot_simple_set
 
 
 sign = lambda x: copysign(x, 1)
