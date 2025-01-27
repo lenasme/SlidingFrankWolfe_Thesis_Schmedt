@@ -91,3 +91,27 @@ def plot_simple_function(f, m, save_path = None):
         plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=0)
 
     plt.show()
+
+
+def plot_obs(y, cmap, v_abs_max=None, save_path=None):
+    if v_abs_max is None:
+        v_abs_max = np.max(y)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.set_aspect('equal')
+
+    n = np.int(np.sqrt(y.size))
+
+    im = ax.imshow(y.reshape((n, n)), origin='lower', cmap=cmap, vmin=-v_abs_max, vmax=v_abs_max)
+
+    cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04, format=tick.FormatStrFormatter('%.2f'))
+    cbar.ax.tick_params(labelsize=30)
+
+    ax.axis('off')
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=0)
+
+    plt.show()
