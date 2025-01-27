@@ -35,7 +35,7 @@ def generate_square_aux(grid, cut_off, normalization):
                     fft_filtered = fft_image * freq_mask
 
                     for k in range(grid.shape[0]):
-                        res[i, j, k] += scheme_weights[n] * np.sum(fft_filtered)
+                        res[i, j, k] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 res[i, j] *= h ** 2
 
@@ -86,7 +86,7 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
 
-                        res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered)
+                        res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
                     res[i, j, m] *= area
 
@@ -130,7 +130,7 @@ def generate_line_aux(grid, cut_off, normalization):
                     fft_filtered = fft_image * mask
 
                     for m in range(grid.shape[0]):
-                        res[i, j, m, 0] += scheme_weights[n] * np.sum(fft_filtered)
+                        res[i, j, m, 0] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 res[i, j, :, 0] *= edge_length / 2
 
@@ -148,7 +148,7 @@ def generate_line_aux(grid, cut_off, normalization):
                     fft_filtered = fft_image * mask
 
                     for m in range(grid.shape[0]):
-                        res[i, j, m, 1] += scheme_weights[n] * np.sum(fft_filtered)
+                        res[i, j, m, 1] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 res[i, j, :, 1] *= edge_length / 2
 
@@ -157,7 +157,7 @@ def generate_line_aux(grid, cut_off, normalization):
 
     return aux
 
-
+# überall fft_filtered.real ergänzt
 
 
 class TruncatedFourierTransform:
