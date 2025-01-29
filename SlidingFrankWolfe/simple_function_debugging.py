@@ -116,7 +116,22 @@ class SimpleFunction:
         print(obs.shape)
         summe = np.sum(obs, axis=(1, 2))
         print("summe:", summe)
-        
+
+        fig, axes = plt.subplots(12, 2, figsize=(12, 36))
+
+        for i in range(obs.shape[0]):
+            for j in range(obs.shape[1]):
+                fourier_image = obs[i, j, :].reshape(int(np.sqrt(obs.shape[2])), -1)
+
+                ax = axes[i, j]
+                im = ax.imshow(np.abs(fourier_image), origin="lower", cmap="viridis")
+                ax.set_title(f"Atom {i}, Dreieck {j}")
+                ax.set_xticks([])
+                ax.set_yticks([])
+                fig.colorbar(im, ax=ax)
+
+        plt.show()
+
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
