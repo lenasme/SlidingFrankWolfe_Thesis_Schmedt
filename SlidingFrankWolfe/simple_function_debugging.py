@@ -96,27 +96,24 @@ class SimpleFunction:
 
 
     def compute_obs(self, fourier, version=0):
-        print("die funktion wird aufgerufen")
+        
         if self.num_atoms == 0:
             return np.zeros(fourier.grid_size)
 
         max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
         obs = np.zeros((self.num_atoms, max_num_triangles, fourier.grid_size))
-        print("hierher komme ich noch")
+       
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-        print("Ich rufe _triangle_aux auf")
+       
 
         fourier._triangle_aux(meshes, obs) 
 
-        print("ich habe triangele_aux beendet und stehe kurz davor, obs zu printen")
+        
 
-        plt.imshow(np.abs(np.sum(obs, axis=0)), origin="lower")
-        plt.colorbar()
-        plt.title("Summe der Fourier-Koeffizienten")
-        plt.show()
+        print(obs.shape, obs)
 
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
