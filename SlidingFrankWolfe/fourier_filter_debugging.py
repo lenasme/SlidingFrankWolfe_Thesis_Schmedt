@@ -21,9 +21,7 @@ def generate_square_aux(grid, cut_off, normalization):
         freq_norms = np.abs(freq_x) + np.abs(freq_y)
         # Frequenzmaske erstellen
         freq_mask = freq_norms <= cut_off
-        plt.imshow(freq_mask)
-        plt.colorbar()
-        plt.show()
+       
 
         h = 2 / grid_size
         for i in prange(grid_size):
@@ -62,6 +60,9 @@ def generate_triangle_aux(grid, cut_off, normalization):
 
     # Frequenzmaske erstellen
     mask = freq_norms <= cut_off
+    plt.imshow(freq_mask)
+    plt.colorbar()
+    plt.show()
 
     @jit(nopython=True, parallel=True)
     def aux(meshes, res):
