@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #from numpy import exp
 from numba import jit, prange
-#from scipy.fft import fft2, fftshift
+from scipy.fft import ifftshift
 
 
 def generate_square_aux(grid, cut_off, normalization):
@@ -59,7 +59,8 @@ def generate_triangle_aux(grid, cut_off, normalization):
     freq_norms = np.abs(freq_x) + np.abs(freq_y)
 
     # Frequenzmaske erstellen
-    mask = freq_norms <= cut_off
+    mask = (freq_norms <= cut_off)
+    mask = np.fft.ifftshift(mask)
     plt.imshow(mask)
     plt.colorbar()
     plt.show()
