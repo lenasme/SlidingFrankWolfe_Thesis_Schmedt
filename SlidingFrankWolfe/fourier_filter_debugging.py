@@ -92,10 +92,7 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
 
-                        plt.imshow(np.abs(np.sum(fft_filtered, axis=0)), origin="lower")
-                        plt.colorbar()
-                        plt.title("Summe der gefilterten Fourier-Koeffizienten")
-                        plt.show()
+                        
 
                         res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
