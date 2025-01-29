@@ -109,7 +109,10 @@ class SimpleFunction:
 
         fourier._triangle_aux(meshes, obs) 
 
-        
+        plt.imshow(np.abs(np.sum(obs, axis=0)), origin="lower")
+        plt.colorbar()
+        plt.title("Summe der Fourier-Koeffizienten")
+        plt.show()
 
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
