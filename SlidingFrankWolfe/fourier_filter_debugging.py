@@ -90,10 +90,14 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
                         print("Shape von fft_image:", fft_image.shape)
                         print("Shape von np.sum(fft_image, axis=0):", np.sum(fft_image, axis=0).shape)
-                        plt.imshow(np.abs(fft_image), origin="lower", cmap="inferno")
-                        plt.colorbar()
-                        plt.title("FFT-Bild vor Maskierung")
-                        plt.show()
+                        print("Min:", np.min(np.abs(fft_image)))
+                        print("Max:", np.max(np.abs(fft_image)))
+                        print("Mean:", np.mean(np.abs(fft_image)))
+                        print("Std Dev:", np.std(np.abs(fft_image)))
+                        #plt.imshow(np.abs(fft_image), origin="lower", cmap="inferno")
+                        #plt.colorbar()
+                        #plt.title("FFT-Bild vor Maskierung")
+                        #plt.show()
 
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
