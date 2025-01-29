@@ -60,7 +60,7 @@ def generate_triangle_aux(grid, cut_off, normalization):
 
     # Frequenzmaske erstellen
     mask = freq_norms <= cut_off
-    plt.imshow(freq_mask)
+    plt.imshow(mask)
     plt.colorbar()
     plt.show()
 
