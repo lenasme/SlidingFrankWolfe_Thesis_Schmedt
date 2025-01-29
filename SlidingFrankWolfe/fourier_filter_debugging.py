@@ -13,7 +13,7 @@ def generate_square_aux(grid, cut_off, normalization):
     scheme_points = (1 + scheme.points.T) / 2
     
 
-    @jit(nopython=True, parallel=True)
+    #@jit(nopython=True, parallel=True)
     def aux(grid_size, res):
         
         freqs = np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
@@ -24,8 +24,8 @@ def generate_square_aux(grid, cut_off, normalization):
        
 
         h = 2 / grid_size
-        for i in prange(grid_size):
-            for j in prange(grid_size):
+        for i in range(grid_size):
+            for j in range(grid_size):
                 for n in range(scheme_weights.size):
                     x = -1 + h * (scheme_points[n, 0] + i)
                     y = -1 + h * (scheme_points[n, 1] + j)
