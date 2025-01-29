@@ -13,7 +13,7 @@ def generate_square_aux(grid, cut_off, normalization):
     scheme_points = (1 + scheme.points.T) / 2
     
 
-    #@jit(nopython=True, parallel=True)
+    @jit(nopython=True, parallel=True)
     def aux(grid_size, res):
         
         freqs = np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
@@ -24,8 +24,8 @@ def generate_square_aux(grid, cut_off, normalization):
        
 
         h = 2 / grid_size
-        for i in range(grid_size):
-            for j in range(grid_size):
+        for i in prange(grid_size):
+            for j in prange(grid_size):
                 for n in range(scheme_weights.size):
                     x = -1 + h * (scheme_points[n, 0] + i)
                     y = -1 + h * (scheme_points[n, 1] + j)
@@ -65,10 +65,10 @@ def generate_triangle_aux(grid, cut_off, normalization):
     plt.colorbar()
     plt.show()
 
-    @jit(nopython=True, parallel=True)
+    #@jit(nopython=True, parallel=True)
     def aux(meshes, res):
         for i in range(len(meshes)):
-            for j in prange(len(meshes[i])):
+            for j in range(len(meshes[i])):
                 # Berechnung der Dreiecksfläche
                 a = np.sqrt((meshes[i, j, 1, 0] - meshes[i, j, 0, 0]) ** 2 + (meshes[i, j, 1, 1] - meshes[i, j, 0, 1]) ** 2)
                 b = np.sqrt((meshes[i, j, 2, 0] - meshes[i, j, 1, 0]) ** 2 + (meshes[i, j, 2, 1] - meshes[i, j, 1, 1]) ** 2)
