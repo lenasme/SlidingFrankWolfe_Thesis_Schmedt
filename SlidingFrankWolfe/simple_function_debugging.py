@@ -117,6 +117,12 @@ class SimpleFunction:
         summe = np.sum(obs, axis=(1, 2))
         print("summe:", summe)
 
+        print("Minimale und maximale Werte in obs:")
+        print("Min:", np.min(obs))
+        print("Max:", np.max(obs))
+        print("Durchschnitt:", np.mean(obs))
+        print("Standardabweichung:", np.std(obs))
+        
         fig, axes = plt.subplots(obs.shape[0], 2, figsize=(12, 36))
 
         for i in range(obs.shape[0]):
