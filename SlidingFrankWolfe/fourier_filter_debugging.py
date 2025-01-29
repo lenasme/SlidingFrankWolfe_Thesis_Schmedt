@@ -89,6 +89,11 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         # Fourier-Transformation für den Punkt (x, y)
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
 
+                        plt.imshow(np.abs(np.sum(fft_image, axis=0)), origin="lower", cmap="inferno")
+                        plt.colorbar()
+                        plt.title("FFT-Bild vor Maskierung")
+                        plt.show()
+
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
 
