@@ -102,7 +102,7 @@ class SimpleFunction:
         max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
         obs = np.zeros((self.num_atoms, max_num_triangles, fourier.grid_size))
-
+        print("hierher komme ich noch")
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
