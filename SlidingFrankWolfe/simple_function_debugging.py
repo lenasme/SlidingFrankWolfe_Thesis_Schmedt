@@ -106,10 +106,11 @@ class SimpleFunction:
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
+        print("Ich rufe _triangle_aux auf")
 
         fourier._triangle_aux(meshes, obs) 
-        
-        print("ich stehe kurz davor, obs zu printen")
+
+        print("ich habe triangele_aux beendet und stehe kurz davor, obs zu printen")
 
         plt.imshow(np.abs(np.sum(obs, axis=0)), origin="lower")
         plt.colorbar()
