@@ -58,6 +58,9 @@ def generate_triangle_aux(grid, cut_off, normalization):
     freq_x, freq_y = np.meshgrid(freqs, freqs, indexing="ij")
     freq_norms = np.abs(freq_x) + np.abs(freq_y)
 
+    print("Min freq_x:", np.min(freq_x), "Max freq_x:", np.max(freq_x))
+    print("Min freq_y:", np.min(freq_y), "Max freq_y:", np.max(freq_y))
+
     # Frequenzmaske erstellen
     mask = (freq_norms <= cut_off)
     mask = np.fft.ifftshift(mask)
@@ -90,10 +93,10 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
                         print("Shape von fft_image:", fft_image.shape)
                         print("Shape von np.sum(fft_image, axis=0):", np.sum(fft_image, axis=0).shape)
-                        print("Min:", np.min(np.abs(fft_image)))
-                        print("Max:", np.max(np.abs(fft_image)))
-                        print("Mean:", np.mean(np.abs(fft_image)))
-                        print("Std Dev:", np.std(np.abs(fft_image)))
+                        #print("Min:", np.min(np.abs(fft_image)))
+                        #print("Max:", np.max(np.abs(fft_image)))
+                        #print("Mean:", np.mean(np.abs(fft_image)))
+                        #print("Std Dev:", np.std(np.abs(fft_image)))
                         #plt.imshow(np.abs(fft_image), origin="lower", cmap="inferno")
                         #plt.colorbar()
                         #plt.title("FFT-Bild vor Maskierung")
