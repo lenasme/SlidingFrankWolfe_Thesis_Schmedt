@@ -108,6 +108,8 @@ class SimpleFunction:
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
 
         fourier._triangle_aux(meshes, obs) 
+        
+        print("ich stehe kurz davor, obs zu printen")
 
         plt.imshow(np.abs(np.sum(obs, axis=0)), origin="lower")
         plt.colorbar()
