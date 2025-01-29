@@ -113,8 +113,10 @@ class SimpleFunction:
 
         
 
-        print(obs.shape, obs)
-
+        print(obs.shape)
+        summe = np.sum(obs, axis=(1, 2))
+        print("summe:", summe)
+        
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
