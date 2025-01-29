@@ -96,6 +96,7 @@ class SimpleFunction:
 
 
     def compute_obs(self, fourier, version=0):
+        print("die funktion wird aufgerufen")
         if self.num_atoms == 0:
             return np.zeros(fourier.grid_size)
 
