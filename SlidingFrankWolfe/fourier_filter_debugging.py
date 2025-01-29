@@ -70,6 +70,7 @@ def generate_triangle_aux(grid, cut_off, normalization):
 
     #@jit(nopython=True, parallel=True)
     def aux(meshes, res):
+        print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
             for j in range(len(meshes[i])):
                 # Berechnung der Dreiecksfläche
@@ -88,6 +89,9 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
+
+                        print("x:", x[:10])  # Zeigt die ersten 10 x-Werte
+                        print("y:", y[:10])  # Zeigt die ersten 10 y-Werte
 
                         # Fourier-Transformation für den Punkt (x, y)
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
