@@ -117,7 +117,7 @@ class SimpleFunction:
         summe = np.sum(obs, axis=(1, 2))
         print("summe:", summe)
 
-        fig, axes = plt.subplots(12, 2, figsize=(12, 36))
+        fig, axes = plt.subplots(obs.shape[0], 2, figsize=(12, 36))
 
         for i in range(obs.shape[0]):
             for j in range(obs.shape[1]):
