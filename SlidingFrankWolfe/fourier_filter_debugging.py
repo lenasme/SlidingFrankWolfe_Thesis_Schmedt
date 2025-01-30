@@ -63,7 +63,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
     # Frequenzmaske erstellen
     mask = (freq_norms <= cut_off)
-    mask_expanded = np.expand_dims(mask, axis=-1) 
+    #mask_expanded = np.expand_dims(mask, axis=-1) 
     #mask = np.fft.ifftshift(mask)
     #plt.imshow(mask)
     #plt.colorbar()
@@ -81,7 +81,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 p = (a + b + c) / 2
                 area = np.sqrt(p * (p - a) * (p - b) * (p - c))
 
-                function_grid = np.zeros(grid.shape)
+                #function_grid = np.zeros(grid.shape)
+                function_grid = np.zeros((grid.shape[0], grid.shape[1]))
                 print("grid shape:", grid.shape)
                 for m in range(grid.shape[0]):
                     for n in range(scheme_weights.size):
@@ -97,12 +98,12 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         
                 fft_image = (np.fft.fft2(function_grid)).real
                         
-                print("function_gird shape:", function_grid.shape)
+                print("function_grid shape:", function_grid.shape)
                 print("fft_image shape:", fft_image.shape)
                 print("mask shape:", mask.shape)  
-                print("mask_expanded shape:", mask_expanded.shape)      
+                #print("mask_expanded shape:", mask_expanded.shape)      
                 # Anwenden der Frequenzmaske
-                fft_filtered = fft_image * mask_expanded
+                fft_filtered = fft_image * mask
                 print("fft_filtered shape:", fft_filtered.shape)
                 res[i, j, :] = fft_filtered.flatten()      
 
@@ -111,7 +112,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 #res[i, j, m] *= area
 
         if normalization:
-            res /= np.sum(mask_expanded)
+            res /= np.sum(mask)
 
     return aux
 
