@@ -39,6 +39,13 @@ class ZeroWeightedIndicatorFunction:
             return self.weight * (0 - self.support.compute_area_rec() / 1 )
             #return 0
 
+    @property
+    def inner_value(self):
+        return self.weight * (1 - self.support.compute_area_rec() / 1)
+    
+    @property
+    def outer_value(self):
+        return self.weight * (0 - self.support.compute_area_rec() / 1)
 
 
 # fasst die verschiedenen Indikatorfunktionen zu einer simple function mit mehreren Atomen zusammen
@@ -96,7 +103,7 @@ class SimpleFunction:
 
 
     def compute_obs(self, fourier, version=0):
-        
+        function = self
         if self.num_atoms == 0:
             return np.zeros(fourier.grid_size)
 
@@ -109,7 +116,7 @@ class SimpleFunction:
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
             
 
-        fourier._triangle_aux(meshes, obs) 
+        fourier._triangle_aux(meshes, function, obs) 
         
         
         if version == 1:
