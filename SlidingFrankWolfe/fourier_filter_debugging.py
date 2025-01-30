@@ -89,62 +89,10 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
-                        #print("Shape von scheme_points:", scheme_points.shape)
-                        #print("Shape von meshes:", meshes.shape)
-                        #print("Shape von meshes[i, j]:", meshes[i, j].shape)
-                        #print("Shape von meshes[i, j, 0]:", meshes[i, j, 0].shape)
-                        #print("Shape von scheme_points[n]:", scheme_points[n].shape)
-                        #print("x:", x)  # Zeigt die ersten 10 x-Werte
-                        #print("y:", y)  # Zeigt die ersten 10 y-Werte
-                        #unique_exponents = np.unique(freq_x * x + freq_y * y)
-                        #print("Unique Werte von freq_x * x + freq_y * y:", unique_exponents)
-                        #print("x unique values:", np.unique(x))
-                        #print("y unique values:", np.unique(y))
-                        #print("Min freq_x * x + freq_y * y:", np.min(freq_x * x + freq_y * y))
-                        #print("Max freq_x * x + freq_y * y:", np.max(freq_x * x + freq_y * y))
-                        #print("Mean:", np.mean(freq_x * x + freq_y * y))
-                        #print("Std Dev:", np.std(freq_x * x + freq_y * y))
-                        # Fourier-Transformation für den Punkt (x, y)
-                        #test_values = -2j * np.pi * (freq_x * x + freq_y * y)
-                        #exp_values = np.unique(np.exp(test_values))
-                        #print("Unique exp values:", exp_values)
                         
-                        #plt.scatter(np.real(exp_values), np.imag(exp_values), alpha=0.5)
-                        #plt.xlim(-1, 1)
-                        #plt.ylim(-1, 1)
-                        #plt.gca().set_aspect('equal')
-                        #plt.show()
                         
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
-                        #print("freq_x * x + freq_y * y Min/Max:", np.min(freq_x * x + freq_y * y), np.max(freq_x * x + freq_y * y))
-
-                        #print("Shape von fft_image:", fft_image.shape)
-                        #print("Shape von np.sum(fft_image, axis=0):", np.sum(fft_image, axis=0).shape)
-                        #print("Min:", np.min(np.abs(fft_image)))
-                        #print("Max:", np.max(np.abs(fft_image)))
-                        #print("Mean:", np.mean(np.abs(fft_image)))
-                        #print("Std Dev:", np.std(np.abs(fft_image)))
-                        #plt.imshow(np.abs(fft_image), origin="lower", cmap="inferno")
-                        #plt.colorbar()
-                        #plt.title("FFT-Bild vor Maskierung")
-                        #plt.show()
-
-
-                        plt.imshow(np.abs(fft_image), cmap="viridis")
-                        plt.colorbar()
-                        plt.title("Magnitude Spectrum")
-                        plt.show()
-
-                        plt.imshow(np.angle(fft_image), cmap="twilight")
-                        plt.colorbar()
-                        plt.title("Phase Spectrum")
-                        plt.show()
                         
-                        print("fft_image unique values:", np.unique(np.abs(fft_image)))
-                        
-                        print("Min fft_image:", np.min(fft_image))
-                        print("Max fft_image:", np.max(fft_image))
-                        print("Mean fft_image:", np.mean(fft_image))
                         
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
