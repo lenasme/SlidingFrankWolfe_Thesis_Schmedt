@@ -81,6 +81,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 area = np.sqrt(p * (p - a) * (p - b) * (p - c))
 
                 function_grid = np.zeros(grid.shape)
+                print(grid.shape)
                 for m in range(grid.shape[0]):
                     for n in range(scheme_weights.size):
                         x = scheme_points[n, 0] * meshes[i, j, 0, 0] + \
