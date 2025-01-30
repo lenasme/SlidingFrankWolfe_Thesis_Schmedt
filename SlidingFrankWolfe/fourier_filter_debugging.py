@@ -93,7 +93,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         
                         function_grid[m] += scheme_weights[n] * (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
                         
-                fft_image = np.fft.fft2(function_grid).real
+                fft_image = (np.fft.fft2(function_grid)).real
                         
                         
                 # Anwenden der Frequenzmaske
