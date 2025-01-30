@@ -128,6 +128,18 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         #plt.colorbar()
                         #plt.title("FFT-Bild vor Maskierung")
                         #plt.show()
+
+
+                        plt.imshow(np.abs(fft_image), cmap="viridis")
+                        plt.colorbar()
+                        plt.title("Magnitude Spectrum")
+                        plt.show()
+
+                        plt.imshow(np.angle(fft_image), cmap="twilight")
+                        plt.colorbar()
+                        plt.title("Phase Spectrum")
+                        plt.show()
+                        
                         print("fft_image unique values:", np.unique(np.abs(fft_image)))
                         
                         print("Min fft_image:", np.min(fft_image))
