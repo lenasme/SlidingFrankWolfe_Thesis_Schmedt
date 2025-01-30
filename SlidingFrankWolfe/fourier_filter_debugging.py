@@ -98,6 +98,8 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         #print("y:", y)  # Zeigt die ersten 10 y-Werte
                         unique_exponents = np.unique(freq_x * x + freq_y * y)
                         print("Unique Werte von freq_x * x + freq_y * y:", unique_exponents)
+                        print("x unique values:", np.unique(x))
+                        print("y unique values:", np.unique(y))
                         # Fourier-Transformation für den Punkt (x, y)
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
                         #print("freq_x * x + freq_y * y Min/Max:", np.min(freq_x * x + freq_y * y), np.max(freq_x * x + freq_y * y))
