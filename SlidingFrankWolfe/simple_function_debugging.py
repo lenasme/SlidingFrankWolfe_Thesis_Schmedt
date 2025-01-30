@@ -107,7 +107,7 @@ class SimpleFunction:
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-       
+            print(f"Mesh-Daten für Atom {i}: {meshes[i]}")
 
         fourier._triangle_aux(meshes, obs) 
         
