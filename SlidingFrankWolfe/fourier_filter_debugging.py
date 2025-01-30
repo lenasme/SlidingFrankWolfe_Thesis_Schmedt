@@ -48,7 +48,7 @@ def generate_square_aux(grid, cut_off, normalization):
 
 
 
-def generate_triangle_aux(grid, cut_off, function, normalization):
+def generate_triangle_aux(grid, cut_off,  normalization):
     scheme = quadpy.t2.get_good_scheme(5)
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
@@ -69,7 +69,7 @@ def generate_triangle_aux(grid, cut_off, function, normalization):
     #plt.show()
 
     #@jit(nopython=True, parallel=True)
-    def aux(meshes, res):
+    def aux(meshes, function, res):
         #print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
             for j in range(len(meshes[i])):
