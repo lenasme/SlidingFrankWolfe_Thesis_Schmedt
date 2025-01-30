@@ -94,8 +94,8 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         #print("Shape von meshes[i, j]:", meshes[i, j].shape)
                         #print("Shape von meshes[i, j, 0]:", meshes[i, j, 0].shape)
                         #print("Shape von scheme_points[n]:", scheme_points[n].shape)
-                        #print("x:", x)  # Zeigt die ersten 10 x-Werte
-                        #print("y:", y)  # Zeigt die ersten 10 y-Werte
+                        print("x:", x)  # Zeigt die ersten 10 x-Werte
+                        print("y:", y)  # Zeigt die ersten 10 y-Werte
 
                         # Fourier-Transformation für den Punkt (x, y)
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
