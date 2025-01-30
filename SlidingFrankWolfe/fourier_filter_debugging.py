@@ -95,7 +95,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         
                 fft_image = (np.fft.fft2(function_grid)).real
                         
-                        
+                print(function_grid.shape)
+                print(fft_image.shape)
+                print(mask.shape)        
                 # Anwenden der Frequenzmaske
                 fft_filtered = fft_image * mask
 
