@@ -96,24 +96,24 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         #print("Shape von scheme_points[n]:", scheme_points[n].shape)
                         #print("x:", x)  # Zeigt die ersten 10 x-Werte
                         #print("y:", y)  # Zeigt die ersten 10 y-Werte
-                        unique_exponents = np.unique(freq_x * x + freq_y * y)
-                        print("Unique Werte von freq_x * x + freq_y * y:", unique_exponents)
-                        print("x unique values:", np.unique(x))
-                        print("y unique values:", np.unique(y))
-                        print("Min freq_x * x + freq_y * y:", np.min(freq_x * x + freq_y * y))
-                        print("Max freq_x * x + freq_y * y:", np.max(freq_x * x + freq_y * y))
-                        print("Mean:", np.mean(freq_x * x + freq_y * y))
-                        print("Std Dev:", np.std(freq_x * x + freq_y * y))
+                        #unique_exponents = np.unique(freq_x * x + freq_y * y)
+                        #print("Unique Werte von freq_x * x + freq_y * y:", unique_exponents)
+                        #print("x unique values:", np.unique(x))
+                        #print("y unique values:", np.unique(y))
+                        #print("Min freq_x * x + freq_y * y:", np.min(freq_x * x + freq_y * y))
+                        #print("Max freq_x * x + freq_y * y:", np.max(freq_x * x + freq_y * y))
+                        #print("Mean:", np.mean(freq_x * x + freq_y * y))
+                        #print("Std Dev:", np.std(freq_x * x + freq_y * y))
                         # Fourier-Transformation für den Punkt (x, y)
-                        test_values = -2j * np.pi * (freq_x * x + freq_y * y)
-                        exp_values = np.unique(np.exp(test_values))
-                        print("Unique exp values:", exp_values)
+                        #test_values = -2j * np.pi * (freq_x * x + freq_y * y)
+                        #exp_values = np.unique(np.exp(test_values))
+                        #print("Unique exp values:", exp_values)
                         
-                        plt.scatter(np.real(exp_values), np.imag(exp_values), alpha=0.5)
-                        plt.xlim(-1, 1)
-                        plt.ylim(-1, 1)
-                        plt.gca().set_aspect('equal')
-                        plt.show()
+                        #plt.scatter(np.real(exp_values), np.imag(exp_values), alpha=0.5)
+                        #plt.xlim(-1, 1)
+                        #plt.ylim(-1, 1)
+                        #plt.gca().set_aspect('equal')
+                        #plt.show()
                         
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
                         #print("freq_x * x + freq_y * y Min/Max:", np.min(freq_x * x + freq_y * y), np.max(freq_x * x + freq_y * y))
@@ -129,6 +129,11 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         #plt.title("FFT-Bild vor Maskierung")
                         #plt.show()
                         print("fft_image unique values:", np.unique(np.abs(fft_image)))
+                        
+                        print("Min fft_image:", np.min(fft_image))
+                        print("Max fft_image:", np.max(fft_image))
+                        print("Mean fft_image:", np.mean(fft_image))
+                        
                         # Anwenden der Frequenzmaske
                         fft_filtered = fft_image * mask
 
