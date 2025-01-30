@@ -111,7 +111,8 @@ class SimpleFunction:
 
         fourier._triangle_aux(meshes, obs) 
         
-
+        print(obs)
+        print("obs shape:", obs.shape)
         fig, axes = plt.subplots(obs.shape[0], 2, figsize=(12, 36))
 
         for i in range(obs.shape[0]):
