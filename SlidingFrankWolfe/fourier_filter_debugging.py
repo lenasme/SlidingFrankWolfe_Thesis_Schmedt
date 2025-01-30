@@ -48,29 +48,29 @@ def generate_square_aux(grid, cut_off, normalization):
 
 
 
-def generate_triangle_aux(grid, cut_off, normalization):
+def generate_triangle_aux(grid, cut_off, function, normalization):
     scheme = quadpy.t2.get_good_scheme(5)
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
 
     # Frequenzgitter erstellen
-    freqs = np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
-    freq_x, freq_y = np.meshgrid(freqs, freqs, indexing="ij")
+    freqs_x= np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
+    freqs_y = np.fft.fftfreq(grid.shape[1], d=1 / grid.shape[1])
+    freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
     freq_norms = np.abs(freq_x) + np.abs(freq_y)
 
-    print("Min freq_x:", np.min(freq_x), "Max freq_x:", np.max(freq_x))
-    print("Min freq_y:", np.min(freq_y), "Max freq_y:", np.max(freq_y))
+    
 
     # Frequenzmaske erstellen
     mask = (freq_norms <= cut_off)
-    mask = np.fft.ifftshift(mask)
-    plt.imshow(mask)
-    plt.colorbar()
-    plt.show()
+    #mask = np.fft.ifftshift(mask)
+    #plt.imshow(mask)
+    #plt.colorbar()
+    #plt.show()
 
     #@jit(nopython=True, parallel=True)
     def aux(meshes, res):
-        print("Meshes:", meshes[:5])
+        #print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
             for j in range(len(meshes[i])):
                 # Berechnung der Dreiecksfläche
@@ -80,6 +80,7 @@ def generate_triangle_aux(grid, cut_off, normalization):
                 p = (a + b + c) / 2
                 area = np.sqrt(p * (p - a) * (p - b) * (p - c))
 
+                function_grid = np.zeros(grid.shape)
                 for m in range(grid.shape[0]):
                     for n in range(scheme_weights.size):
                         x = scheme_points[n, 0] * meshes[i, j, 0, 0] + \
@@ -90,18 +91,19 @@ def generate_triangle_aux(grid, cut_off, normalization):
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
+                        function_grid[m] += scheme_weights[n] * (function.atoms[i].innner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
                         
-                        fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
+                fft_image = np.fft.fft2(function_grid)
                         
                         
-                        # Anwenden der Frequenzmaske
-                        fft_filtered = fft_image * mask
+                # Anwenden der Frequenzmaske
+                fft_filtered = fft_image * mask
 
-                        
+                res[i, j, :] = fft_filtered.flatten()      
 
-                        res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
+                #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
-                    res[i, j, m] *= area
+                #res[i, j, m] *= area
 
         if normalization:
             res /= np.sum(mask)
