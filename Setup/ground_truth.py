@@ -4,7 +4,7 @@ import random
 import itertools
 from  Cheeger.rectangular_set import RectangularSet 
 #from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
-from SlidingFrankWolfe.simple_function import ZeroWeightedIndicatorFunction, SimpleFunction
+from SlidingFrankWolfe.simple_function_debugging import ZeroWeightedIndicatorFunction, SimpleFunction
 #import matpy as mp
 #import matplotlib.pyplot as plt
 
