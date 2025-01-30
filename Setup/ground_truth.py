@@ -3,8 +3,8 @@ import numpy as np
 import random
 import itertools
 from  Cheeger.rectangular_set import RectangularSet 
-from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
-#from SlidingFrankWolfe.simple_function import ZeroWeightedIndicatorFunction, SimpleFunction
+#from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
+from SlidingFrankWolfe.simple_function import ZeroWeightedIndicatorFunction, SimpleFunction
 #import matpy as mp
 #import matplotlib.pyplot as plt
 
@@ -382,7 +382,7 @@ class GroundTruth:
             #print(pair[1])
             # Gewicht anpassen, falls benötigt
             #indicator_function = ZeroWeightedIndicatorFunction(simple_set= pair[0], weight=pair[1])
-            indicator_function = WeightedIndicatorFunction( pair[0], pair[1])
+            indicator_function = ZeroWeightedIndicatorFunction( pair[0], pair[1])
             atoms.append(indicator_function)
 
         return SimpleFunction(atoms, imgsz = self.imgsz)
