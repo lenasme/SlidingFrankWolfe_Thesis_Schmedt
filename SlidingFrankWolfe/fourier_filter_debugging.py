@@ -91,7 +91,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
-                        function_grid[m] += scheme_weights[n] * (function.atoms[i].innner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
+                        function_grid[m] += scheme_weights[n] * (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
                         
                 fft_image = np.fft.fft2(function_grid)
                         
