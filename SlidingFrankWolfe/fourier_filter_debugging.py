@@ -95,6 +95,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
                         function_grid[m] += scheme_weights[n] * (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
+                plt.plot()
+                plt.imshow(function_grid)
+                plt.colorbar()
+                plt.show()
                         
                 fft_image = (np.fft.fft2(function_grid)).real
                         
