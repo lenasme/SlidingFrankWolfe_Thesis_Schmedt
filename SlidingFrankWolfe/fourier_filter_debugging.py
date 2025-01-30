@@ -89,18 +89,18 @@ def generate_triangle_aux(grid, cut_off, normalization):
                         y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
-                        print("Shape von scheme_points:", scheme_points.shape)
-                        print("Shape von meshes:", meshes.shape)
-                        print("Shape von meshes[i, j]:", meshes[i, j].shape)
-                        print("Shape von meshes[i, j, 0]:", meshes[i, j, 0].shape)
-                        print("Shape von scheme_points[n]:", scheme_points[n].shape)
-                        #print("x:", x[:10])  # Zeigt die ersten 10 x-Werte
-                        #print("y:", y[:10])  # Zeigt die ersten 10 y-Werte
+                        #print("Shape von scheme_points:", scheme_points.shape)
+                        #print("Shape von meshes:", meshes.shape)
+                        #print("Shape von meshes[i, j]:", meshes[i, j].shape)
+                        #print("Shape von meshes[i, j, 0]:", meshes[i, j, 0].shape)
+                        #print("Shape von scheme_points[n]:", scheme_points[n].shape)
+                        #print("x:", x)  # Zeigt die ersten 10 x-Werte
+                        #print("y:", y)  # Zeigt die ersten 10 y-Werte
 
                         # Fourier-Transformation für den Punkt (x, y)
                         fft_image = np.exp(-2j * np.pi * (freq_x * x + freq_y * y))
-                        print("Shape von fft_image:", fft_image.shape)
-                        print("Shape von np.sum(fft_image, axis=0):", np.sum(fft_image, axis=0).shape)
+                        #print("Shape von fft_image:", fft_image.shape)
+                        #print("Shape von np.sum(fft_image, axis=0):", np.sum(fft_image, axis=0).shape)
                         #print("Min:", np.min(np.abs(fft_image)))
                         #print("Max:", np.max(np.abs(fft_image)))
                         #print("Mean:", np.mean(np.abs(fft_image)))
