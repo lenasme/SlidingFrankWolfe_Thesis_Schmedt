@@ -114,7 +114,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 #print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
-            fft_image = (np.fft.fft2(function_grid)).real
+            fft_image = np.abs((np.fft.fft2(function_grid)))
                         
             print("function_grid shape:", function_grid.shape)
             print("fft_image shape:", fft_image.shape)
