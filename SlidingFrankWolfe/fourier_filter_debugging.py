@@ -108,7 +108,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
                 
             plt.plot()
-            plt.imshow(function_grid, cmap = cm.bwr)
+            plt.imshow(function_grid)
             plt.show()
                 #print("function_grid unique values:", np.unique(function_grid))
                 #print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
