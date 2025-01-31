@@ -52,7 +52,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     scheme = quadpy.t2.get_good_scheme(5)
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
-
+    print("scheme_weights:", scheme_weights)
     # Frequenzgitter erstellen
     freqs_x= np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
     freqs_y = np.fft.fftfreq(grid.shape[1], d=1 / grid.shape[1])
@@ -96,7 +96,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
                         function_grid[m] += scheme_weights[n] * (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
-                        print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
+                        print("inner_value:", function.atoms[i].inner_value)
+                        print("outer_value:", function.atoms[i].outer_value)
+                        #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
                 print(function_grid)
                 print("function_grid unique values:", np.unique(function_grid))
                 print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
