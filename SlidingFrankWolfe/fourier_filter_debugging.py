@@ -1,7 +1,7 @@
 import numpy as np
 import quadpy
 import matplotlib.pyplot as plt
-
+import matplotlib.cm as cm
 #from numpy import exp
 from numba import jit, prange
 from scipy.fft import ifftshift
@@ -102,7 +102,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         #print("inner_value:", function.atoms[i].inner_value)
                         #print("outer_value:", function.atoms[i].outer_value)
                         #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
-                print(function_grid)
+                
+                plt.plot()
+                plt.imshow(function_grid, cmap = cm.bwr)
+                plt.show()
                 #print("function_grid unique values:", np.unique(function_grid))
                 #print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
