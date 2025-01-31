@@ -102,27 +102,27 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
 
                     function_grid[x,y] = (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
-                print("inner_value:", function.atoms[i].inner_value)
-                print("outer_value:", function.atoms[i].outer_value)
-                print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
+            print("inner_value:", function.atoms[i].inner_value)
+            print("outer_value:", function.atoms[i].outer_value)
+            print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
                 
-                plt.plot()
-                plt.imshow(function_grid, cmap = cm.bwr)
-                plt.show()
+            plt.plot()
+            plt.imshow(function_grid, cmap = cm.bwr)
+            plt.show()
                 #print("function_grid unique values:", np.unique(function_grid))
                 #print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
-                fft_image = (np.fft.fft2(function_grid)).real
+            fft_image = (np.fft.fft2(function_grid)).real
                         
-                print("function_grid shape:", function_grid.shape)
-                print("fft_image shape:", fft_image.shape)
-                print("mask shape:", mask.shape)  
+            print("function_grid shape:", function_grid.shape)
+            print("fft_image shape:", fft_image.shape)
+            print("mask shape:", mask.shape)  
                 #print("mask_expanded shape:", mask_expanded.shape)      
                 # Anwenden der Frequenzmaske
-                fft_filtered = fft_image #* mask
-                print("fft_filtered shape:", fft_filtered.shape)
-                res[i, j, :] = fft_filtered.flatten()      
+            fft_filtered = fft_image #* mask
+            print("fft_filtered shape:", fft_filtered.shape)
+            res[i, :] = fft_filtered.flatten()      
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
