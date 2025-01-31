@@ -49,10 +49,10 @@ def generate_square_aux(grid, cut_off, normalization):
 
 
 def generate_triangle_aux(grid, cut_off,  normalization):
-    scheme = quadpy.t2.get_good_scheme(5)
-    scheme_weights = scheme.weights
-    scheme_points = scheme.points.T
-    print("scheme_weights:", scheme_weights)
+    #scheme = quadpy.t2.get_good_scheme(5)
+    #scheme_weights = scheme.weights
+    #scheme_points = scheme.points.T
+    #print("scheme_weights:", scheme_weights)
     # Frequenzgitter erstellen
     freqs_x= np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
     freqs_y = np.fft.fftfreq(grid.shape[1], d=1 / grid.shape[1])
@@ -75,30 +75,33 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         for i in range(len(meshes)):
             print(len(meshes))
             function_grid = np.zeros((grid.shape[0], grid.shape[1]))
-            for j in range(len(meshes[i])):
-                print(len(meshes[i]))
+            for x in range(function_grid.shape[0]):
+                for y in range(function_grid.shape[1]):
+                    
+            #for j in range(len(meshes[i])):
+            #    print(len(meshes[i]))
                 
                 #function_grid = np.zeros(grid.shape)
                 #function_grid = np.zeros((grid.shape[0], grid.shape[1]))
                 #print("grid shape:", grid.shape)
-                for m in range(grid.shape[0]):
-                    for n in range(scheme_weights.size):
-                        x = scheme_points[n, 0] * meshes[i, j, 0, 0] + \
-                            scheme_points[n, 1] * meshes[i, j, 1, 0] + \
-                            scheme_points[n, 2] * meshes[i, j, 2, 0]
+             #   for m in range(grid.shape[0]):
+              #      for n in range(scheme_weights.size):
+               #         x = scheme_points[n, 0] * meshes[i, j, 0, 0] + \
+                #            scheme_points[n, 1] * meshes[i, j, 1, 0] + \
+                 #           scheme_points[n, 2] * meshes[i, j, 2, 0]
 
-                        y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
-                            scheme_points[n, 1] * meshes[i, j, 1, 1] + \
-                            scheme_points[n, 2] * meshes[i, j, 2, 1]
+                  #      y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
+                   #         scheme_points[n, 1] * meshes[i, j, 1, 1] + \
+                    #        scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
-                        p = int(np.round(x * (grid.shape[0] - 1)))
-                        q = int(np.round(y * (grid.shape[1] - 1)))
+                    #    p = int(np.round(x * (grid.shape[0] - 1)))
+                     #   q = int(np.round(y * (grid.shape[1] - 1)))
 
-                        p = max(0, min(grid.shape[0] - 1, p))
-                        q = max(0, min(grid.shape[1] - 1, q))
+                      #  p = max(0, min(grid.shape[0] - 1, p))
+                       # q = max(0, min(grid.shape[1] - 1, q))
 
 
-                        function_grid[p,q] += (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
+                    function_grid[x,y] += (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
                         #print("inner_value:", function.atoms[i].inner_value)
                         #print("outer_value:", function.atoms[i].outer_value)
                         #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
