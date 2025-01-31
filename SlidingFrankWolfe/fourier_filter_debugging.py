@@ -96,8 +96,12 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
                         function_grid[m] += scheme_weights[n] * (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
+                        print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
                 print(function_grid)
-
+                print("function_grid unique values:", np.unique(function_grid))
+                print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
+                
+                
                 fft_image = (np.fft.fft2(function_grid)).real
                         
                 print("function_grid shape:", function_grid.shape)
