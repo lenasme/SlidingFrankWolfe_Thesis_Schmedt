@@ -114,7 +114,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 print("mask shape:", mask.shape)  
                 #print("mask_expanded shape:", mask_expanded.shape)      
                 # Anwenden der Frequenzmaske
-                fft_filtered = fft_image * mask
+                fft_filtered = fft_image #* mask
                 print("fft_filtered shape:", fft_filtered.shape)
                 res[i, j, :] = fft_filtered.flatten()      
 
