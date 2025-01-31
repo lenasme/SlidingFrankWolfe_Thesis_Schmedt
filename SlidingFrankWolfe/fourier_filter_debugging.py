@@ -74,7 +74,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         #print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
             print(len(meshes))
-            print(function.atoms[i].support  )
+            print(function.atoms[i].support.boundary_vertices)  
             function_grid = np.zeros((grid.shape[0], grid.shape[1]))
             for x in range(function_grid.shape[0]):
                 for y in range(function_grid.shape[1]):
