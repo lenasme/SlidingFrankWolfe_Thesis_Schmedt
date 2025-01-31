@@ -91,7 +91,14 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             scheme_points[n, 1] * meshes[i, j, 1, 1] + \
                             scheme_points[n, 2] * meshes[i, j, 2, 1]
                         
-                        function_grid[m] += (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
+                        p = int(np.round(x * (grid.shape[0] - 1)))
+                        q = int(np.round(y * (grid.shape[1] - 1)))
+
+                        p = max(0, min(grid.shape[0] - 1, p))
+                        q = max(0, min(grid.shape[1] - 1, q))
+
+
+                        function_grid[p,q] += (function.atoms[i].inner_value if function.atoms[i].support.contains((x,y)) else function.atoms[i].outer_value)
                         #print("inner_value:", function.atoms[i].inner_value)
                         #print("outer_value:", function.atoms[i].outer_value)
                         #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
