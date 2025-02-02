@@ -60,7 +60,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     freq_norms = np.abs(freq_x) + np.abs(freq_y)
 
     
-    mask = np.zeros(grid.shape)
+    mask = np.zeros((grid.shape[0], grid.shape[1]))
     mask[freq_norms <= cut_off] = 1
    
     # Frequenzmaske erstellen
