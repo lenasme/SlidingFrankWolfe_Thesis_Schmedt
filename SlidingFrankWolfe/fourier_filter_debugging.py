@@ -130,8 +130,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
 
             print("fft_filtered shape:", fft_filtered.shape)
-            #res[i, :] = fft_filtered.flatten()   
-            res[i, :] = ifft_image.flatten()   
+            res[i, :] = fft_filtered.flatten()   
+            #res[i, :] = ifft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
