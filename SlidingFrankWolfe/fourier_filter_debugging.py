@@ -116,7 +116,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 
                 
             #fft_image = np.abs((np.fft.fft2(function_grid)))
-            fft_image = ((np.fft.fft2(function_grid))) .real          
+            fft_image = (np.fft.ifftshift(np.fft.fft2(function_grid))) .real          
             print("function_grid shape:", function_grid.shape)
             print("fft_image shape:", fft_image.shape)
             print("mask shape:", mask.shape)  
