@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 #from numpy import exp
 from numba import jit, prange
-from scipy.fft import ifftshift
+from scipy.fft import ifftshift, fft2, ifft2, fftshift 
 
 
 def generate_square_aux(grid, cut_off, normalization):
@@ -127,7 +127,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             #fft_filtered = np.fft.fftshift(fft_image * mask)
             fft_filtered = fft_image * mask
 
-            ifft_image = np.fft2.ifft2(np.fft.ifftshift(fft_filtered)).real
+            ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
 
             print("fft_filtered shape:", fft_filtered.shape)
             #res[i, :] = fft_filtered.flatten()   
