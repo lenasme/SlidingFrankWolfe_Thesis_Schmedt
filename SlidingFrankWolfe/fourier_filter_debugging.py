@@ -65,9 +65,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     mask = (freq_norms <= cut_off)
     #mask_expanded = np.expand_dims(mask, axis=-1) 
     #mask = np.fft.ifftshift(mask)
-    #plt.imshow(mask)
-    #plt.colorbar()
-    #plt.show()
+    plt.plot()
+    plt.imshow(mask)
+    plt.colorbar()
+    plt.show()
 
     #@jit(nopython=True, parallel=True)
     def aux(meshes, function, res):
@@ -115,7 +116,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 
                 
             #fft_image = np.abs((np.fft.fft2(function_grid)))
-            fft_image = ((np.fft.fft2(function_grid))) .real          
+            fft_image = (np.fft.fftshift(np.fft.fft2(function_grid))) .real          
             print("function_grid shape:", function_grid.shape)
             print("fft_image shape:", fft_image.shape)
             print("mask shape:", mask.shape)  
