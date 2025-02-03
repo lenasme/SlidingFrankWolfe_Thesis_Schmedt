@@ -89,27 +89,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             for x in range(function_grid.shape[0]):
                 for y in range(function_grid.shape[1]):
                     
-            #for j in range(len(meshes[i])):
-            #    print(len(meshes[i]))
-                
-                #function_grid = np.zeros(grid.shape)
-                #function_grid = np.zeros((grid.shape[0], grid.shape[1]))
-                #print("grid shape:", grid.shape)
-             #   for m in range(grid.shape[0]):
-              #      for n in range(scheme_weights.size):
-               #         x = scheme_points[n, 0] * meshes[i, j, 0, 0] + \
-                #            scheme_points[n, 1] * meshes[i, j, 1, 0] + \
-                 #           scheme_points[n, 2] * meshes[i, j, 2, 0]
-
-                  #      y = scheme_points[n, 0] * meshes[i, j, 0, 1] + \
-                   #         scheme_points[n, 1] * meshes[i, j, 1, 1] + \
-                    #        scheme_points[n, 2] * meshes[i, j, 2, 1]
-                        
-                    #    p = int(np.round(x * (grid.shape[0] - 1)))
-                     #   q = int(np.round(y * (grid.shape[1] - 1)))
-
-                      #  p = max(0, min(grid.shape[0] - 1, p))
-                       # q = max(0, min(grid.shape[1] - 1, q))
+            
                     norm_x = x / function_grid.shape[0]
                     norm_y = y / function_grid.shape[1]
 
@@ -130,6 +110,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     #print("inner_value:", function.atoms[i].inner_value)
                     #print("outer_value:", function.atoms[i].outer_value)
                     #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
+             
+
+
+
              
             plt.plot()
             plt.imshow(function_grid)
