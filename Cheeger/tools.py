@@ -126,6 +126,57 @@ def triangulate(vertices, max_triangle_area=None, split_boundary=False, plot_res
 
     return raw_mesh
 
+def triangulate_combined(vertices_inner, vertices_outer, max_triangle_area=None, split_boundary=False, plot_result=False):
+    """
+    Triangulate the interior of a closed polygonal curve using the triangle library (Python wrapper around Shewchuk's
+    Triangle mesh generator)
+
+    Parameters
+    ----------
+    vertices : array, shape (N, 2)
+        Coordinates of the curve's vertices
+    max_triangle_area : None or float
+        Maximum area allowed for triangles, see Shewchuk's Triangle mesh generator, defaut None (no constraint)
+    split_boundary : bool
+        Whether to allow boundary segments to be splitted or not, defaut False
+    plot_result : bool
+        If True, the resulting triangulation is shown along with the input, defaut False
+
+    Returns
+    -------
+    raw_mesh : dict
+        Output mesh, see the documentation of the triangle library
+
+    """
+
+    combined_vertices = np.vstack([vertices_inner, vertices_outer])
+
+    num_inner = len(vertices_inner)
+    num_outer = len(vertices_outer)
+
+    inner_segments = [[i, (i + 1) % num_inner] for i in range(num_inner)]
+    outer_segments = [[num_inner + i, num_inner + (i + 1) % num_outer] for i in range(num_outer)]
+    connecting_segments = [[i, num_inner + i] for i in range(num_outer)]
+    
+    segments = np.array(inner_segments + outer_segments + connecting_segments)
+    triangle_input = dict(vertices=combined_vertices, segments=segments)
+
+    opts = 'qpe'
+
+    if max_triangle_area is not None:
+        opts = opts + 'a{}'.format(max_triangle_area)
+
+    if not split_boundary:
+        opts = opts + 'Y'
+
+    raw_mesh = triangle.triangulate(triangle_input, opts)
+
+    if plot_result:
+        triangle.compare(plt, triangle_input, raw_mesh)
+        plt.show()
+
+    return raw_mesh
+
 
 @jit(nopython=True)
 def find_threshold(y):
