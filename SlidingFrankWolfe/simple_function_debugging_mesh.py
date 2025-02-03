@@ -114,7 +114,8 @@ class SimpleFunction:
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-            
+
+        print("obs shape", obs.shape)   
 
         fourier._triangle_aux(meshes, function, obs) 
         
