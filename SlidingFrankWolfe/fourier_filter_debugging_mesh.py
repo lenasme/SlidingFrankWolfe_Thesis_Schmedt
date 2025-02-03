@@ -84,6 +84,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             
 
             plt.figure(figsize=(8, 8))
+
             for j in range(len(meshes[i])):
                 triangle = meshes[i][j]  # Holt sich die Vertices des Dreiecks
                 plt.plot([triangle[0, 0], triangle[1, 0], triangle[2, 0], triangle[0, 0]], 
@@ -93,10 +94,11 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.ylabel('Y')
             plt.title('Mesh Visualization')
             plt.show()
-            
+
+
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
-            
+            mask = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
             for j in range(len(meshes[i])):
 
                 function_grid = np.zeros((grid.shape[0], grid.shape[1]))
@@ -136,11 +138,15 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                             function_grid[x, y] = 0
                             
                         elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
-                            function_grid[x, y] = function.atoms[i].inner_value
-                        
+                            if not mask[x,y]:
+                                function_grid[x, y] = function.atoms[i].inner_value
+                                mask[x,y] = True
 
                         else:   
-                            function_grid[x, y] = function.atoms[i].outer_value
+                            if not mask[x,y]:
+                                function_grid[x, y] = function.atoms[i].outer_value
+                                mask[x,y] = True
+                    
                     #if function.atoms[i].support.contains((norm_x, norm_y)):
                         #function_grid[x, y] = function.atoms[i].inner_value
                     #else:
