@@ -1,9 +1,10 @@
 import numpy as np
 
 from math import copysign
-from .simple_function_debugging import SimpleFunction, WeightedIndicatorFunction
+#from .simple_function import SimpleFunction, WeightedIndicatorFunction
+from .simple_function_debugging_mesh import SimpleFunction, WeightedIndicatorFunction
 from Cheeger.tools import resample
-from Cheeger.rectangular_set import RectangularSet
+from Cheeger.rectangular_set_debugging import RectangularSet
 from Cheeger.plot_utils import plot_simple_set
 
 
