@@ -103,9 +103,15 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
                       #  p = max(0, min(grid.shape[0] - 1, p))
                        # q = max(0, min(grid.shape[1] - 1, q))
+                    norm_x = x / function_grid.shape[0]
+                    norm_y = y / function_grid.shape[1]
 
+                    if function.atoms[i].support.contains((norm_x, norm_y)):
+                        function_grid[x, y] = function.atoms[i].inner_value
+                    else:
+                        function_grid[x, y] = function.atoms[i].outer_value
 
-                    function_grid[x,y] = (function.atoms[i].inner_value if function.atoms[i].support.contains((x/(function_grid.shape[0]),y/(function_grid.shape[1]))) else function.atoms[i].outer_value)
+                    #function_grid[x,y] = (function.atoms[i].inner_value if function.atoms[i].support.contains((x/(function_grid.shape[0]),y/(function_grid.shape[1]))) else function.atoms[i].outer_value)
                     #print("inner_value:", function.atoms[i].inner_value)
                     #print("outer_value:", function.atoms[i].outer_value)
                     #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
@@ -140,7 +146,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             #print("fft_filtered shape:", fft_filtered.shape)
             #res[i,1, :] = fft_filtered.flatten()   
-            res[i, :] = shifted_fft_image.flatten(order = "C") 
+            res[i, :] = shifted_fft_image.flatten() 
             print(res[i,:].size) 
             plt.plot()
             plt.imshow(np.abs(np.fft.ifft2((res[i, :]).reshape((100, 100)))), cmap="bwr")
