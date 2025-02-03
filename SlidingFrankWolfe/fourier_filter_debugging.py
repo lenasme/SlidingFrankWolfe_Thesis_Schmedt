@@ -79,8 +79,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)  
             function_grid = np.zeros((grid.shape[0], grid.shape[1]))
-            if i==6:
-                indices=[]
+        
             
             for x in range(function_grid.shape[0]):
                 for y in range(function_grid.shape[1]):
@@ -109,8 +108,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     norm_x = x / function_grid.shape[0]
                     norm_y = y / function_grid.shape[1]
 
-                    if i ==6 and function.atoms[6].support.contains((norm_x, norm_y)):
-                        indices.append([norm_x, norm_y])
+        
 
                     if function.atoms[i].support.contains((norm_x, norm_y)):
                         function_grid[x, y] = function.atoms[i].inner_value
@@ -125,7 +123,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.plot()
             plt.imshow(function_grid)
             plt.show()
-                #print("function_grid unique values:", np.unique(function_grid))
+                
             print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
@@ -150,31 +148,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.imshow(np.abs(ifft_image), cmap = 'bwr')
             plt.show()
 
-            #print("fft_filtered shape:", fft_filtered.shape)
-            #res[i,1, :] = fft_filtered.flatten()   
-            res[i, :] = shifted_fft_image.flatten() 
-            print(res[i,:].size) 
-            plt.plot()
-            plt.imshow(np.abs(np.fft.ifft2((res[i, :]).reshape((100, 100)))), cmap="bwr")
-            plt.colorbar()
-            plt.title(f"ifft2 aus res[{i}, :] nach Speicherung")
-            plt.show() 
-
-            vector = shifted_fft_image.flatten()
-            matrix = np.reshape(vector, (grid.shape[0], grid.shape[1]))
-
-            plt.plot()
-            plt.imshow(np.abs(np.fft.ifft2(matrix)), cmap = 'bwr')
-            plt.title("abruf ohne res, aber geflattet und wieder zusammengesetzt")
-            plt.show()
-        
-        print("interior indices", indices)   
-        plt.plot()
-        plt.imshow(np.abs(np.fft.ifft2(np.fft.ifftshift(res[0, :].reshape((100, 100))))))
-        plt.colorbar()
-        plt.title("ifft2 aus obs[0, 0, :] innerhalb von triangle_aux")
-        plt.show()
-            #res[i, :] = ifft_image.flatten()   
+              
+            res[i, :] = shifted_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
