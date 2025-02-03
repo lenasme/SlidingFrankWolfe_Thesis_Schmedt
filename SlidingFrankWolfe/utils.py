@@ -4,7 +4,7 @@ import itertools
 
 from scipy import interpolate
 from shapely.geometry import Polygon
-from .simple_function_debugging import SimpleFunction, ZeroWeightedIndicatorFunction
+from .simple_function_debugging_mesh import SimpleFunction, ZeroWeightedIndicatorFunction
 
 import matplotlib.ticker as tick
 from matplotlib import rc
