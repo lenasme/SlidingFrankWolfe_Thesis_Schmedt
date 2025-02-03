@@ -109,8 +109,8 @@ class SimpleFunction:
 
         max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
-        obs = np.zeros((self.num_atoms, max_num_triangles, fourier.grid_size**2))
-        #obs = np.zeros((self.num_atoms,  fourier.grid_size**2))
+        #obs = np.zeros((self.num_atoms, max_num_triangles, fourier.grid_size**2))
+        obs = np.zeros((self.num_atoms,  fourier.grid_size**2))
         for i in range(self.num_atoms):
             support_i = self.atoms[i].support
             meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
@@ -122,10 +122,11 @@ class SimpleFunction:
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
-            res = np.sum(obs, axis=0)
-            #res = np.zeros(fourier.grid_size**2)
-            #for i in range(self.num_atoms):
-                #res += self.atoms[i].weight * np.sum(obs[i], axis=0)
+            #res = np.sum(obs, axis=0)
+            res = np.zeros(fourier.grid_size**2)
+
+            for i in range(self.num_atoms):
+                res += self.atoms[i].weight * np.sum(obs[i])
                 #res += np.sum(obs[i], axis=0)
         return res
 
