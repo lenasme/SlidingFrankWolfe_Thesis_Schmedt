@@ -79,8 +79,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         for i in range(len(meshes)):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)
-            print(type(meshes[i]))  # Gibt den Typ des Elements aus
-            print(meshes[i])
+            #print(type(meshes[i]))  # Gibt den Typ des Elements aus
+            #print(meshes[i])
             
 
             plt.figure(figsize=(8, 8))
@@ -98,7 +98,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
-            mask = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
+            maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
             for j in range(len(meshes[i])):
 
                 function_grid = np.zeros((grid.shape[0], grid.shape[1]))
@@ -140,12 +140,12 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
                             if not mask[x,y]:
                                 function_grid[x, y] = function.atoms[i].inner_value
-                                mask[x,y] = True
+                                maske[x,y] = True
 
                         else:   
                             if not mask[x,y]:
                                 function_grid[x, y] = function.atoms[i].outer_value
-                                mask[x,y] = True
+                                maske[x,y] = True
                     
                     #if function.atoms[i].support.contains((norm_x, norm_y)):
                         #function_grid[x, y] = function.atoms[i].inner_value
