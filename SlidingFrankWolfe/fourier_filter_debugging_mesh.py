@@ -80,6 +80,25 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)
 
+            plt.figure(figsize=(6, 6))
+    
+            # Alle Punkte (Knoten) des Meshes
+            vertices = meshes[i]['vertices']
+            triangles = meshes[i]['triangles']
+
+            # Zeichne alle Dreiecke
+            for tri in triangles:
+                pts = vertices[tri]  # Hole die 3 Punkte des Dreiecks
+                plt.fill(*zip(*pts), edgecolor='black', fill=False, linewidth=1)
+
+            # Zeichne die Punkte als kleine Kreise
+            plt.scatter(vertices[:, 0], vertices[:, 1], color='red', s=10, label="Vertices")
+
+            plt.axis("equal")
+            plt.title("Triangulated Mesh")
+            plt.legend()
+            plt.show()
+
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
             
@@ -90,23 +109,23 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 triangle_vertices = np.array([[meshes[i,j,0,0], meshes[i,j,0,1]],[meshes[i,j,1,0], meshes[i,j,1,1]],[meshes[i,j,2,0], meshes[i,j,2,1]]])
                 triangle_polygon = Polygon(triangle_vertices)
 
-                fig, ax = plt.subplots()
+                #fig, ax = plt.subplots()
 
                 # Plotte das Polygon
-                x, y = triangle_polygon.exterior.xy
-                ax.fill(x, y, alpha=0.5, color='blue')  # Das Polygon füllen (blau)
-                ax.plot(x, y, color='red')  # Das Polygonumriss (rot)
+                #x, y = triangle_polygon.exterior.xy
+                #ax.fill(x, y, alpha=0.5, color='blue')  # Das Polygon füllen (blau)
+                #ax.plot(x, y, color='red')  # Das Polygonumriss (rot)
 
-                ax.set_xlim(0, 1)
-                ax.set_ylim(0, 1)
+                #ax.set_xlim(0, 1)
+                #ax.set_ylim(0, 1)
 
                 # Achsen einstellen
-                ax.set_aspect('equal')
-                ax.set_xlabel('X')
-                ax.set_ylabel('Y')
+                #ax.set_aspect('equal')
+                #ax.set_xlabel('X')
+                #ax.set_ylabel('Y')
 
-                plt.title('Randpolygon')
-                plt.show()
+                #plt.title('Randpolygon')
+                #plt.show()
 
                 for x in range(function_grid.shape[0]):
                     for y in range(function_grid.shape[1]):
