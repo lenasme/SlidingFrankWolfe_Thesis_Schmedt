@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.spatial import Delaunay
 from .tools import winding, triangulate
 
 class RectangularSet:
@@ -14,8 +15,8 @@ class RectangularSet:
 		self.mesh_faces = None
 		self.mesh_boundary_faces_indices = None
 		# creation of the inner mesh
-		#self.create_mesh(boundary_vertices, max_tri_area)
-		self.create_mesh(boundary_vertices, max_tri_area)
+		
+		self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
 
 	@property
 	def boundary_vertices_indices(self):
@@ -278,9 +279,23 @@ class RectangularSet:
 
 
 
-	def create_whole_mesh(self, domain_vertices, max_tri_area):
+	def create_whole_mesh(self, boundary_vertices, domain_vertices, max_tri_area):
+		"""
+		Create the inner mesh of the set
+
+		Additional: also outer of the set (not only inner)
 		
-		mesh = triangulate(domain_vertices, max_triangle_area=max_tri_area)
+		Parameters
+		----------
+		boundary_vertices : array, shape (N, 2)
+			Each row contains the two coordinates of a boundary vertex
+		max_tri_area : float
+			Maximum triangle area for the inner mesh
+
+		"""
+		combined_vertices = np.vstack([boundary_vertices, domain_vertices])
+		mesh = Delaunay(combined_vertices, max_triangle_area=max_tri_area)
+
 		self.mesh_vertices = mesh['vertices']
 		self.mesh_faces = mesh['triangles']
 
@@ -303,4 +318,4 @@ class RectangularSet:
 			if len(np.intersect1d(np.arange(self.num_boundary_vertices), self.mesh_faces[i])) > 0:
 				boundary_faces_indices.append(i)
 
-		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)
+		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)	
