@@ -5,6 +5,7 @@ import matplotlib.cm as cm
 #from numpy import exp
 from numba import jit, prange
 from scipy.fft import ifftshift, fft2, ifft2, fftshift 
+from shapely.geometry import Point, Polygon
 
 
 def generate_square_aux(grid, cut_off, normalization):
@@ -77,7 +78,11 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         #print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
             print(len(meshes))
-            print(function.atoms[i].support.boundary_vertices)  
+            print(function.atoms[i].support.boundary_vertices)
+
+            boundary_vertices = function.atoms[i].support.boundary_vertices  
+            boundary_polygon = Polygon(boundary_vertices)
+            
             function_grid = np.zeros((grid.shape[0], grid.shape[1]))
         
             
@@ -108,12 +113,18 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     norm_x = x / function_grid.shape[0]
                     norm_y = y / function_grid.shape[1]
 
-        
+                    point = Point(norm_x, norm_y)
 
-                    if function.atoms[i].support.contains((norm_x, norm_y)):
+        
+                    if boundary_polygon.contains(point):
                         function_grid[x, y] = function.atoms[i].inner_value
-                    else:
+
+                    else:   
                         function_grid[x, y] = function.atoms[i].outer_value
+                    #if function.atoms[i].support.contains((norm_x, norm_y)):
+                        #function_grid[x, y] = function.atoms[i].inner_value
+                    #else:
+                        #function_grid[x, y] = function.atoms[i].outer_value
 
                     #function_grid[x,y] = (function.atoms[i].inner_value if function.atoms[i].support.contains((x/(function_grid.shape[0]),y/(function_grid.shape[1]))) else function.atoms[i].outer_value)
                     #print("inner_value:", function.atoms[i].inner_value)
