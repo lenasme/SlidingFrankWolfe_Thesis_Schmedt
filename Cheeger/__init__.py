@@ -4,3 +4,4 @@ from .integrable_function import IntegrableFunction
 from .tools import winding, resample
 from .plot_utils import *
 from .rectangular_set import *
+from .rectangular_set_debugging import *
