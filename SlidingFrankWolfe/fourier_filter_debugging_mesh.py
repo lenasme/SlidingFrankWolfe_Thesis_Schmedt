@@ -134,31 +134,31 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
 
              
-            plt.plot()
-            plt.imshow(function_grid)
-            plt.show()
+                plt.plot()
+                plt.imshow(function_grid)
+                plt.show()
                 
-            print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
+                print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
-            fft_image = ((np.fft.fft2(function_grid)))
-            shifted_fft_image = np.fft.fftshift(fft_image) * mask
+                fft_image = ((np.fft.fft2(function_grid)))
+                shifted_fft_image = np.fft.fftshift(fft_image) * mask
             
 
-            plt.plot()
-            plt.imshow(shifted_fft_image.real)
-            plt.show()
+                plt.plot()
+                plt.imshow(shifted_fft_image.real)
+                plt.show()
 
-            #ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
-            ifft_image = np.fft.ifft2(shifted_fft_image)
-            plt.plot()
-            plt.imshow(np.abs(ifft_image), cmap = 'bwr')
-            plt.show()
+                #ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
+                ifft_image = np.fft.ifft2(shifted_fft_image)
+                plt.plot()
+                plt.imshow(np.abs(ifft_image), cmap = 'bwr')
+                plt.show()
 
-            print("res shape:", res.shape)
-            print("i, j:", i, j)
-            print("shifted_fft_image shape:", shifted_fft_image.shape)
-            res[i, j, :] = shifted_fft_image.flatten()   
+                print("res shape:", res.shape)
+                print("i, j:", i, j)
+                print("shifted_fft_image shape:", shifted_fft_image.shape)
+                res[i, j, :] = shifted_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
