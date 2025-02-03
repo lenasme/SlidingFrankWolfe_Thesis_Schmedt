@@ -123,10 +123,10 @@ class SimpleFunction:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
             #res = np.sum(obs, axis=0)
-            res = np.zeros(fourier.grid_size**2)
-
-            for i in range(self.num_atoms):
-                res += self.atoms[i].weight * np.sum(obs[i])
+            #res = np.zeros(fourier.grid_size**2)
+            res = np.sum(obs, axis=0)
+            #for i in range(self.num_atoms):
+             #   res += self.atoms[i].weight * np.sum(obs[i])
                 #res += np.sum(obs[i], axis=0)
         return res
 
