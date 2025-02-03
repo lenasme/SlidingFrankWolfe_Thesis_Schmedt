@@ -79,7 +79,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         for i in range(len(meshes)):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)
-
+            print(type(meshes[i]))  # Gibt den Typ des Elements aus
+            print(meshes[i])
             plt.figure(figsize=(6, 6))
     
             # Alle Punkte (Knoten) des Meshes
