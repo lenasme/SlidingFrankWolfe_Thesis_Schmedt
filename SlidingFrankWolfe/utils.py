@@ -94,6 +94,9 @@ def plot_simple_function(f, m, save_path = None):
 
 
 def plot_obs(y, cmap, v_abs_max=None, save_path=None):
+    if np.iscomplexobj(y):
+        y = np.abs(y)
+
     if v_abs_max is None:
         v_abs_max = np.max(y)
 
