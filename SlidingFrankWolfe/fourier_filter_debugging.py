@@ -140,7 +140,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             #print("fft_filtered shape:", fft_filtered.shape)
             #res[i,1, :] = fft_filtered.flatten()   
-            res[i, :] = shifted_fft_image.T.flatten()  
+            res[i, :] = shifted_fft_image.flatten(order = "C")  
             plt.plot()
             plt.imshow(np.abs(np.fft.ifft2(res[i, :].reshape((100, 100)))), cmap="bwr")
             plt.colorbar()
