@@ -116,7 +116,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     point = Point(norm_x, norm_y)
 
         
-                    if boundary_polygon.contains(point):
+                    if boundary_polygon.contains(point) or boundary_polygon.boundary.contains(point):
                         function_grid[x, y] = function.atoms[i].inner_value
 
                     else:   
