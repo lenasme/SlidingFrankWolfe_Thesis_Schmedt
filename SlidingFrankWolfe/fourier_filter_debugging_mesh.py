@@ -135,15 +135,18 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
         
                         if not (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
-                            function_grid[x, y] = 0
+                            if not maske[x,y]:
+                                function_grid[x, y] = 0
+                                maske[x,y] = True
+
                             
                         elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
-                            if not mask[x,y]:
+                            if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].inner_value
                                 maske[x,y] = True
 
                         else:   
-                            if not mask[x,y]:
+                            if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].outer_value
                                 maske[x,y] = True
                     
