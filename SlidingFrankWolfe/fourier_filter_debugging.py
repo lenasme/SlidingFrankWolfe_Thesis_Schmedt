@@ -114,14 +114,14 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.imshow(function_grid)
             plt.show()
                 #print("function_grid unique values:", np.unique(function_grid))
-                #print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
+            print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
             #fft_image = ((np.fft.fft2(function_grid)))
             fft_image = (np.fft.fftshift(np.fft.fft2(function_grid)))          
-            print("function_grid shape:", function_grid.shape)
-            print("fft_image shape:", fft_image.shape)
-            print("mask shape:", mask.shape)  
+            #print("function_grid shape:", function_grid.shape)
+            #print("fft_image shape:", fft_image.shape)
+            #print("mask shape:", mask.shape)  
                 #print("mask_expanded shape:", mask_expanded.shape)      
                 # Anwenden der Frequenzmaske
             #fft_filtered = np.fft.fftshift(fft_image * mask)
@@ -130,7 +130,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
            
             plt.plot()
-            plt.imshow(ifft_image)
+            plt.imshow(ifft_image, cmap = 'bwr')
             plt.show()
 
             #print("fft_filtered shape:", fft_filtered.shape)
