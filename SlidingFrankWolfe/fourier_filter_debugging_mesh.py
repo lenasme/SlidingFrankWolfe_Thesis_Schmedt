@@ -90,6 +90,24 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 triangle_vertices = np.array([[meshes[i,j,0,0], meshes[i,j,0,1]],[meshes[i,j,1,0], meshes[i,j,1,1]],[meshes[i,j,2,0], meshes[i,j,2,1]]])
                 triangle_polygon = Polygon(triangle_vertices)
 
+                fig, ax = plt.subplots()
+
+                # Plotte das Polygon
+                x, y = triangle_polygon.exterior.xy
+                ax.fill(x, y, alpha=0.5, color='blue')  # Das Polygon füllen (blau)
+                ax.plot(x, y, color='red')  # Das Polygonumriss (rot)
+
+                ax.set_xlim(0, 1)
+                ax.set_ylim(0, 1)
+
+                # Achsen einstellen
+                ax.set_aspect('equal')
+                ax.set_xlabel('X')
+                ax.set_ylabel('Y')
+
+                plt.title('Randpolygon')
+                plt.show()
+
                 for x in range(function_grid.shape[0]):
                     for y in range(function_grid.shape[1]):
                     
@@ -111,11 +129,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     #else:
                         #function_grid[x, y] = function.atoms[i].outer_value
 
-                    #function_grid[x,y] = (function.atoms[i].inner_value if function.atoms[i].support.contains((x/(function_grid.shape[0]),y/(function_grid.shape[1]))) else function.atoms[i].outer_value)
-                    #print("inner_value:", function.atoms[i].inner_value)
-                    #print("outer_value:", function.atoms[i].outer_value)
-                    #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
-             
+                    
 
 
 
@@ -129,14 +143,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 
             fft_image = ((np.fft.fft2(function_grid)))
             shifted_fft_image = np.fft.fftshift(fft_image) * mask
-            #fft_image = (np.fft.fftshift(np.fft.fft2(function_grid)))          
-            #print("function_grid shape:", function_grid.shape)
-            #print("fft_image shape:", fft_image.shape)
-            #print("mask shape:", mask.shape)  
-                #print("mask_expanded shape:", mask_expanded.shape)      
-                # Anwenden der Frequenzmaske
-            #fft_filtered = np.fft.fftshift(fft_image * mask)
-            fft_filtered = (fft_image * mask).real
+            
 
             plt.plot()
             plt.imshow(shifted_fft_image.real)
