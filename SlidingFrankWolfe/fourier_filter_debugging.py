@@ -79,6 +79,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)  
             function_grid = np.zeros((grid.shape[0], grid.shape[1]))
+            if i==6:
+                indices=[]
+            
             for x in range(function_grid.shape[0]):
                 for y in range(function_grid.shape[1]):
                     
@@ -106,6 +109,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     norm_x = x / function_grid.shape[0]
                     norm_y = y / function_grid.shape[1]
 
+                    if i ==6 and function.atoms[6].support.contains((norm_x, norm_y)):
+                        indices.append([norm_x, norm_y])
+
                     if function.atoms[i].support.contains((norm_x, norm_y)):
                         function_grid[x, y] = function.atoms[i].inner_value
                     else:
@@ -115,7 +121,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                     #print("inner_value:", function.atoms[i].inner_value)
                     #print("outer_value:", function.atoms[i].outer_value)
                     #print(f"x: {x}, y: {y}, contains: {function.atoms[i].support.contains((x,y))}")
-                
+             
             plt.plot()
             plt.imshow(function_grid)
             plt.show()
@@ -161,7 +167,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.imshow(np.abs(np.fft.ifft2(matrix)), cmap = 'bwr')
             plt.title("abruf ohne res, aber geflattet und wieder zusammengesetzt")
             plt.show()
-
+        
+        print("interior indices", indices)   
         plt.plot()
         plt.imshow(np.abs(np.fft.ifft2(np.fft.ifftshift(res[0, :].reshape((100, 100))))))
         plt.colorbar()
