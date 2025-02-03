@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.spatial import Delaunay
-from .tools import winding, triangulate
+from .tools import winding, triangulate, triangulate_combined
 
 class RectangularSet:
 
@@ -293,8 +293,7 @@ class RectangularSet:
 			Maximum triangle area for the inner mesh
 
 		"""
-		combined_vertices = np.vstack([boundary_vertices, domain_vertices])
-		mesh = Delaunay(combined_vertices)
+		mesh = triangulate_combined(boundary_vertices, domain_vertices, max_triangle_area=max_tri_area)
 
 		self.mesh_vertices = mesh['vertices']
 		self.mesh_faces = mesh['triangles']
