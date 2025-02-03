@@ -294,7 +294,7 @@ class RectangularSet:
 
 		"""
 		combined_vertices = np.vstack([boundary_vertices, domain_vertices])
-		mesh = Delaunay(combined_vertices, max_triangle_area=max_tri_area)
+		mesh = Delaunay(combined_vertices)
 
 		self.mesh_vertices = mesh['vertices']
 		self.mesh_faces = mesh['triangles']
