@@ -118,7 +118,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         point = Point(norm_x, norm_y)
 
         
-                        if (rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) and (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
+                        if not (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
+                            function_grid[x, y] = 0
+                            
+                        elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
                             function_grid[x, y] = function.atoms[i].inner_value
                         
 
