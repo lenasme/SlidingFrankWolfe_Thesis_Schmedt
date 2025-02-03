@@ -149,6 +149,11 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.imshow(np.abs(np.fft.ifft2(matrix)), cmap = 'bwr')
             plt.show()
 
+        plt.plot()
+        plt.imshow(np.abs(np.fft.ifft2((res[0, :].reshape((100, 100))))))
+        plt.colorbar()
+        plt.title("ifft2 aus obs[0, 0, :] innerhalb von triangle_aux")
+        plt.show()
             #res[i, :] = ifft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
