@@ -148,7 +148,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.imshow(np.abs(ifft_image), cmap = 'bwr')
             plt.show()
 
-              
+            print("res shape:", res.shape)
+            print("i, j:", i, j)
+            print("shifted_fft_image shape:", shifted_fft_image.shape)
             res[i, j, :] = shifted_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
