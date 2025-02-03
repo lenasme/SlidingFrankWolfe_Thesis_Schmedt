@@ -152,6 +152,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             plt.plot()
             plt.imshow(np.abs(np.fft.ifft2(matrix)), cmap = 'bwr')
+            plt.title("abruf ohne res, aber geflattet und wieder zusammengesetzt")
             plt.show()
 
         plt.plot()
