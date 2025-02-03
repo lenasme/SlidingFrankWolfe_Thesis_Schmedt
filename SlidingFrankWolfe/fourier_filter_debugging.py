@@ -140,7 +140,12 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             #print("fft_filtered shape:", fft_filtered.shape)
             #res[i,1, :] = fft_filtered.flatten()   
-            res[i, :] = shifted_fft_image.flatten()   
+            res[i, :] = shifted_fft_image.flatten()  
+            plt.plot()
+            plt.imshow(np.abs(np.fft.ifft2(res[i, :].reshape((100, 100)))), cmap="bwr")
+            plt.colorbar()
+            plt.title(f"ifft2 aus res[{i}, :] nach Speicherung")
+            plt.show() 
 
             vector = shifted_fft_image.flatten()
             matrix = np.reshape(vector, (grid.shape[0], grid.shape[1]))
