@@ -81,25 +81,19 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             print(function.atoms[i].support.boundary_vertices)
             print(type(meshes[i]))  # Gibt den Typ des Elements aus
             print(meshes[i])
-            plt.figure(figsize=(6, 6))
-    
-            # Alle Punkte (Knoten) des Meshes
-            vertices = meshes[i]['vertices']
-            triangles = meshes[i]['triangles']
+            
 
-            # Zeichne alle Dreiecke
-            for tri in triangles:
-                pts = vertices[tri]  # Hole die 3 Punkte des Dreiecks
-                plt.fill(*zip(*pts), edgecolor='black', fill=False, linewidth=1)
-
-            # Zeichne die Punkte als kleine Kreise
-            plt.scatter(vertices[:, 0], vertices[:, 1], color='red', s=10, label="Vertices")
-
-            plt.axis("equal")
-            plt.title("Triangulated Mesh")
-            plt.legend()
+            plt.figure(figsize=(8, 8))
+            for j in range(len(meshes[i])):
+                triangle = meshes[i][j]  # Holt sich die Vertices des Dreiecks
+                plt.plot([triangle[0, 0], triangle[1, 0], triangle[2, 0], triangle[0, 0]], 
+                    [triangle[0, 1], triangle[1, 1], triangle[2, 1], triangle[0, 1]], 'k-')
+            plt.gca().set_aspect('equal', adjustable='box')  # Gleiche Skalierung für x- und y-Achse
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.title('Mesh Visualization')
             plt.show()
-
+            
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
             
