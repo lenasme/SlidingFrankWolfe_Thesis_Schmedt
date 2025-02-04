@@ -48,27 +48,50 @@ def generate_square_aux(grid, cut_off, normalization):
     return aux
 
 
-@jit(nopython=True, parallel=True)
-def point_in_triangle(px, py, v0, v1, v2):
-    """
-    Prüft, ob der Punkt (px, py) innerhalb des Dreiecks (v0, v1, v2) liegt.
-    Berechnet Baryzentrische Koordinaten.
-    """
+#@jit(nopython=True, parallel=True)
+#def point_in_triangle(px, py, v0, v1, v2):
+ #   """
+  #  Prüft, ob der Punkt (px, py) innerhalb des Dreiecks (v0, v1, v2) liegt.
+ #   Berechnet Baryzentrische Koordinaten.
+  #  """
   
 
-    v0x, v0y = v0
-    v1x, v1y = v1
-    v2x, v2y = v2
+   # v0x, v0y = v0
+  #  v1x, v1y = v1
+  #  v2x, v2y = v2
 
-    detT = (v1x - v0x) * (v2y - v0y) - (v2x - v0x) * (v1y - v0y)
-    if detT == 0:
-        return False  # Entartetes Dreieck
+   # detT = (v1x - v0x) * (v2y - v0y) - (v2x - v0x) * (v1y - v0y)
+   # if detT == 0:
+  #      return False  # Entartetes Dreieck
 
-    lambda1 = ((px - v0x) * (v2y - v0y) - (py - v0y) * (v2x - v0x)) / detT
-    lambda2 = ((v1x - v0x) * (py - v0y) - (v1y - v0y) * (px - v0x)) / detT
-    lambda3 = 1 - lambda1 - lambda2
+    #lambda1 = ((px - v0x) * (v2y - v0y) - (py - v0y) * (v2x - v0x)) / detT
+    #lambda2 = ((v1x - v0x) * (py - v0y) - (v1y - v0y) * (px - v0x)) / detT
+    #lambda3 = 1 - lambda1 - lambda2
 
-    return (0 <= lambda1 <= 1) and (0 <= lambda2 <= 1) and (0 <= lambda3  <= 1)
+    #return (0 <= lambda1 <= 1) and (0 <= lambda2 <= 1) and (0 <= lambda3  <= 1)
+
+def cross_product(x1, y1, x2, y2):
+    return x1 * y2 - y1 * x2
+
+def point_in_triangle(px, py, v0, v1, v2):
+    # Kanten des Dreiecks
+    edge1 = (v1[0] - v0[0], v1[1] - v0[1])
+    edge2 = (v2[0] - v1[0], v2[1] - v1[1])
+    edge3 = (v0[0] - v2[0], v0[1] - v2[1])
+
+    # Vektoren vom Punkt zum Ecken
+    to_v0 = (px - v0[0], py - v0[1])
+    to_v1 = (px - v1[0], py - v1[1])
+    to_v2 = (px - v2[0], py - v2[1])
+
+    # Kreuzprodukte zur Prüfung der Orientierung
+    cross1 = cross_product(edge1[0], edge1[1], to_v0[0], to_v0[1])
+    cross2 = cross_product(edge2[0], edge2[1], to_v1[0], to_v1[1])
+    cross3 = cross_product(edge3[0], edge3[1], to_v2[0], to_v2[1])
+
+    # Prüft, ob der Punkt auf der richtigen Seite jeder Kante liegt
+    return (cross1 >= 0) and (cross2 >= 0) and (cross3 >= 0)
+
 
 @jit(nopython=True)
 def point_in_rectangle(px, py, rect_vertices):
