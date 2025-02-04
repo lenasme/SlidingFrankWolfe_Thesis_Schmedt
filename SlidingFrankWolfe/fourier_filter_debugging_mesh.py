@@ -54,6 +54,8 @@ def point_in_triangle(px, py, v0, v1, v2):
     Prüft, ob der Punkt (px, py) innerhalb des Dreiecks (v0, v1, v2) liegt.
     Berechnet Baryzentrische Koordinaten.
     """
+    epsilon = 1e-10
+
     v0x, v0y = v0
     v1x, v1y = v1
     v2x, v2y = v2
@@ -66,7 +68,7 @@ def point_in_triangle(px, py, v0, v1, v2):
     lambda2 = ((v1x - v0x) * (py - v0y) - (v1y - v0y) * (px - v0x)) / detT
     lambda3 = 1 - lambda1 - lambda2
 
-    return (0 <= lambda1 <= 1) and (0 <= lambda2 <= 1) and (0 <= lambda3 <= 1)
+    return (0 <= lambda1 + epsilon<= 1) and (0 <= lambda2 + epsilon <= 1) and (0 <= lambda3 + epsilon <= 1)
 
 @jit(nopython=True)
 def point_in_rectangle(px, py, rect_vertices):
