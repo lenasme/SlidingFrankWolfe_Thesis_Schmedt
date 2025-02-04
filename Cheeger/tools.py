@@ -156,12 +156,12 @@ def triangulate_combined(vertices_inner, vertices_outer, max_triangle_area=None,
 
     inner_segments = [[i, (i + 1) % num_inner] for i in range(num_inner)]
     outer_segments = [[num_inner + i, num_inner + (i + 1) % num_outer] for i in range(num_outer)]
-    connecting_segments = [[i, num_inner + i] for i in range(num_outer)]
+    #connecting_segments = [[i, num_inner + i] for i in range(num_outer)]
     
-    segments = np.array(inner_segments + outer_segments + connecting_segments)
+    segments = np.array(inner_segments + outer_segments) #+ connecting_segments)
     triangle_input = dict(vertices=combined_vertices, segments=segments)
 
-    opts = 'qpe'
+    opts = 'qpeu'
 
     if max_triangle_area is not None:
         opts = opts + 'a{}'.format(max_triangle_area)
