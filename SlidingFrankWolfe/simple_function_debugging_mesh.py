@@ -121,6 +121,10 @@ class SimpleFunction:
         atoms_outer_values = np.array([atom.outer_value for atom in self.atoms])
         atoms_boundary_vertices = np.array([atom.support.boundary_vertices for atom in self.atoms])
 
+        print(type(atoms_boundary_vertices))
+        print(atoms_boundary_vertices.dtype)
+        print(atoms_boundary_vertices.shape)
+
         #fourier._triangle_aux(meshes, function, obs) 
         fourier._triangle_aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, obs) 
         
