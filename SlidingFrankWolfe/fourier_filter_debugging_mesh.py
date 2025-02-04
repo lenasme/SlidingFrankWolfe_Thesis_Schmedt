@@ -3,7 +3,7 @@ import quadpy
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 #from numpy import exp
-from numba import jit, prange
+from numba import jit, prange, NumbaWarning
 from scipy.fft import ifftshift, fft2, ifft2, fftshift 
 from shapely.geometry import Point, Polygon
 
