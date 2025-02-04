@@ -95,7 +95,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.title('Mesh Visualization')
             plt.show()
 
-
+            whole_function_grid = np.zeros((grid.shape[0], grid.shape[1]))
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
             maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
@@ -136,17 +136,19 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         
                         if not (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
                             function_grid[x, y] = 0
-                                
+                            whole_function_grid[x, y] = 0
 
                             
                         elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
                             if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].inner_value
+                                whole_function_grid[x, y] = function.atoms[i].inner_value
                                 maske[x,y] = True
 
                         else:   
                             if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].outer_value
+                                whole_function_grid[x, y] = function.atoms[i].outer_value
                                 maske[x,y] = True
                     
                     #if function.atoms[i].support.contains((norm_x, norm_y)):
@@ -159,35 +161,39 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
 
              
-                plt.plot()
-                plt.imshow(function_grid)
-                plt.show()
+               # plt.plot()
+               # plt.imshow(function_grid)
+               # plt.show()
                 
-                print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
+               # print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
                 fft_image = ((np.fft.fft2(function_grid)))
                 shifted_fft_image = np.fft.fftshift(fft_image) * mask
             
 
-                plt.plot()
-                plt.imshow(shifted_fft_image.real)
-                plt.show()
+              #  plt.plot()
+               # plt.imshow(shifted_fft_image.real)
+              #  plt.show()
 
                 #ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
                 ifft_image = np.fft.ifft2(shifted_fft_image)
-                plt.plot()
-                plt.imshow(np.abs(ifft_image), cmap = 'bwr')
-                plt.show()
+              #  plt.plot()
+              #  plt.imshow(np.abs(ifft_image), cmap = 'bwr')
+              #  plt.show()
 
-                print("res shape:", res.shape)
-                print("i, j:", i, j)
-                print("shifted_fft_image shape:", shifted_fft_image.shape)
+               # print("res shape:", res.shape)
+               # print("i, j:", i, j)
+               # print("shifted_fft_image shape:", shifted_fft_image.shape)
                 res[i, j, :] = shifted_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 #res[i, j, m] *= area
+
+            plt.plot()
+            plt.imshow(whole_function_grid)
+            plt.show()
 
         if normalization:
             res /= np.sum(mask)
