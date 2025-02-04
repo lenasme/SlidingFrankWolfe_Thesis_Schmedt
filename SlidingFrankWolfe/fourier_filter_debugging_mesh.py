@@ -193,6 +193,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             plt.plot()
             plt.imshow(whole_function_grid)
+            plt.title("whole_function_grid")
             plt.show()
 
         if normalization:
