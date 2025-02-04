@@ -48,6 +48,38 @@ def generate_square_aux(grid, cut_off, normalization):
     return aux
 
 
+@jit(nopython=True, parallel=True)
+def point_in_triangle(px, py, v0, v1, v2):
+    """
+    Prüft, ob der Punkt (px, py) innerhalb des Dreiecks (v0, v1, v2) liegt.
+    Berechnet Baryzentrische Koordinaten.
+    """
+    v0x, v0y = v0
+    v1x, v1y = v1
+    v2x, v2y = v2
+
+    detT = (v1x - v0x) * (v2y - v0y) - (v2x - v0x) * (v1y - v0y)
+    if detT == 0:
+        return False  # Entartetes Dreieck
+
+    lambda1 = ((px - v0x) * (v2y - v0y) - (py - v0y) * (v2x - v0x)) / detT
+    lambda2 = ((v1x - v0x) * (py - v0y) - (v1y - v0y) * (px - v0x)) / detT
+    lambda3 = 1 - lambda1 - lambda2
+
+    return (0 <= lambda1 <= 1) and (0 <= lambda2 <= 1) and (0 <= lambda3 <= 1)
+
+@jit(nopython=True)
+def point_in_rectangle(px, py, rect_vertices):
+    """
+    Prüft, ob ein Punkt (px, py) innerhalb des Rechtecks mit 4 Ecken liegt.
+    """
+    x_min, y_min = np.min(rect_vertices, axis=0)
+    x_max, y_max = np.max(rect_vertices, axis=0)
+
+    return x_min <= px <= x_max and y_min <= py <= y_max
+
+
+
 
 def generate_triangle_aux(grid, cut_off,  normalization):
     #scheme = quadpy.t2.get_good_scheme(5)
@@ -73,10 +105,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     plt.colorbar()
     plt.show()
 
-    #@jit(nopython=True, parallel=True)
+    @jit(nopython=True, parallel=True)
     def aux(meshes, function, res):
         #print("Meshes:", meshes[:5])
-        for i in range(len(meshes)):
+        for i in prange(len(meshes)):
             print(len(meshes))
             print(function.atoms[i].support.boundary_vertices)
             #print(type(meshes[i]))  # Gibt den Typ des Elements aus
@@ -96,17 +128,20 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.show()
 
             whole_function_grid = np.zeros((grid.shape[0], grid.shape[1]))
-            maske_whole = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
+            #maske_whole = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
+            maske_whole = np.zeros((grid.shape[0], grid.shape[1]), dtype=np.bool_)
             
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
-            rectangle_polygon = Polygon(rectangle_vertices)
+            #rectangle_polygon = Polygon(rectangle_vertices)
             maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
             for j in range(len(meshes[i])):
 
                 function_grid = np.zeros((grid.shape[0], grid.shape[1]))
 
-                triangle_vertices = np.array([[meshes[i,j,0,0], meshes[i,j,0,1]],[meshes[i,j,1,0], meshes[i,j,1,1]],[meshes[i,j,2,0], meshes[i,j,2,1]]])
-                triangle_polygon = Polygon(triangle_vertices)
+                #triangle_vertices = np.array([[meshes[i,j,0,0], meshes[i,j,0,1]],[meshes[i,j,1,0], meshes[i,j,1,1]],[meshes[i,j,2,0], meshes[i,j,2,1]]])
+                #triangle_polygon = Polygon(triangle_vertices)
+
+                v0, v1, v2 = meshes[i,j,0], meshes[i,j,1], meshes[i,j,2]
 
                 #fig, ax = plt.subplots()
 
@@ -126,22 +161,27 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 #plt.title('Randpolygon')
                 #plt.show()
 
-                for x in range(function_grid.shape[0]):
-                    for y in range(function_grid.shape[1]):
+                for x in prange(function_grid.shape[0]):
+                    for y in prange(function_grid.shape[1]):
                     
             
                         norm_x = x / function_grid.shape[0]
                         norm_y = y / function_grid.shape[1]
 
-                        point = Point(norm_x, norm_y)
+                        #point = Point(norm_x, norm_y)
+
+                        in_triangle = point_in_triangle(norm_x, norm_y, v0, v1, v2)
+                        in_rectangle = point_in_rectangle(norm_x, norm_y, rectangle_vertices)
 
         
-                        if not (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
+                        #if not (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point)):
+                        if not (in_triangle):   
                             function_grid[x, y] = 0
                             
 
                             
-                        elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
+                        #elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
+                        elif  (in_triangle and in_rectangle) :  
                             if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].inner_value
                                 maske[x,y] = True
