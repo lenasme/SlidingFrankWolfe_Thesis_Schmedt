@@ -116,17 +116,17 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             #print(meshes[i])
             
 
-            plt.figure(figsize=(8, 8))
+            #plt.figure(figsize=(8, 8))
 
-            for j in range(len(meshes[i])):
-                triangle = meshes[i][j]  # Holt sich die Vertices des Dreiecks
-                plt.plot([triangle[0, 0], triangle[1, 0], triangle[2, 0], triangle[0, 0]], 
-                    [triangle[0, 1], triangle[1, 1], triangle[2, 1], triangle[0, 1]], 'k-')
-            plt.gca().set_aspect('equal', adjustable='box')  # Gleiche Skalierung für x- und y-Achse
-            plt.xlabel('X')
-            plt.ylabel('Y')
-            plt.title('Mesh Visualization')
-            plt.show()
+            #for j in range(len(meshes[i])):
+                #triangle = meshes[i][j]  # Holt sich die Vertices des Dreiecks
+                #plt.plot([triangle[0, 0], triangle[1, 0], triangle[2, 0], triangle[0, 0]], 
+                 #   [triangle[0, 1], triangle[1, 1], triangle[2, 1], triangle[0, 1]], 'k-')
+            #plt.gca().set_aspect('equal', adjustable='box')  # Gleiche Skalierung für x- und y-Achse
+            #plt.xlabel('X')
+            #plt.ylabel('Y')
+           # plt.title('Mesh Visualization')
+           # plt.show()
 
             inner_value = atoms_inner_values[i]
             outer_value = atoms_outer_values[i]
