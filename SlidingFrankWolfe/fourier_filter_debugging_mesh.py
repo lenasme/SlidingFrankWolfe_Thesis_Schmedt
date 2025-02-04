@@ -130,7 +130,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
             inner_value = atoms_inner_values[i]
             outer_value = atoms_outer_values[i]
-            rect_vertices = atoms_boundary_vertices[i]
+            rectangle_vertices = atoms_boundary_vertices[i]
 
             whole_function_grid = np.zeros((grid.shape[0], grid.shape[1]))
             #maske_whole = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
