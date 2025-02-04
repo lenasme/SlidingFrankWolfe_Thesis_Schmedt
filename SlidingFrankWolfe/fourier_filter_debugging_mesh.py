@@ -111,7 +111,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         #print("Meshes:", meshes[:5])
         for i in prange(len(meshes)):
             print(len(meshes))
-            print(function.atoms[i].support.boundary_vertices)
+            #print(function.atoms[i].support.boundary_vertices)
             #print(type(meshes[i]))  # Gibt den Typ des Elements aus
             #print(meshes[i])
             
