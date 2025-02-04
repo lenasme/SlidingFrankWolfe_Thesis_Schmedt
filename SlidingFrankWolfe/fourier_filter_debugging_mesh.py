@@ -73,8 +73,13 @@ def point_in_rectangle(px, py, rect_vertices):
     """
     Prüft, ob ein Punkt (px, py) innerhalb des Rechtecks mit 4 Ecken liegt.
     """
-    x_min, y_min = np.min(rect_vertices, axis=0)
-    x_max, y_max = np.max(rect_vertices, axis=0)
+    #x_min, y_min = np.min(rect_vertices, axis=0)
+    #x_max, y_max = np.max(rect_vertices, axis=0)
+
+    x_min = rect_vertices[:, 0].min()
+    y_min = rect_vertices[:, 1].min()
+    x_max = rect_vertices[:, 0].max()
+    y_max = rect_vertices[:, 1].max()
 
     return x_min <= px <= x_max and y_min <= py <= y_max
 
@@ -105,7 +110,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     plt.colorbar()
     plt.show()
 
-    @jit(nopython=True, parallel=True)
+    @jit(nopython=False, parallel=True)
     #def aux(meshes, function, res):
     def aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, res):
         #print("Meshes:", meshes[:5])
