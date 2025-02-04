@@ -146,7 +146,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             return np.fft.fft2(function_grid)
         
         #print("Meshes:", meshes[:5])
-        for i in prange(len(meshes)):
+        for i in range(len(meshes)):
             print(len(meshes))
             #print(function.atoms[i].support.boundary_vertices)
             #print(type(meshes[i]))  # Gibt den Typ des Elements aus
@@ -178,7 +178,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             #maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
             maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=np.bool_)
             
-            for j in range(len(meshes[i])):
+            for j in prange(len(meshes[i])):
 
                 function_grid = np.zeros((grid.shape[0], grid.shape[1]))
 
