@@ -83,7 +83,8 @@ def point_in_rectangle(px, py, rect_vertices):
 
     return x_min <= px <= x_max and y_min <= py <= y_max
 
-
+def precompute_fft(function_grid):
+    return np.fft.fft2(function_grid)
 
 
 def generate_triangle_aux(grid, cut_off,  normalization):
@@ -232,7 +233,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                # print("function_grid min/max:", np.min(function_grid), np.max(function_grid))
                 
                 
-                fft_image = ((np.fft.fft2(function_grid)))
+                #fft_image = ((np.fft.fft2(function_grid)))
+                fft_image = precompute_fft(function_grid)
                 shifted_fft_image = np.fft.fftshift(fft_image) * mask
             
 
