@@ -70,12 +70,14 @@ def generate_square_aux(grid, cut_off, normalization):
 
     #return (0 <= lambda1 <= 1) and (0 <= lambda2 <= 1) and (0 <= lambda3  <= 1)
 
-def cross_product(x1, y1, x2, y2):
-    return x1 * y2 - y1 * x2
+
 
 
 @jit(nopython=True, parallel=True)
 def point_in_triangle(px, py, v0, v1, v2):
+
+    def cross_product(x1, y1, x2, y2):
+        return x1 * y2 - y1 * x2
     # Kanten des Dreiecks
     edge1 = (v1[0] - v0[0], v1[1] - v0[1])
     edge2 = (v2[0] - v1[0], v2[1] - v1[1])
