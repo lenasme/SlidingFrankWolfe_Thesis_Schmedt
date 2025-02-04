@@ -139,7 +139,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     plt.colorbar()
     plt.show()
 
-    @jit(nopython=False, parallel=True, warn = False)
+    @jit(nopython=False, parallel=True)
     #def aux(meshes, function, res):
     def aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, res):
         def precompute_fft(function_grid):
