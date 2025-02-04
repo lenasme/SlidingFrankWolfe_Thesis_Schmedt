@@ -96,6 +96,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.show()
 
             whole_function_grid = np.zeros((grid.shape[0], grid.shape[1]))
+            maske_whole = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
+            
             rectangle_vertices = function.atoms[i].support.boundary_vertices  
             rectangle_polygon = Polygon(rectangle_vertices)
             maske = np.zeros((grid.shape[0], grid.shape[1]), dtype=bool)
@@ -142,14 +144,20 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                         elif  (triangle_polygon.contains(point) or triangle_polygon.boundary.contains(point) ) and(rectangle_polygon.contains(point) or rectangle_polygon.boundary.contains(point)) :
                             if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].inner_value
-                                whole_function_grid[x, y] = function.atoms[i].inner_value
                                 maske[x,y] = True
+
+                            if not maske_whole[x,y]:
+                                whole_function_grid[x, y] = function.atoms[i].inner_value
+                                maske_whole[x,y] = True
 
                         else:   
                             if not maske[x,y]:
                                 function_grid[x, y] = function.atoms[i].outer_value
-                                whole_function_grid[x, y] = function.atoms[i].outer_value
                                 maske[x,y] = True
+
+                            if not maske_whole[x,y]:
+                                whole_function_grid[x, y] = function.atoms[i].outer_value
+                                maske_whole[x,y] = True
                     
                     #if function.atoms[i].support.contains((norm_x, norm_y)):
                         #function_grid[x, y] = function.atoms[i].inner_value
