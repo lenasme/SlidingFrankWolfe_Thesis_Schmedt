@@ -117,7 +117,12 @@ class SimpleFunction:
 
         print("obs shape", obs.shape)   
 
-        fourier._triangle_aux(meshes, function, obs) 
+        atoms_inner_values = np.array([atom.inner_value for atom in function.atoms])
+        atoms_outer_values = np.array([atom.outer_value for atom in function.atoms])
+        atoms_boundary_vertices = np.array([atom.support.boundary_vertices for atom in function.atoms])
+
+        #fourier._triangle_aux(meshes, function, obs) 
+        fourier._triangle_aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, obs) 
         
         
         if version == 1:
