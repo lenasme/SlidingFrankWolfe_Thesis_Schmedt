@@ -36,7 +36,8 @@ class SlidingOptimizerState:
         for atom in self.function.atoms:
             self.perimeter_tab.append(atom.support.compute_perimeter_rec())
         sum_obs = np.array([np.sum(self.obs_tab[i], axis=0) for i in range(self.function.num_atoms)]) # für jedes atom eine grid_size große Beobachtungsmatrix?
-        y_hat = np.sum(weights[:, None] * sum_obs, axis=0) # gewichtete summe der fourierkoeffizienten
+        #y_hat = np.sum(weights[:, None] * sum_obs, axis=0) # gewichtete summe der fourierkoeffizienten
+        y_hat = sum_obs
         self.diff_obs = y_hat - y
 
         self.obj = 0.5 * np.sum(self.diff_obs ** 2) + reg_param * np.sum(np.abs(weights) * self.perimeter_tab) #objective, was in Artikel T_lambda (u) ist!
@@ -50,7 +51,7 @@ class SlidingOptimizerState:
 
     def update_boundary_vertices(self, new_boundary_vertices, fourier, y, reg_param):
         max_num_boundary_faces = max(len(atom.support.mesh_boundary_faces) for atom in self.function.atoms)
-        obs = np.zeros((self.function.num_atoms, max_num_boundary_faces, fourier.grid_size))
+        obs = np.zeros((self.function.num_atoms, max_num_boundary_faces, fourier.grid_size**2), dtype=complex)
         meshes = np.zeros((self.function.num_atoms, max_num_boundary_faces, 3, 2))
 
         for i in range(self.function.num_atoms):
@@ -82,8 +83,9 @@ class SlidingOptimizerState:
             support_i = self.function.atoms[i].support
             curves[i, :support_i.num_boundary_vertices, :] = support_i.boundary_vertices
             mask[i, :support_i.num_boundary_vertices] = True
+            inner_values = np.array([atom.inner_value for atom in self.function.atoms])
 
-        fourier._line_aux(curves, mask, grad_area_weights)
+        fourier._line_aux(curves, mask, inner_values, grad_area_weights)
 
         for i in range(self.function.num_atoms):
             weight_i = self.function.atoms[i].weight
