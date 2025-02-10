@@ -298,13 +298,17 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
     return aux
 
-
+def point_on_line(px, py, v0, v1, tol = 1e-2):
+    x0, y0 = v0
+    x1, y1 = v1
+    cross_product = abs((py-y0)*(x1-x0)-(px-x0)*(y1-y0))
+    return cross_product < tol
 
 
 def generate_line_aux(grid, cut_off, normalization):
-    scheme = quadpy.c1.gauss_patterson(3)
-    scheme_weights = scheme.weights
-    scheme_points = (scheme.points + 1) / 2
+    #scheme = quadpy.c1.gauss_patterson(3)
+    #scheme_weights = scheme.weights
+    #scheme_points = (scheme.points + 1) / 2
 
     # Frequenzgitter erstellen
     freqs = np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
@@ -312,49 +316,67 @@ def generate_line_aux(grid, cut_off, normalization):
     freq_norms = np.abs(freq_x) + np.abs(freq_y)
 
     # Frequenzmaske erstellen
-    mask = freq_norms <= cut_off
+    
+    mask = np.zeros((grid.shape[0], grid.shape[1]))
+    mask[freq_norms <= cut_off] = 1
+    mask = np.fft.fftshift(mask)
 
-    @jit(nopython=True, parallel=True)
-    def aux(curves, mask_vertices, res):
+    plt.imshow(mask)
+    plt.colorbar()
+    plt.title("Frequency Mask")
+    plt.show()
+
+
+
+    @jit(nopython=False, parallel=True)
+    def aux(curves, atoms_inner_values, mask_vertices, res):
+
+        def precompute_fft(image):
+            return np.fft.fft2(image)
+
         for i in range(len(curves)):
             num_vertices_i = np.sum(mask_vertices[i])
+            #line_image = np.zeros((grid.shape[0], grid.shape[1]))
+            inner_value = atoms_inner_values[i]
+
+
             for j in prange(num_vertices_i):
-                edge_length = np.sqrt((curves[i, (j + 1) % num_vertices_i, 0] - curves[i, j, 0]) ** 2 +
-                                      (curves[i, (j + 1) % num_vertices_i, 1] - curves[i, j, 1]) ** 2)
 
-                # Integration entlang des Segments (Vorwärtsrichtung)
-                for n in range(scheme_weights.size):
-                    x = scheme_points[n] * curves[i, j] + (1 - scheme_points[n]) * curves[i, (j + 1) % num_vertices_i]
+                v_start = curves[i, j]
+                v_end_fwd = curves[i, (j + 1) % num_vertices_i]
+                v_end_bwd = curves[i, j - 1]
 
-                    # Fourier-Transformation für den Punkt x
-                    fft_image = np.exp(-2j * np.pi * (freq_x * x[0] + freq_y * x[1]))
+                line_grid_fwd = np.zeros((grid.shape[0], grid.shape[1]))
+                line_grid_bwd = np.zeros((grid.shape[0], grid.shape[1]))
 
-                    # Anwenden der Frequenzmaske
-                    fft_filtered = fft_image * mask
+                #v1, v2 = curves[i, j], curves[i, (j + 1) % num_vertices]
+                #edge_length = np.sqrt((curves[i, (j + 1) % num_vertices_i, 0] - curves[i, j, 0]) ** 2 +
+                                      #(curves[i, (j + 1) % num_vertices_i, 1] - curves[i, j, 1]) ** 2)
 
-                    for m in range(grid.shape[0]):
-                        res[i, j, m, 0] += scheme_weights[n] * np.sum(fft_filtered).real
+                for x in prange(grid.shape[0]):
+                    for y in prange(grid.shape[1]):
+                        norm_x = x / grid.shape[0]
+                        norm_y = y / grid.shape[1]
 
-                res[i, j, :, 0] *= edge_length / 2
+                        if point_on_line(norm_x, norm_y, v_start, v_end_fwd):
+                            line_grid_fwd[x, y] = inner_value
+                        if point_on_line(norm_x, norm_y, v_start, v_end_bwd):
+                            line_grid_bwd[x, y] = inner_value
 
-                # Integration entlang des Segments (Rückwärtsrichtung)
-                edge_length = np.sqrt((curves[i, j, 0] - curves[i, j - 1, 0]) ** 2 +
-                                      (curves[i, j, 1] - curves[i, j - 1, 1]) ** 2)
 
-                for n in range(scheme_weights.size):
-                    x = scheme_points[n] * curves[i, j] + (1 - scheme_points[n]) * curves[i, j - 1]
+            fft_fwd = precompute_fft(line_grid_fwd)
+            fft_bwd = precompute_fft(line_grid_bwd)
+            fft_fwd_filtered = np.fft.fftshift(fft_fwd) * mask
+            fft_bwd_filtered = np.fft.fftshift(fft_bwd) * mask
+            ifft_fwd = np.fft.ifft2(fft_fwd_filtered)
+            ifft_bwd = np.fft.ifft2(fft_bwd_filtered)
+            #shifted_fft_image = np.fft.fftshift(fft_image) * mask
+            #ifft_image = np.fft.ifft2(shifted_fft_image)
 
-                    # Fourier-Transformation für den Punkt x
-                    fft_image = np.exp(-2j * np.pi * (freq_x * x[0] + freq_y * x[1]))
+            res[i, j, :, 0] = fft_fwd_filtered.flatten()
+            res[i, j, :, 1] = fft_bwd_filtered.flatten()
 
-                    # Anwenden der Frequenzmaske
-                    fft_filtered = fft_image * mask
-
-                    for m in range(grid.shape[0]):
-                        res[i, j, m, 1] += scheme_weights[n] * np.sum(fft_filtered).real
-
-                res[i, j, :, 1] *= edge_length / 2
-
+                
         if normalization:
             res /= np.sum(mask)
 
@@ -391,7 +413,7 @@ class TruncatedFourierTransform:
 
     def integrate_on_curves(self, curves):
         max_num_vertices = max([len(vertices) for vertices in curves])
-        res = np.zeros((len(curves), max_num_vertices, self.grid_size, 2))
+        res = np.zeros((len(curves), max_num_vertices, self.grid_size**2, 2))
         curves_array = np.zeros((len(curves), max_num_vertices, 2))
         mask = np.zeros((len(curves), max_num_vertices), dtype='bool')
 
