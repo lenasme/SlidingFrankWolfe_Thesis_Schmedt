@@ -362,7 +362,17 @@ def generate_line_aux(grid, cut_off, normalization):
                             line_grid_fwd[x, y] = inner_value
                         if point_on_line(norm_x, norm_y, v_start, v_end_bwd):
                             line_grid_bwd[x, y] = inner_value
-
+            
+            plt.subplot(1, 2, 1)
+            plt.imshow(line_grid_fwd)
+            plt.colorbar()
+            plt.title("Forward Line")
+            plt.subplot(1, 2, 2)
+            plt.imshow(line_grid_bwd)
+            plt.colorbar()
+            plt.title("Backward Line")
+            
+            plt.show()
 
             fft_fwd = precompute_fft(line_grid_fwd)
             fft_bwd = precompute_fft(line_grid_bwd)
