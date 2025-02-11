@@ -288,50 +288,50 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                # print("res shape:", res.shape)
                # print("i, j:", i, j)
                # print("shifted_fft_image shape:", shifted_fft_image.shape)
-                test[i, j, :] = function_grid.flatten()
+                #test[i, j, :] = function_grid.flatten()
                 
                 res[i, j, :] = masked_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 #res[i, j, m] *= area
-            whole_fft_image = precompute_fft(whole_function_grid) * mask
+            #whole_fft_image = precompute_fft(whole_function_grid) * mask
             #whole_shifted_fft_image = np.fft.fftshift(whole_fft_image) #* mask
             #whole_ifft_image = np.fft.ifft2(whole_shifted_fft_image)
-            whole_ifft_image = np.fft.ifft2(whole_fft_image)
-            print("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
-            print("whole_ifft_image, min = {}, max = {}".format(np.min((whole_ifft_image).real), np.max((whole_ifft_image).real)))
-            plt.subplot(1,2,1)
-            plt.imshow(whole_function_grid, cmap= 'bwr')
+            #whole_ifft_image = np.fft.ifft2(whole_fft_image)
+            #print("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
+            #print("whole_ifft_image, min = {}, max = {}".format(np.min((whole_ifft_image).real), np.max((whole_ifft_image).real)))
+            #plt.subplot(1,2,1)
+            #plt.imshow(whole_function_grid, cmap= 'bwr')
             #plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
-            plt.colorbar()
+            #plt.colorbar()
 
-            plt.subplot(1,2,2)
-            plt.imshow((whole_ifft_image).real, cmap = 'bwr')
-            plt.colorbar()
+            #plt.subplot(1,2,2)
+            #plt.imshow((whole_ifft_image).real, cmap = 'bwr')
+            #plt.colorbar()
             #plt.title("whole_ifft_image, min = {}, max = {}".format(np.min(np.abs(whole_ifft_image)), np.max(np.abs(whole_ifft_image))))
-            plt.show()
+            #plt.show()
 
-        test_image = np.sum(test[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
-        shape_test_image = test_image.reshape(grid.shape[0], grid.shape[1])
+        #test_image = np.sum(test[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
+        #shape_test_image = test_image.reshape(grid.shape[0], grid.shape[1])
         
-        fourier_image = np.sum(res[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
-        shape_fourier_image = fourier_image.reshape(grid.shape[0], grid.shape[1])
+        #fourier_image = np.sum(res[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
+        #shape_fourier_image = fourier_image.reshape(grid.shape[0], grid.shape[1])
 
-        reconstructed_image = np.fft.ifft2(shape_fourier_image).real
+        #reconstructed_image = np.fft.ifft2(shape_fourier_image).real
 
-        print("shape_test_image, min = {}, max = {}".format(np.min(shape_test_image), np.max(shape_test_image)))
-        print("recosntructed_image, min = {}, max = {}".format(np.min(reconstructed_image), np.max(reconstructed_image)))
-        plt.subplot(1,2,1)
-        plt.imshow(shape_test_image, cmap='bwr')
-        plt.title("Test Image")
-        plt.colorbar()
+        #print("shape_test_image, min = {}, max = {}".format(np.min(shape_test_image), np.max(shape_test_image)))
+        #print("recosntructed_image, min = {}, max = {}".format(np.min(reconstructed_image), np.max(reconstructed_image)))
+        #plt.subplot(1,2,1)
+        #plt.imshow(shape_test_image, cmap='bwr')
+        #plt.title("Test Image")
+        #plt.colorbar()
 
-        plt.subplot(1,2,2)
-        plt.imshow(reconstructed_image, cmap='bwr')
-        plt.title("Reconstructed Image")
-        plt.colorbar()
-        plt.show()
+        #plt.subplot(1,2,2)
+        #plt.imshow(reconstructed_image, cmap='bwr')
+        #plt.title("Reconstructed Image")
+        #plt.colorbar()
+        #plt.show()
 
 
         #reconstructed = np.fft.ifft2(shape_fourier_image)
