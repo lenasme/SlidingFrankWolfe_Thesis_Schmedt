@@ -297,7 +297,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
             
             plt.subplot(1,2,2)
-            plt.imshow(np.abs(whole_ifft_image), cmap = 'bwr')
+            plt.imshow(np.real(whole_ifft_image), cmap = 'bwr')
             plt.title("whole_ifft_image, min = {}, max = {}".format(np.min(np.abs(whole_ifft_image)), np.max(np.abs(whole_ifft_image))))
             plt.show()
 
