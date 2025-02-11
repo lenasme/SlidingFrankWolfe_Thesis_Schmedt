@@ -308,8 +308,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             #plt.title("whole_ifft_image, min = {}, max = {}".format(np.min(np.abs(whole_ifft_image)), np.max(np.abs(whole_ifft_image))))
             plt.show()
 
-        fourier_image = res[0, :, :].reshape(grid.shape, grid.shape)
-        reconstructed = np.fft.ifft2(fourier_image)
+        fourier_image = np.sum(res[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
+        shape_fourier_image = fourier_image.reshape(grid.shape[0], grid.shape[1])
+        reconstructed = np.fft.ifft2(shape_fourier_image)
 
         plt.plot()
         plt.imshow((reconstructed).real, cmap='bwr')
