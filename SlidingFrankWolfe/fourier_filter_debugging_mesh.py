@@ -315,8 +315,12 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         test_image = np.sum(test[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
         shape_test_image = test_image.reshape(grid.shape[0], grid.shape[1])
         
-        plt.plot()
+        plt.subplot(1,2,1)
         plt.imshow(shape_test_image, cmap='bwr')
+        plt.colorbar()
+
+        plt.subplot(1,2,2)
+        plt.imshow(np.fft.ifft2(shape_test_image).real, cmap='bwr')
         plt.colorbar()
         plt.show()
 
