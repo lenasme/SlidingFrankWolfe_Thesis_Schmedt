@@ -144,6 +144,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     @jit(nopython=False, parallel=True)
     #def aux(meshes, function, res):
     def aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, res):
+        test = np.zeros(res.shape)
         def precompute_fft(function_grid):
             return np.fft.fft2(function_grid)
         
@@ -286,6 +287,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                # print("res shape:", res.shape)
                # print("i, j:", i, j)
                # print("shifted_fft_image shape:", shifted_fft_image.shape)
+                test[i, j, :] = function_grid.flatten()
+                
                 res[i, j, :] = shifted_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
@@ -308,14 +311,21 @@ def generate_triangle_aux(grid, cut_off,  normalization):
             #plt.title("whole_ifft_image, min = {}, max = {}".format(np.min(np.abs(whole_ifft_image)), np.max(np.abs(whole_ifft_image))))
             plt.show()
 
-        fourier_image = np.sum(res[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
-        shape_fourier_image = fourier_image.reshape(grid.shape[0], grid.shape[1])
-        reconstructed = np.fft.ifft2(shape_fourier_image)
-
+        test_image = np.sum(test[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
+        shape_test_image = test_image.reshape(grid.shape[0], grid.shape[1])
+        
         plt.plot()
-        plt.imshow((reconstructed).real, cmap='bwr')
+        plt.imshow(shape_test_image, cmap='bwr')
         plt.colorbar()
         plt.show()
+
+
+        #reconstructed = np.fft.ifft2(shape_fourier_image)
+
+        #plt.plot()
+        #plt.imshow((reconstructed).real, cmap='bwr')
+        #plt.colorbar()
+        #plt.show()
 
         if normalization:
             res /= np.sum(mask)
