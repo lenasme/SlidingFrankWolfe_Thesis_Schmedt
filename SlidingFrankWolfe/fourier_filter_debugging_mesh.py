@@ -318,13 +318,18 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         fourier_image = np.sum(res[0, :, :], axis=0)#.reshape(grid.shape, grid.shape)
         shape_fourier_image = fourier_image.reshape(grid.shape[0], grid.shape[1])
 
+        reconstructed_image = np.fft.ifft2(shape_fourier_image).real
 
+        print("shape_test_image, min = {}, max = {}".format(np.min(shape_test_image), np.max(shape_test_image)))
+        print("recosntructed_image, min = {}, max = {}".format(np.min(reconstructed_image), np.max(reconstructed_image)))
         plt.subplot(1,2,1)
         plt.imshow(shape_test_image, cmap='bwr')
+        plt.title("Test Image")
         plt.colorbar()
 
         plt.subplot(1,2,2)
-        plt.imshow(np.fft.ifft2(shape_fourier_image).real, cmap='bwr')
+        plt.imshow(reconstructed_image, cmap='bwr')
+        plt.title("Reconstructed Image")
         plt.colorbar()
         plt.show()
 
