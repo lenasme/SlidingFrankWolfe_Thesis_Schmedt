@@ -134,10 +134,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
     #mask = (freq_norms <= cut_off)
     #mask_expanded = np.expand_dims(mask, axis=-1) 
     mask = np.fft.fftshift(mask)
-    plt.plot()
-    plt.imshow(mask)
-    plt.colorbar()
-    plt.show()
+    #plt.plot()
+    #plt.imshow(mask)
+    #plt.colorbar()
+    #plt.show()
 
     @jit(nopython=False, parallel=True)
     #def aux(meshes, function, res):
@@ -288,10 +288,10 @@ def generate_triangle_aux(grid, cut_off,  normalization):
 
                 #res[i, j, m] *= area
 
-            plt.plot()
-            plt.imshow(whole_function_grid)
-            plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
-            plt.show()
+            #plt.plot()
+            #plt.imshow(whole_function_grid)
+            #plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
+            #plt.show()
 
         if normalization:
             res /= np.sum(mask)
@@ -371,7 +371,7 @@ def generate_line_aux(grid, cut_off, normalization):
             plt.imshow(line_grid_bwd)
             plt.colorbar()
             plt.title("Backward Line")
-            
+
             plt.show()
 
             fft_fwd = precompute_fft(line_grid_fwd)
