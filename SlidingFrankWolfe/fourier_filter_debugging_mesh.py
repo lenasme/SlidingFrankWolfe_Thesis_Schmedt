@@ -147,7 +147,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
         
         #print("Meshes:", meshes[:5])
         for i in range(len(meshes)):
-            print(len(meshes))
+            #print(len(meshes))
             #print(function.atoms[i].support.boundary_vertices)
             #print(type(meshes[i]))  # Gibt den Typ des Elements aus
             #print(meshes[i])
@@ -321,10 +321,10 @@ def generate_line_aux(grid, cut_off, normalization):
     mask[freq_norms <= cut_off] = 1
     mask = np.fft.fftshift(mask)
 
-    plt.imshow(mask)
-    plt.colorbar()
-    plt.title("Frequency Mask")
-    plt.show()
+    #plt.imshow(mask)
+    #plt.colorbar()
+    #plt.title("Frequency Mask")
+    #plt.show()
 
 
 
