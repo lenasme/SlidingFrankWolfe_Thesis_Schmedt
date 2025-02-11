@@ -274,7 +274,9 @@ def generate_triangle_aux(grid, cut_off,  normalization):
               #  plt.show()
 
                 #ifft_image = np.fft.ifft2(np.fft.ifftshift(fft_filtered)).real
-                ifft_image = np.fft.ifft2(shifted_fft_image)
+                
+                
+
               #  plt.plot()
               #  plt.imshow(np.abs(ifft_image), cmap = 'bwr')
               #  plt.show()
@@ -287,11 +289,19 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
                 #res[i, j, m] *= area
+            whole_fft_image = precompute_fft(whole_function_grid)
+            whole_shifted_fft_image = np.fft.fftshift(whole_fft_image) * mask
+            whole_ifft_image = np.fft.ifft2(whole_shifted_fft_image)
+            plt.subplot(1,2,1)
+            plt.imshow(whole_function_grid, cmap= 'bwr')
+            plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
+            
+            plt.subplot(1,2,2)
+            plt.imshow(np.abs(whole_ifft_image), cmap = 'bwr')
+            plt.title("whole_ifft_image, min = {}, max = {}".format(np.min(np.abs(whole_ifft_image)), np.max(np.abs(whole_ifft_image))))
+            plt.show()
 
-            #plt.plot()
-            #plt.imshow(whole_function_grid)
-            #plt.title("whole_function_grid, min = {}, max = {}".format(np.min(whole_function_grid), np.max(whole_function_grid)))
-            #plt.show()
+
 
         if normalization:
             res /= np.sum(mask)
