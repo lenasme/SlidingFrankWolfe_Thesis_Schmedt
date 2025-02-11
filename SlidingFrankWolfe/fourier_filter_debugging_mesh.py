@@ -269,7 +269,8 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                 
                 #fft_image = ((np.fft.fft2(function_grid)))
                 fft_image = precompute_fft(function_grid)
-                shifted_fft_image = np.fft.fftshift(fft_image) * mask
+                masked_fft_image = fft_image * mask
+                #shifted_fft_image = np.fft.fftshift(fft_image) * mask
             
 
               #  plt.plot()
@@ -289,7 +290,7 @@ def generate_triangle_aux(grid, cut_off,  normalization):
                # print("shifted_fft_image shape:", shifted_fft_image.shape)
                 test[i, j, :] = function_grid.flatten()
                 
-                res[i, j, :] = shifted_fft_image.flatten()   
+                res[i, j, :] = masked_fft_image.flatten()   
 
                 #res[i, j, m] += scheme_weights[n] * np.sum(fft_filtered).real
 
