@@ -105,7 +105,7 @@ class SimpleFunction:
     def compute_obs(self, fourier, version=0):
         function = self
         if self.num_atoms == 0:
-            return np.zeros(fourier.grid_size)
+            return np.zeros((fourier.grid_size)**2)
 
         max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
         meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
@@ -128,7 +128,7 @@ class SimpleFunction:
         #fourier._triangle_aux(meshes, function, obs) 
         fourier._triangle_aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, obs) 
         
-        print("obs shape:",obs.shape)
+        #print("obs shape:",obs.shape)
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
