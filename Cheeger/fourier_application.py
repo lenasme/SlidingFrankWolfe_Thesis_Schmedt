@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import exp
 from numba import jit, prange
+import matplotlib.pyplot as plt
 
 
 
@@ -21,6 +22,10 @@ def generate_eval_aux(grid, weights, cut_off):
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         reconstructed_image = np.fft.ifft2(frequency_image).real
 
+        plt.plot()
+        plt.imshow(reconstructed_image)
+        plt.colorbar()
+        plt.show()
 
         for i in prange(x.shape[0]):
             res[i]= reconstructed_image[int(x[i, 0]), int(x[i, 1])]
