@@ -4,6 +4,7 @@ from numba import jit, prange
 
 
 
+
 def generate_eval_aux(grid, weights, cut_off):
     
     #freqs_x= np.fft.fftfreq(grid.shape[0], d=1 / grid.shape[0])
@@ -17,7 +18,7 @@ def generate_eval_aux(grid, weights, cut_off):
 
     @jit(nopython=False, parallel=True)
     def aux(x, res):
-        frequency_image = weights  
+        frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         reconstructed_image = np.fft.ifft2(frequency_image).real
 
 
