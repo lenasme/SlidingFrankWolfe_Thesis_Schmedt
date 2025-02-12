@@ -7,6 +7,8 @@ from numba import jit, prange, NumbaWarning
 from scipy.fft import ifftshift, fft2, ifft2, fftshift 
 from shapely.geometry import Point, Polygon
 
+from Cheeger.fourier_application import FourierApplication
+
 
 def generate_square_aux(grid, cut_off, normalization):
     scheme = quadpy.c2.get_good_scheme(3)
@@ -481,4 +483,6 @@ class TruncatedFourierTransform:
 
         self._line_aux(curves_array, mask, res)
         return [res[i, :len(curves[i])] for i in range(len(curves))]
-
+    
+    def apply_adjoint(self, weights):
+        return FourierApplication(self.grid, weights, self.cut_off, normalization= self.normalization)
