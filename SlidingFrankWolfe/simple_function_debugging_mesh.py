@@ -128,7 +128,7 @@ class SimpleFunction:
         #fourier._triangle_aux(meshes, function, obs) 
         fourier._triangle_aux(meshes, atoms_inner_values, atoms_outer_values, atoms_boundary_vertices, obs) 
         
-        
+        print(obs.shape)
         if version == 1:
             res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
         else:
