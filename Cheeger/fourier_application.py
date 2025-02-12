@@ -27,6 +27,8 @@ def generate_eval_aux(grid, weights, cut_off):
         plt.colorbar()
         plt.show()
 
+        print("Summe",np.sum(reconstructed_image))
+
         for i in prange(x.shape[0]):
             res[i]= reconstructed_image[int(x[i, 0]), int(x[i, 1])]
             #for j in range(weights.size):
