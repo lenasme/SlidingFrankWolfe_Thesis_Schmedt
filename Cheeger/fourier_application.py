@@ -20,7 +20,8 @@ def generate_eval_aux(grid, weights, cut_off):
     @jit(nopython=False, parallel=True)
     def aux(x, res):
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
-        reconstructed_image = np.fft.ifft2(frequency_image).real 
+        reconstructed_image_not_vanish = np.fft.ifft2(frequency_image).real 
+        reconstructed_image = reconstructed_image_not_vanish - (np.sum(reconstructed_image)/grid.shape[0]*grid.shape[1])
 
         plt.plot()
         plt.imshow(reconstructed_image, cmap = 'bwr')
