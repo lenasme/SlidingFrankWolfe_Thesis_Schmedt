@@ -2,6 +2,7 @@ import numpy as np
 from numpy import exp
 from numba import jit, prange
 import matplotlib.pyplot as plt
+from scipy.ndimage import zoom
 
 
 
@@ -39,6 +40,16 @@ def generate_eval_aux(grid, weights, cut_off):
     return aux
 
 
+def downsample_image(image, target_shape):
+    # Berechne die Skalierungsfaktoren für jede Dimension
+    scale_x = target_shape[0] / image.shape[0]
+    scale_y = target_shape[1] / image.shape[1]
+    
+    # Wende die Reskalierung an (bilineare Interpolation)
+    downsampled_image = zoom(image, (scale_x, scale_y))
+    return downsampled_image
+
+
 def generate_square_aux(grid, weights, cut_off):
     
 
@@ -56,22 +67,22 @@ def generate_square_aux(grid, weights, cut_off):
         plt.colorbar()
         plt.show()
 
-        factor = grid.shape[0]/ grid_size
+        #factor = grid.shape[0]/ grid_size
 
-        frequency_image_grid_size = np.zeros((grid_size, grid_size))
+        #frequency_image_grid_size = np.zeros((grid_size, grid_size))
         
-        for i in prange(grid_size):
-            for j in prange(grid_size):
+        #for i in prange(grid_size):
+            #for j in prange(grid_size):
    
-                x_start = np.int(i*factor)
+                #x_start = np.int(i*factor)
                 #x_end = np.int((i+1)*factor)
-                y_start = np.int(j*factor)
+                #y_start = np.int(j*factor)
                 #y_end = np.int((j+1)*factor)
 
-                frequency_image_grid_size[i,j] = frequency_image[x_start,y_start]
+                #frequency_image_grid_size[i,j] = frequency_image[x_start,y_start]
                 #frequency_image_grid_size[i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
         
-                
+        frequency_image_grid_size = downsample_image(frequency_image, (grid_size, grid_size))        
         
         plt.plot()
         plt.imshow(np.abs(frequency_image_grid_size), origin = 'lower', cmap = 'bwr')
