@@ -39,6 +39,34 @@ def generate_eval_aux(grid, weights, cut_off):
     return aux
 
 
+def generate_square_aux(grid, weights, cut_off):
+    
+
+    @jit(nopython=False, parallel=True)
+    def aux(grid_size, res):
+        frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
+        
+        factor = grid.shape[0]/ grid_size
+
+        frequency_image_grid_size = np.zeros((grid_size, grid_size))
+        
+        for i in range(grid_size):
+            for j in range(grid_size):
+                x_start = int(i*factor)
+                x_end = int((i+1)*factor)
+                y_start = int(j*factor)
+                y_end = int((j+1)*factor)
+
+                frequency_image_grid_size[i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
+
+
+        reconstructed_image_grid_size_not_vanish = np.fft.ifft2(frequency_image_grid_size).real
+        res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
+        
+    return aux
+
+
+       
 
 
 
@@ -52,7 +80,7 @@ class FourierApplication:
         self.normalization = normalization
 
         self._eval_aux = generate_eval_aux(self.grid, self.weights, self.cut_off)
-        #self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
+        self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
         #self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
         #self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
 
@@ -69,11 +97,11 @@ class FourierApplication:
         else:
             res = np.zeros(x.shape[0])
             self._eval_aux(x, res)
-        if self.normalization:
-            res = res / (2*np.pi * self.std**2)
+        #if self.normalization:
+            #res = res / (2*np.pi * self.std**2)
         return res
 
-    #def integrate_on_pixel_grid(self, grid_size):
+    def integrate_on_pixel_grid(self, grid_size):
         res = np.zeros((grid_size, grid_size))
         self._square_aux(grid_size, res)
         return res
