@@ -50,10 +50,10 @@ def generate_square_aux(grid, weights, cut_off):
 
         frequency_image_grid_size = np.zeros((grid_size, grid_size))
         
-        for i in range(grid_size):
-            for j in range(grid_size):
-                for k in range(grid_size):
-                    for l in range(grid_size):
+        for i in prange(grid_size):
+            for j in prange(grid_size):
+                for k in prange(grid_size):
+                    for l in prange(grid_size):
                         x= np.int(k* factor)
                         y = np.int(l* factor)
                         
