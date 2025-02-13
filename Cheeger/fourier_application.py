@@ -46,7 +46,7 @@ def generate_square_aux(grid, weights, cut_off):
     def aux(grid_size, res):
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         plt.plot()
-        plt.imshow(frequency_image.real, cmap = 'bwr')
+        plt.imshow(np.fft.ifft2(frequency_image).real, cmap = 'bwr')
         plt.colorbar()
         plt.show()
 
