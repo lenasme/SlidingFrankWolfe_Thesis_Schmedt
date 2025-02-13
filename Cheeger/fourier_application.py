@@ -57,7 +57,7 @@ def generate_square_aux(grid, weights, cut_off):
                 y_start = round(j*factor)
                 y_end = round((j+1)*factor)
 
-                frequency_image_grid_size[grid_size -i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
+                frequency_image_grid_size[grid_size -1 -i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
 
         plt.plot()
         plt.imshow(frequency_image_grid_size, cmap = 'bwr')
