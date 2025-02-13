@@ -52,7 +52,7 @@ def generate_square_aux(grid, weights, cut_off):
         plt.show()
 
         plt.plot()
-        plt.imshow((frequency_image).real, cmap = 'bwr')
+        plt.imshow(np.abs(frequency_image), origin = 'lower',  cmap = 'bwr')
         plt.colorbar()
         plt.show()
 
