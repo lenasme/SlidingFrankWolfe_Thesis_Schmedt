@@ -52,10 +52,10 @@ def generate_square_aux(grid, weights, cut_off):
         
         for i in prange(grid_size):
             for j in prange(grid_size):
-                for k in prange(grid_size):
-                    for l in prange(grid_size):
-                        x= np.int(k* factor)
-                        y = np.int(l* factor)
+                
+                x= min(round(i * factor), grid.shape[0]-1)
+                y = min(round(j * factor), grid.shape[1]-1)
+                       
                         
                         
 
@@ -66,7 +66,7 @@ def generate_square_aux(grid, weights, cut_off):
                 #y_start = round(j*factor)
                 #y_end = round((j+1)*factor)
 
-                        frequency_image_grid_size[i,j] = frequency_image[x,y]
+                frequency_image_grid_size[i,j] = frequency_image[x,y]
                         #frequency_image_grid_size[i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
         plt.plot()
         plt.imshow(frequency_image_grid_size, cmap = 'bwr')
