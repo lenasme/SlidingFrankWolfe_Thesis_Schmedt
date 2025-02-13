@@ -74,7 +74,7 @@ def generate_square_aux(grid, weights, cut_off):
                 
         
         plt.plot()
-        plt.imshow(frequency_image_grid_size, cmap = 'bwr')
+        plt.imshow(np.abs(frequency_image_grid_size), origin = 'lower', cmap = 'bwr')
         plt.show()
 
         #frequency_image_grid_size = frequency_image_grid_size.T
