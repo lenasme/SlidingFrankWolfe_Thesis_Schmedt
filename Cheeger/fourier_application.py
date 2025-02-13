@@ -45,6 +45,7 @@ def generate_square_aux(grid, weights, cut_off):
     @jit(nopython=False, parallel=True)
     def aux(grid_size, res):
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
+        
         plt.plot()
         plt.imshow(np.fft.ifft2(frequency_image).real, cmap = 'bwr')
         plt.colorbar()
@@ -56,15 +57,7 @@ def generate_square_aux(grid, weights, cut_off):
         
         for i in prange(grid_size):
             for j in prange(grid_size):
-                
-                #x= min(round(i * factor), grid.shape[0]-1)
-                #y = min(round(j * factor), grid.shape[1]-1)
-                       
-                        
-                        
-
-                    
-                   
+   
                 x_start = round(i*factor)
                 x_end = round((i+1)*factor)
                 y_start = round(j*factor)
@@ -78,7 +71,7 @@ def generate_square_aux(grid, weights, cut_off):
 
         #frequency_image_grid_size = frequency_image_grid_size.T
 
-        reconstructed_image_grid_size_not_vanish = np.fft.ifft2(frequency_image_grid_size).real
+        reconstructed_image_grid_size_not_vanish = np.fft.ifft2(np.fft.fftshift(frequency_image_grid_size)).real
         print("maximaler imag eintrag", np.max(np.abs(reconstructed_image_grid_size_not_vanish.imag)))  
         res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
         
