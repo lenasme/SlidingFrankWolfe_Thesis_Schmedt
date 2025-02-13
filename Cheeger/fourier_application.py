@@ -57,41 +57,9 @@ def generate_square_aux(grid, weights, cut_off):
     def aux(grid_size, res):
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         
-        plt.plot()
-        plt.imshow(np.fft.ifft2(frequency_image).real, cmap = 'bwr')
-        plt.colorbar()
-        plt.show()
-
-        plt.plot()
-        plt.imshow(np.abs(frequency_image), origin = 'lower',  cmap = 'bwr')
-        plt.colorbar()
-        plt.show()
-
-        #factor = grid.shape[0]/ grid_size
-
-        #frequency_image_grid_size = np.zeros((grid_size, grid_size))
-        
-        #for i in prange(grid_size):
-            #for j in prange(grid_size):
-   
-                #x_start = np.int(i*factor)
-                #x_end = np.int((i+1)*factor)
-                #y_start = np.int(j*factor)
-                #y_end = np.int((j+1)*factor)
-
-                #frequency_image_grid_size[i,j] = frequency_image[x_start,y_start]
-                #frequency_image_grid_size[i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
-        
         frequency_image_grid_size = downsample_image(frequency_image, (grid_size, grid_size))        
-        
-        plt.plot()
-        plt.imshow(np.abs(frequency_image_grid_size), origin = 'lower', cmap = 'bwr')
-        plt.show()
-
-        #frequency_image_grid_size = frequency_image_grid_size.T
-
-        reconstructed_image_grid_size_not_vanish = np.fft.ifft2((frequency_image_grid_size)).real
-        print("maximaler imag eintrag", np.max(np.abs(reconstructed_image_grid_size_not_vanish.imag)))  
+       
+        reconstructed_image_grid_size_not_vanish = np.fft.ifft2((frequency_image_grid_size)).real  
         res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
         
     return aux
