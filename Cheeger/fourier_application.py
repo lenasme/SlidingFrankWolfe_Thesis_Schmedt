@@ -57,12 +57,12 @@ def generate_square_aux(grid, weights, cut_off):
                 y_start = round(j*factor)
                 y_end = round((j+1)*factor)
 
-                frequency_image_grid_size[i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
+                frequency_image_grid_size[grid_size -i,j] = np.mean(frequency_image[x_start:x_end, y_start:y_end])
 
         plt.plot()
         plt.imshow(frequency_image_grid_size, cmap = 'bwr')
         plt.show()
-        
+
         reconstructed_image_grid_size_not_vanish = np.fft.ifft2(frequency_image_grid_size).real
         print("maximaler imag eintrag", np.max(np.abs(reconstructed_image_grid_size_not_vanish.imag)))  
         res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
