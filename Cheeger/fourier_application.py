@@ -51,7 +51,7 @@ def generate_square_aux(grid, weights, cut_off):
     reconstructed_not_vanish = np.fft.ifft2((frequency_image)).real  
     reconstructed_vanish = reconstructed_not_vanish - (np.sum(reconstructed_not_vanish)/(grid.shape[0]*grid.shape[1]))    
 
-    @jit(nopython=False, parallel=True)
+    @jit(nopython=True, parallel=True)
     def aux(grid_size, res):
 
        
