@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import exp
 from numba import jit, prange
+import quadpy
 import matplotlib.pyplot as plt
 from scipy.ndimage import zoom
 
@@ -39,8 +40,50 @@ def generate_eval_aux(grid, weights, cut_off):
 
     return aux
 
+def generate_square_aux(grid, weights, cut_off):
+    scheme = quadpy.c2.get_good_scheme(3)
+    scheme_weights = scheme.weights
+    scheme_points = (1 + scheme.points.T) / 2
+    
 
-def downsample_image(image, target_shape):
+    @jit(nopython=True, parallel=True)
+    def aux(grid_size, res):
+
+        frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
+        
+       
+        reconstructed_not_vanish = np.fft.ifft2((frequency_image)).real  
+        reconstructed_vanish = reconstructed_not_vanish - (np.sum(reconstructed_not_vanish)/(grid_size*grid_size))     
+        
+        scale = grid.size / grid_size 
+        #h = 2 / grid_size
+        for i in prange(grid_size):
+            for j in prange(grid_size):
+
+                x_min = i * scale
+                x_max = (i + 1) * scale
+                y_min = j * scale
+                y_max = (j + 1) * scale
+
+                def integrand(x, y):
+                # Bildwert an der Stelle (x, y), wobei x und y im Bereich [0,1] liegen
+                    x_img = x_min + (x * scale)
+                    y_img = y_min + (y * scale)
+                    return reconstructed_vanish[int(x_img), int(y_img)]
+            
+                integral_value = 0
+                for k in range(scheme_weights.size):
+
+                    x, y = scheme_points[k]
+                    integral_value += scheme_weights[k] * integrand(x, y)
+                   
+                res[i, j] = integral_value
+
+                #res[i, j] *= h ** 2
+
+    return aux
+
+#def downsample_image(image, target_shape):
     # Berechne die Skalierungsfaktoren für jede Dimension
     scale_x = target_shape[0] / image.shape[0]
     scale_y = target_shape[1] / image.shape[1]
@@ -50,7 +93,7 @@ def downsample_image(image, target_shape):
     return downsampled_image
 
 
-def generate_square_aux(grid, weights, cut_off):
+#def generate_square_aux(grid, weights, cut_off):
     
 
     @jit(nopython=False, parallel=True)
@@ -62,8 +105,9 @@ def generate_square_aux(grid, weights, cut_off):
        
         reconstructed_image_grid_size_not_vanish = np.fft.ifft2((frequency_image_grid_size)).real  
         res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
-        res[:] *= h**2
         
+        res[:] *= h**2 #WARUM muss ich hier skalieren??
+
     return aux
 
 
