@@ -44,16 +44,17 @@ def generate_square_aux(grid, weights, cut_off):
     scheme = quadpy.c2.get_good_scheme(3)
     scheme_weights = scheme.weights
     scheme_points = (1 + scheme.points.T) / 2
-    
 
-    @jit(nopython=True, parallel=True)
-    def aux(grid_size, res):
-
-        frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
+    frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         
        
-        reconstructed_not_vanish = np.fft.ifft2((frequency_image)).real  
-        reconstructed_vanish = reconstructed_not_vanish - (np.sum(reconstructed_not_vanish)/(grid_size*grid_size))     
+    reconstructed_not_vanish = np.fft.ifft2((frequency_image)).real  
+    reconstructed_vanish = reconstructed_not_vanish - (np.sum(reconstructed_not_vanish)/(grid.shape[0]*grid.shape[1]))    
+
+    @jit(nopython=False, parallel=True)
+    def aux(grid_size, res):
+
+       
         
         scale = grid.size / grid_size 
         #h = 2 / grid_size
