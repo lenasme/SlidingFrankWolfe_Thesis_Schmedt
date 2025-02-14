@@ -55,17 +55,45 @@ def generate_square_aux(grid, weights, cut_off):
 
     @jit(nopython=False, parallel=True)
     def aux(grid_size, res):
+        h = 1/ grid_size
         frequency_image = weights.reshape(grid.shape[0], grid.shape[1]) 
         
         frequency_image_grid_size = downsample_image(frequency_image, (grid_size, grid_size))        
        
         reconstructed_image_grid_size_not_vanish = np.fft.ifft2((frequency_image_grid_size)).real  
         res[:] = reconstructed_image_grid_size_not_vanish - (np.sum(reconstructed_image_grid_size_not_vanish)/(grid_size*grid_size))     
+        res[:] *= h**2
         
     return aux
 
 
        
+#def generate_triangle_aux(grid, weights, cut_off):
+    
+
+    @jit(nopython=False, parallel=True)
+    def aux(triangles, res):
+        for i in prange(len(triangles)):
+            a = np.sqrt((triangles[i, 1, 0] - triangles[i, 0, 0]) ** 2 + (triangles[i, 1, 1] - triangles[i, 0, 1]) ** 2)
+            b = np.sqrt((triangles[i, 2, 0] - triangles[i, 1, 0]) ** 2 + (triangles[i, 2, 1] - triangles[i, 1, 1]) ** 2)
+            c = np.sqrt((triangles[i, 2, 0] - triangles[i, 0, 0]) ** 2 + (triangles[i, 2, 1] - triangles[i, 0, 1]) ** 2)
+            p = (a + b + c) / 2
+            area = np.sqrt(p * (p - a) * (p - b) * (p - c))
+
+            for k in range(scheme_weights.size):
+                x = scheme_points[k, 0] * triangles[i, 0, 0] + \
+                    scheme_points[k, 1] * triangles[i, 1, 0] + \
+                    scheme_points[k, 2] * triangles[i, 2, 0]
+                y = scheme_points[k, 0] * triangles[i, 0, 1] + \
+                    scheme_points[k, 1] * triangles[i, 1, 1] + \
+                    scheme_points[k, 2] * triangles[i, 2, 1]
+                for j in range(grid.shape[0]):
+                    squared_norm = (x - grid[j, 0]) ** 2 + (y - grid[j, 1]) ** 2
+                    res[i] += scheme_weights[k] * weights[j] * exp(scale * squared_norm)
+
+            res[i] *= area
+
+    return aux
 
 
 
