@@ -162,6 +162,53 @@ def generate_triangle_aux(grid, weights, cut_off):
 
 
 
+def generate_line_aux(grid, weights, cut_off):
+    scheme = quadpy.c1.gauss_patterson(3)
+    scheme_weights = scheme.weights
+    scheme_points = (1 + scheme.points) / 2
+
+    # Bild aus Fourier-Koeffizienten rekonstruieren
+    frequency_image = weights.reshape(grid.shape[0], grid.shape[1])
+    reconstructed_not_vanish = np.fft.ifft2(frequency_image).real
+    reconstructed_vanish = reconstructed_not_vanish - np.mean(reconstructed_not_vanish)
+
+    def aux(vertices, res):
+        for i in range(len(vertices)):
+            # Länge der Kante (i, i+1)
+            edge_length = np.sqrt((vertices[(i + 1) % len(vertices), 0] - vertices[i, 0]) ** 2 +
+                               (vertices[(i + 1) % len(vertices), 1] - vertices[i, 1]) ** 2)
+
+            def integrand(x, y):
+                # Bildkoordinaten berechnen
+                x_img = x * grid.shape[1]
+                y_img = y * grid.shape[0]
+
+                # Begrenzung, um Index-Fehler zu vermeiden
+                #x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
+                #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
+
+                return reconstructed_vanish[int(y_img), int(x_img)]
+
+            integral_value = 0
+            for k in range(scheme_weights.size):
+                x = scheme_points[k] * vertices[i] + (1 - scheme_points[k]) * vertices[(i + 1) % len(vertices)]
+                integral_value += scheme_weights[k] * integrand(x[0], x[1])
+
+            res[i, 0] = integral_value * (edge_length / 2)
+
+            # Länge der Kante (i, i-1)
+            edge_length = np.sqrt((vertices[i, 0] - vertices[i - 1, 0]) ** 2 +
+                               (vertices[i, 1] - vertices[i - 1, 1]) ** 2)
+
+            integral_value = 0
+            for k in range(scheme_weights.size):
+                x = scheme_points[k] * vertices[i] + (1 - scheme_points[k]) * vertices[i - 1]
+                integral_value += scheme_weights[k] * integrand(x[0], x[1])
+
+            res[i, 1] = integral_value * (edge_length / 2)
+
+    return aux
+
 
 
 class FourierApplication:
@@ -174,7 +221,7 @@ class FourierApplication:
         self._eval_aux = generate_eval_aux(self.grid, self.weights, self.cut_off)
         self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
         self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
-        #self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
+        self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
 
 
     @property
@@ -203,7 +250,7 @@ class FourierApplication:
         self._triangle_aux(triangles, res)
         return res
 
-    #def integrate_on_polygonal_curve(self, vertices):
+    def integrate_on_polygonal_curve(self, vertices):
         res = np.zeros((len(vertices), 2))
         self._line_aux(vertices, res)
         return res
