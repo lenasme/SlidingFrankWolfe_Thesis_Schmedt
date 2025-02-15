@@ -124,6 +124,10 @@ def generate_triangle_aux(grid, weights, cut_off):
     print("max scheme points1", max(scheme_points[:, 1]))
     print("max scheme points2", max(scheme_points[:, 2]))
 
+    print("scheme_points[:, 0] range:", min(scheme_points[:, 0]), "to", max(scheme_points[:, 0]))
+    print("scheme_points[:, 1] range:", min(scheme_points[:, 1]), "to", max(scheme_points[:, 1]))
+    print("scheme_points[:, 2] range:", min(scheme_points[:, 2]), "to", max(scheme_points[:, 2]))
+
 
 
 
