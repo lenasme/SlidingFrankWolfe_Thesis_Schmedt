@@ -120,9 +120,9 @@ def generate_triangle_aux(grid, weights, cut_off):
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
 
-    print("min scheme points0", min(scheme_points[:, 0]))
-    print("min scheme points1", min(scheme_points[:, 1]))
-    print("min scheme points2", min(scheme_points[:, 2]))
+    print("max scheme points0", max(scheme_points[:, 0]))
+    print("max scheme points1", max(scheme_points[:, 1]))
+    print("max scheme points2", max(scheme_points[:, 2]))
 
 
 
