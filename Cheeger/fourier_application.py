@@ -196,10 +196,10 @@ def generate_line_aux(grid, weights, cut_off):
                 y_img = y * grid.shape[0]
 
                 # Begrenzung, um Index-Fehler zu vermeiden
-                #x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
-                #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
+                x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
+                y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
 
-                return reconstructed_vanish[int(y_img), int(x_img)]
+                return reconstructed_vanish[(y_img), (x_img)]
 
             integral_value = 0
             for k in range(scheme_weights.size):
