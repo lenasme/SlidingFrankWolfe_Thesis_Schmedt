@@ -70,8 +70,8 @@ def generate_square_aux(grid, weights, cut_off):
                 # Bildwert an der Stelle (x, y), wobei x und y im Bereich [0,1] liegen
                     x_img = x_min + (x * scale)
                     y_img = y_min + (y * scale)
-                    print("x_img", x_img)
-                    print("y_img", y_img)
+                    #print("x_img", x_img)
+                    #print("y_img", y_img)
                     return reconstructed_vanish[int(x_img), int(y_img)]
             
                 integral_value = 0
