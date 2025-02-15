@@ -173,7 +173,7 @@ class FourierApplication:
 
         self._eval_aux = generate_eval_aux(self.grid, self.weights, self.cut_off)
         self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
-        #self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
+        self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
         #self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
 
 
@@ -198,7 +198,7 @@ class FourierApplication:
         self._square_aux(grid_size, res)
         return res
 
-    #def integrate_on_triangles(self, triangles):
+    def integrate_on_triangles(self, triangles):
         res = np.zeros(len(triangles))
         self._triangle_aux(triangles, res)
         return res
