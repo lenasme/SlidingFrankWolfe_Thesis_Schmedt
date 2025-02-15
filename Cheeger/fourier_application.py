@@ -153,7 +153,8 @@ def generate_triangle_aux(grid, weights, cut_off):
                 y = scheme_points[k, 0] * triangles[i, 0, 1] + \
                     scheme_points[k, 1] * triangles[i, 1, 1] + \
                     scheme_points[k, 2] * triangles[i, 2, 1]
-
+                print("x", x)
+                print("y", y)
                 integral_value += scheme_weights[k] * integrand(x, y)
 
             res[i] = integral_value * area
