@@ -57,7 +57,7 @@ def generate_square_aux(grid, weights, cut_off):
        
         
         scale = grid.shape[0] / grid_size 
-        #h = 2 / grid_size
+        h = 1 / grid_size
         for i in range(grid_size):
             for j in range(grid_size):
 
