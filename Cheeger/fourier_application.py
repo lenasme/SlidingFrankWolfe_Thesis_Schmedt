@@ -120,7 +120,7 @@ def generate_triangle_aux(grid, weights, cut_off):
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
 
-    print("min scheme points", min(scheme_points))
+    print("min scheme points", min(scheme_points[:, :]))
 
     # Bild aus Fourier-Koeffizienten rekonstruieren
     frequency_image = weights.reshape(grid.shape[0], grid.shape[1])  
