@@ -82,7 +82,7 @@ def generate_square_aux(grid, weights, cut_off):
                    
                 res[i, j] = integral_value
 
-                #res[i, j] *= h ** 2
+                res[i, j] *= h ** 2
 
     return aux
 
