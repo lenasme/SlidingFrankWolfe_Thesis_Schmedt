@@ -80,6 +80,9 @@ class CheegerOptimizer:
         print("Gradient shape:", gradient.shape)
         print("Gradient min/max:", np.min(gradient), np.max(gradient))
         print("Gradient values (first 5 rows):", gradient[:5])
+
+        print("Former boundary vertices min/max x:", np.min(former_boundary_vertices[:,0]), np.max(former_boundary_vertices[:,0]))
+        print("Former boundary vertices min/max y:", np.min(former_boundary_vertices[:,1]), np.max(former_boundary_vertices[:,1]))
         #print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = former_boundary_vertices - t * gradient
