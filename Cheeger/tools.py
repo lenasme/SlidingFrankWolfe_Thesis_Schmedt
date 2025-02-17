@@ -148,6 +148,8 @@ def triangulate_combined(vertices_inner, vertices_outer, max_triangle_area=None,
         Output mesh, see the documentation of the triangle library
 
     """
+    print("Shape von vertices_inner:", vertices_inner.shape)
+    print("Shape von vertices_outer:", vertices_outer.shape)
 
     combined_vertices = np.vstack([vertices_inner, vertices_outer])
 
