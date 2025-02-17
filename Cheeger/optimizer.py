@@ -70,14 +70,22 @@ class CheegerOptimizer:
         former_boundary_vertices = self.state.set.boundary_vertices
 
         iteration = 0
-        plt.figure(figsize=(8,8))
+        plt.figure(figsize=(6,6))
         plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
         plt.scatter(former_boundary_vertices[:, 0]*80,former_boundary_vertices[:, 1]*80)
+        plt.title("original boundaries")
         plt.show()
 
-        print("gradient for line search:", gradient)
+        #print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = former_boundary_vertices - t * gradient
+            
+            plt.figure(figsize=(6,6))
+            plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
+            plt.scatter(new_boundary_vertices[:, 0]*80, new_boundary_vertices[:, 1]*80)
+            plt.title("new boundaries boundaries from iteration {}".format(iteration))
+            plt.show()
+
             self.state.update_boundary_vertices(new_boundary_vertices, f)
             new_obj = self.state.obj
 
