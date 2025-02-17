@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib as plt
 
 from .tools import resample
 from .simple_set import SimpleSet
@@ -69,6 +70,10 @@ class CheegerOptimizer:
         former_boundary_vertices = self.state.set.boundary_vertices
 
         iteration = 0
+        plt.plot()
+        plt.scatter(former_boundary_vertices[:, 0], former_boundary_vertices[:, 1])
+        plt.show()
+
         print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = former_boundary_vertices - t * gradient
