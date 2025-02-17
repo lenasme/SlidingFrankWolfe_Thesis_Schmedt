@@ -69,7 +69,7 @@ class CheegerOptimizer:
         former_boundary_vertices = self.state.set.boundary_vertices
 
         iteration = 0
-
+        print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = former_boundary_vertices - t * gradient
             self.state.update_boundary_vertices(new_boundary_vertices, f)
