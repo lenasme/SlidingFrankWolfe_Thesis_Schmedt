@@ -70,7 +70,8 @@ class CheegerOptimizer:
         former_boundary_vertices = self.state.set.boundary_vertices
 
         iteration = 0
-        plt.plot()
+        plt.figure(figsize=(8,8))
+        plt.imshow(f.integrate_on_pixel_grid(80), cmap = 'bwr')
         plt.scatter(former_boundary_vertices[:, 0], former_boundary_vertices[:, 1])
         plt.show()
 
