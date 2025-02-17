@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .tools import resample
-from .simple_set import SimpleSet
+#from .simple_set import SimpleSet
+from .rectangular_set_debugging import RectangularSet
 
 
 class CheegerOptimizerState:
