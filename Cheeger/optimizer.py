@@ -72,7 +72,7 @@ class CheegerOptimizer:
         iteration = 0
         plt.figure(figsize=(8,8))
         plt.imshow(f.integrate_on_pixel_grid(80), cmap = 'bwr')
-        plt.scatter(former_boundary_vertices[:, 0], former_boundary_vertices[:, 1])
+        plt.scatter(former_boundary_vertices[:, 0]*100,former_boundary_vertices[:, 1]*100)
         plt.show()
 
         print("gradient for line search:", gradient)
