@@ -71,12 +71,15 @@ class CheegerOptimizer:
         former_boundary_vertices = self.state.set.boundary_vertices
 
         iteration = 0
-        plt.figure(figsize=(6,6))
+        plt.figure()
         plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
         plt.scatter(former_boundary_vertices[:, 0]*80,former_boundary_vertices[:, 1]*80)
         plt.title("original boundaries")
         plt.show()
 
+        print("Gradient shape:", gradient.shape)
+        print("Gradient min/max:", np.min(gradient), np.max(gradient))
+        print("Gradient values (first 5 rows):", gradient[:5])
         #print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = former_boundary_vertices - t * gradient
