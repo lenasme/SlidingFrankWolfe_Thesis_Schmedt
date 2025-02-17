@@ -6,3 +6,4 @@ from .plot_utils import *
 #from .rectangular_set import *
 from .rectangular_set_debugging import *
 from .fourier_application import *
+from .optimizer_debugging import *
