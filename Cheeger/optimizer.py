@@ -71,7 +71,7 @@ class CheegerOptimizer:
 
         iteration = 0
         plt.figure(figsize=(8,8))
-        plt.imshow(f.integrate_on_pixel_grid(80),  cmap = 'bwr')
+        plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
         plt.scatter(former_boundary_vertices[:, 0]*80,former_boundary_vertices[:, 1]*80)
         plt.show()
 
