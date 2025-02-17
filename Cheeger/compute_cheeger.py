@@ -4,7 +4,7 @@ import time
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 from .simple_set import SimpleSet
-from .optimizer import CheegerOptimizer
+from .optimizer_debugging import CheegerOptimizer
 from .tools import run_primal_dual, extract_contour, resample
 from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 from .rectangular_optimizer import objective
