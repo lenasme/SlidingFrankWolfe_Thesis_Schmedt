@@ -155,6 +155,7 @@ def generate_triangle_aux(grid, weights, cut_off):
                 #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
 
                 return reconstructed_vanish[int(y_img), int(x_img)]
+            print("Index", i)
             print("min und max tri", i, "0",min(triangles[i, :, 0]), max(triangles[i, :, 0]))
             print("min und max tri", i, " 1",min(triangles[i, :, 1]), max(triangles[i, :, 1]))
             integral_value = 0
@@ -165,8 +166,8 @@ def generate_triangle_aux(grid, weights, cut_off):
                 y = scheme_points[k, 0] * triangles[i, 0, 1] + \
                     scheme_points[k, 1] * triangles[i, 1, 1] + \
                     scheme_points[k, 2] * triangles[i, 2, 1]
-                print("x", x)
-                print("y", y)
+                #print("x", x)
+                #print("y", y)
                 integral_value += scheme_weights[k] * integrand(x, y)
 
             res[i] = integral_value * area
