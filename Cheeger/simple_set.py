@@ -132,6 +132,8 @@ class SimpleSet:
         """
         if boundary_faces_only:
             triangles = self.mesh_vertices[self.mesh_boundary_faces]
+            print("Boundary Faces Indices:", self.mesh_boundary_faces_indices)
+            print("Mesh Faces:", self.mesh_faces[self.mesh_boundary_faces_indices])
         else:
             triangles = self.mesh_vertices[self.mesh_faces]
 
