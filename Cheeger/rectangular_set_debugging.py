@@ -21,7 +21,7 @@ class RectangularSet:
 		#self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
 		self.create_mesh(boundary_vertices, max_tri_area)
 
-		self.plot_meshes(self.mesh_vertices, self.mesh_faces)
+		#self.plot_meshes(self.mesh_vertices, self.mesh_faces)
 
 	@property
 	def boundary_vertices_indices(self):
@@ -83,7 +83,7 @@ class RectangularSet:
 		plt.title("Trianguliertes Mesh")
 		plt.axis("equal")  # Gleiche Skalierung der Achsen
 		plt.show()
-		
+
 
 	def contains(self, x):
 		"""
