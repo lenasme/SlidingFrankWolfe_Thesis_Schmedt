@@ -18,8 +18,10 @@ class RectangularSet:
 		self.mesh_boundary_faces_indices = None
 		# creation of the inner mesh
 		
-		self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
-		#self.create_mesh(boundary_vertices, max_tri_area)
+		#self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
+		self.create_mesh(boundary_vertices, max_tri_area)
+
+		self.plot_meshes(self.mesh_vertices, self.mesh_faces)
 
 	@property
 	def boundary_vertices_indices(self):
@@ -64,6 +66,24 @@ class RectangularSet:
 		self.mesh_vertices[self.boundary_vertices_indices] = new_boundary_vertices
 
 	
+	def plot_meshes(self, vertices, faces):
+		plt.figure(figsize=(8, 8))
+	
+		# Erstelle das Triangulationsobjekt
+		triang = tri.Triangulation(vertices[:, 0], vertices[:, 1], faces)
+	
+		# Zeichne das Mesh
+		plt.triplot(triang, color='black', linewidth=0.5)
+	
+		# Optional: Markiere die Punkte
+		plt.scatter(vertices[:, 0], vertices[:, 1], color='red', s=10, zorder=2)
+
+		plt.xlabel("X")
+		plt.ylabel("Y")
+		plt.title("Trianguliertes Mesh")
+		plt.axis("equal")  # Gleiche Skalierung der Achsen
+		plt.show()
+		
 
 	def contains(self, x):
 		"""
@@ -280,22 +300,7 @@ class RectangularSet:
 
 		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)
 
-		plt.figure(figsize=(8, 8))
-    
-		# Erstellen der Triangulierung für das Plotten
-		triang = tri.Triangulation(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], self.mesh_faces)
-	
-		# Plotte das Mesh
-		plt.triplot(triang, color='black', linewidth=0.5)
-	
-		# Optional: Markiere die Knotenpunkte
-		plt.scatter(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], color='red', s=10, zorder=2)
-
-		plt.xlabel("X")
-		plt.ylabel("Y")
-		plt.title("Trianguliertes Mesh")
-		plt.axis("equal")  # Gleiche Skalierung der Achsen
-		plt.show()
+		
 
 
 	def create_whole_mesh(self, boundary_vertices, domain_vertices, max_tri_area):
@@ -338,19 +343,4 @@ class RectangularSet:
 
 		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)	
 
-		plt.figure(figsize=(8, 8))
-    
-		# Erstellen der Triangulierung für das Plotten
-		triang = tri.Triangulation(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], self.mesh_faces)
-	
-		# Plotte das Mesh
-		plt.triplot(triang, color='black', linewidth=0.5)
-	
-		# Optional: Markiere die Knotenpunkte
-		plt.scatter(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], color='red', s=10, zorder=2)
-
-		plt.xlabel("X")
-		plt.ylabel("Y")
-		plt.title("Trianguliertes Mesh")
-		plt.axis("equal")  # Gleiche Skalierung der Achsen
-		plt.show()
+		
