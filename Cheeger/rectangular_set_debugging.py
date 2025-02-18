@@ -18,8 +18,8 @@ class RectangularSet:
 		self.mesh_boundary_faces_indices = None
 		# creation of the inner mesh
 		
-		#self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
-		self.create_mesh(boundary_vertices, max_tri_area)
+		self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
+		#self.create_mesh(boundary_vertices, max_tri_area)
 
 	@property
 	def boundary_vertices_indices(self):
@@ -337,3 +337,20 @@ class RectangularSet:
 				boundary_faces_indices.append(i)
 
 		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)	
+
+		plt.figure(figsize=(8, 8))
+    
+		# Erstellen der Triangulierung für das Plotten
+		triang = tri.Triangulation(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], self.mesh_faces)
+	
+		# Plotte das Mesh
+		plt.triplot(triang, color='black', linewidth=0.5)
+	
+		# Optional: Markiere die Knotenpunkte
+		plt.scatter(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], color='red', s=10, zorder=2)
+
+		plt.xlabel("X")
+		plt.ylabel("Y")
+		plt.title("Trianguliertes Mesh")
+		plt.axis("equal")  # Gleiche Skalierung der Achsen
+		plt.show()
