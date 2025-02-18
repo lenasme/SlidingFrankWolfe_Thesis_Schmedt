@@ -16,7 +16,8 @@ class RectangularSet:
 		self.mesh_boundary_faces_indices = None
 		# creation of the inner mesh
 		
-		self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
+		#self.create_whole_mesh(boundary_vertices, domain_vertices, max_tri_area)
+		self.create_mesh(boundary_vertices, max_tri_area)
 
 	@property
 	def boundary_vertices_indices(self):
