@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.spatial import Delaunay
+import matplotlib.pyplot as plt
+import matplotlib.tri as tri
 from .tools import winding, triangulate, triangulate_combined
 
 class RectangularSet:
@@ -278,6 +280,22 @@ class RectangularSet:
 
 		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)
 
+		plt.figure(figsize=(8, 8))
+    
+		# Erstellen der Triangulierung für das Plotten
+		triang = tri.Triangulation(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], self.mesh_faces)
+	
+		# Plotte das Mesh
+		plt.triplot(triang, color='black', linewidth=0.5)
+	
+		# Optional: Markiere die Knotenpunkte
+		plt.scatter(self.mesh_vertices[:, 0], self.mesh_vertices[:, 1], color='red', s=10, zorder=2)
+
+		plt.xlabel("X")
+		plt.ylabel("Y")
+		plt.title("Trianguliertes Mesh")
+		plt.axis("equal")  # Gleiche Skalierung der Achsen
+		plt.show()
 
 
 	def create_whole_mesh(self, boundary_vertices, domain_vertices, max_tri_area):
