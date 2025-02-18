@@ -4,7 +4,7 @@ from .tools import winding, triangulate, triangulate_combined
 
 class RectangularSet:
 
-	def __init__(self, boundary_vertices, domain_vertices = np.array([[0,0], [0,1], [1,1], [1,0]]), max_tri_area=None):
+	def __init__(self, boundary_vertices,max_tri_area=None, domain_vertices = np.array([[0,0], [0,1], [1,1], [1,0]])):
 		self.num_boundary_vertices = len(boundary_vertices)
 
 		# the curve is clockwise if and only if the sum over the edges of (x2-x1)(y2+y1) is positive
