@@ -41,6 +41,7 @@ class CheegerOptimizerState:
     #hier überall rec hinzu
     def compute_gradient(self, f):
         perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
+        print("anisotropic perimeter gradient", perimeter_gradient)
         area_gradient = self.set.compute_weighted_area_rec_gradient(f)
         gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 
