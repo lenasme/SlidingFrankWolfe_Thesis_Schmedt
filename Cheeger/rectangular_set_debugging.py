@@ -132,6 +132,12 @@ class RectangularSet:
 		
 		return res
 	
+	def compute_anisotropic_perimeter(self):
+		x_min, y_min = np.min(self.boundary_vertices, axis=0)
+		x_max, y_max = np.max(self.boundary_vertices, axis=0)
+		return 2 * ((x_max - x_min) + (y_max - y_min))
+	
+	
 	def compute_perimeter_rec_gradient(self):
 		"""
 		Compute the "gradient" of the perimeter
@@ -163,6 +169,26 @@ class RectangularSet:
 
 		return gradient
 	
+
+	def compute_anisotropic_perimeter_gradient(self):
+		x_min, y_min = np.min(self.boundary_vertices, axis=0)
+		x_max, y_max = np.max(self.boundary_vertices, axis=0)
+		
+		gradient = np.zeros_like(self.boundary_vertices)
+		
+		# Identifiziere welche Punkte x_min, x_max, y_min, y_max definieren
+		is_x_min = self.boundary_vertices[:, 0] == x_min
+		is_x_max = self.boundary_vertices[:, 0] == x_max
+		is_y_min = self.boundary_vertices[:, 1] == y_min
+		is_y_max = self.boundary_vertices[:, 1] == y_max
+		
+		# Gradienten setzen
+		gradient[is_x_min, 0] = -1
+		gradient[is_x_max, 0] = 1
+		gradient[is_y_min, 1] = -1
+		gradient[is_y_max, 1] = 1
+		
+		return 2 * gradient
 
 	def compute_weighted_area_rec_tab(self, fourier, boundary_faces_only=False):
 		"""
