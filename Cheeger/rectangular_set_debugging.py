@@ -176,19 +176,25 @@ class RectangularSet:
 		
 		gradient = np.zeros_like(self.boundary_vertices)
 		
-		# Identifiziere welche Punkte x_min, x_max, y_min, y_max definieren
-		is_x_min = self.boundary_vertices[:, 0] == x_min
-		is_x_max = self.boundary_vertices[:, 0] == x_max
-		is_y_min = self.boundary_vertices[:, 1] == y_min
-		is_y_max = self.boundary_vertices[:, 1] == y_max
-		
-		# Gradienten setzen
-		gradient[is_x_min, 0] = -1
-		gradient[is_x_max, 0] = 1
-		gradient[is_y_min, 1] = -1
-		gradient[is_y_max, 1] = 1
-		
-		return 2 * gradient
+		x_min_mask = self.boundary_vertices[:, 0] == x_min
+		x_max_mask = self.boundary_vertices[:, 0] == x_max
+		y_min_mask = self.boundary_vertices[:, 1] == y_min
+		y_max_mask = self.boundary_vertices[:, 1] == y_max
+
+		count_x_min = np.sum(x_min_mask)
+		count_x_max = np.sum(x_max_mask)
+		count_y_min = np.sum(y_min_mask)
+		count_y_max = np.sum(y_max_mask)
+
+		# Set gradient in x-direction
+		gradient[x_min_mask, 0] = -1 if count_x_min == 1 else 0
+		gradient[x_max_mask, 0] = 1  # Immer 1, weil Änderung x_max beeinflusst
+
+		# Set gradient in y-direction
+		gradient[y_min_mask, 1] = -1 if count_y_min == 1 else 0
+		gradient[y_max_mask, 1] = 1  # Immer 1, weil Änderung y_max beeinflusst
+
+		return 2* gradient
 
 	def compute_weighted_area_rec_tab(self, fourier, boundary_faces_only=False):
 		"""
