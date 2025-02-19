@@ -18,7 +18,7 @@ class CheegerOptimizerState:
 
     def update_obj(self):
         self.weighted_area = np.sum(self.weighted_area_tab)
-        self.perimeter = self.set.compute_perimeter_rec()
+        self.perimeter = self.set.compute_anisotropic_perimeter()
 
         self.obj = (self.perimeter / np.abs(self.weighted_area))
 
@@ -40,7 +40,7 @@ class CheegerOptimizerState:
 
     #hier überall rec hinzu
     def compute_gradient(self, f):
-        perimeter_gradient = self.set.compute_perimeter_rec_gradient()
+        perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
         area_gradient = self.set.compute_weighted_area_rec_gradient(f)
         gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 
