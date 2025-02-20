@@ -170,7 +170,59 @@ class RectangularSet:
 		return gradient
 	
 
+
 	def compute_anisotropic_perimeter_gradient(self):
+		gradient_left = np.zeros_like(self.boundary_vertices)
+		gradient_right = np.zeros_like(self.boundary_vertices)
+
+		x_min, y_min = np.min(self.boundary_vertices, axis=0)
+		x_max, y_max = np.max(self.boundary_vertices, axis=0)
+
+		x_min_mask = self.boundary_vertices[:, 0] == x_min
+		x_max_mask = self.boundary_vertices[:, 0] == x_max
+		y_min_mask = self.boundary_vertices[:, 1] == y_min
+		y_max_mask = self.boundary_vertices[:, 1] == y_max
+
+		num_x_min = np.sum(x_min_mask)
+		num_x_max = np.sum(x_max_mask)
+		num_y_min = np.sum(y_min_mask)
+		num_y_max = np.sum(y_max_mask)
+
+		if num_x_min == 1:
+			gradient_left[x_min_mask, 0] = -1
+			gradient_right[x_min_mask, 0] = -1
+		else:
+			gradient_left[x_min_mask, 0] = -1  # Nach links verschieben → Perimeter steigt
+			gradient_right[x_min_mask, 0] = 0  # Nach rechts verschieben -> Perimeter unverändert
+
+
+		if num_x_max == 1:
+			gradient_left[x_max_mask, 0] = 1
+			gradient_right[x_max_mask, 0] = 1
+		else:
+			gradient_left[x_max_mask, 0] = 0  # Nach links verschieben → Perimeter unverändert
+			gradient_right[x_max_mask, 0] = 1  # Nach rechts verschieben -> Perimeter steigt
+
+
+		if num_y_min == 1:
+			gradient_left[y_min_mask, 1] = -1
+			gradient_right[y_min_mask, 1] = -1
+		else:
+			gradient_left[y_min_mask, 1] = -1  # Nach unten verschieben → Perimeter steigt
+			gradient_right[y_min_mask, 1] = 0  # Nach oben verschieben -> Perimeter unverändert
+	
+
+		if num_y_max == 1:
+			gradient_left[y_max_mask, 1] = 1
+			gradient_right[y_max_mask, 1] = 1
+		else:
+			gradient_left[y_max_mask, 1] = 0  # Nach unten verschieben → Perimeter unverändert
+			gradient_right[y_max_mask, 1] = 1  # Nach oben verschieben -> Perimeter steigt
+
+	
+		return 2*gradient_left, 2*gradient_right
+	
+	#def compute_anisotropic_perimeter_gradient(self):
 		x_min, y_min = np.min(self.boundary_vertices, axis=0)
 		x_max, y_max = np.max(self.boundary_vertices, axis=0)
 		
