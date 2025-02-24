@@ -121,13 +121,13 @@ def generate_triangle_aux(grid, weights, cut_off):
     scheme_weights = scheme.weights
     scheme_points = scheme.points.T
 
-    print("max scheme points0", max(scheme_points[:, 0]))
-    print("max scheme points1", max(scheme_points[:, 1]))
-    print("max scheme points2", max(scheme_points[:, 2]))
+    #print("max scheme points0", max(scheme_points[:, 0]))
+    #print("max scheme points1", max(scheme_points[:, 1]))
+    #print("max scheme points2", max(scheme_points[:, 2]))
 
-    print("scheme_points[:, 0] range:", min(scheme_points[:, 0]), "to", max(scheme_points[:, 0]))
-    print("scheme_points[:, 1] range:", min(scheme_points[:, 1]), "to", max(scheme_points[:, 1]))
-    print("scheme_points[:, 2] range:", min(scheme_points[:, 2]), "to", max(scheme_points[:, 2]))
+    #print("scheme_points[:, 0] range:", min(scheme_points[:, 0]), "to", max(scheme_points[:, 0]))
+    #print("scheme_points[:, 1] range:", min(scheme_points[:, 1]), "to", max(scheme_points[:, 1]))
+    #print("scheme_points[:, 2] range:", min(scheme_points[:, 2]), "to", max(scheme_points[:, 2]))
 
 
 
@@ -156,9 +156,9 @@ def generate_triangle_aux(grid, weights, cut_off):
                 #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
 
                 return reconstructed_vanish[int(y_img), int(x_img)]
-            print("Index", i)
-            print("min und max tri", i, "0",min(triangles[i, :, 0]), max(triangles[i, :, 0]))
-            print("min und max tri", i, " 1",min(triangles[i, :, 1]), max(triangles[i, :, 1]))
+           # print("Index", i)
+            #print("min und max tri", i, "0",min(triangles[i, :, 0]), max(triangles[i, :, 0]))
+            #print("min und max tri", i, " 1",min(triangles[i, :, 1]), max(triangles[i, :, 1]))
             integral_value = 0
             for k in range(scheme_weights.size):
                 x = scheme_points[k, 0] * triangles[i, 0, 0] + \
@@ -172,7 +172,7 @@ def generate_triangle_aux(grid, weights, cut_off):
                 integral_value += scheme_weights[k] * integrand(x, y)
 
             res[i] = integral_value * area
-        print("Ich habe generate triangle aux einmal durchgelaufen.")
+        #print("Ich habe generate triangle aux einmal durchgelaufen.")
     return aux
 
 
