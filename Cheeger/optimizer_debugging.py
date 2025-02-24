@@ -50,7 +50,8 @@ class CheegerOptimizerState:
 
         print("Fläche:", self.weighted_area)
         print("Perimeter:", self.perimeter)
-
+        print("Norm Perimetergradient:", np.linalg.norm(mean_perimeter_gradient))
+        print("Norm Flächengradient:", np.linalg.norm(area_gradient))
         return np.sign(self.weighted_area) * gradient
 
 
