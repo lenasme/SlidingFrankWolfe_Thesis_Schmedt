@@ -172,6 +172,8 @@ def generate_triangle_aux(grid, weights, cut_off):
                 integral_value += scheme_weights[k] * integrand(x, y)
 
             res[i] = integral_value * area
+
+        print("weighted area tab:", res)
         #print("Ich habe generate triangle aux einmal durchgelaufen.")
     return aux
 
