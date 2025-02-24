@@ -188,6 +188,8 @@ class RectangularSet:
 		num_y_min = np.sum(y_min_mask)
 		num_y_max = np.sum(y_max_mask)
 
+		print("num minimal x:", num_x_min, "num maximal x:", num_x_max, "num minimal y:", num_y_min, "num maximal y:", num_y_max)
+
 		if num_x_min == 1:
 			gradient_left[x_min_mask, 0] = -1
 			gradient_right[x_min_mask, 0] = -1
