@@ -137,11 +137,12 @@ class CheegerOptimizer:
             
             #grad_norm_tab.append(np.sum(np.linalg.norm(gradient, ord=1, axis=-1)))
             obj_tab.append(self.state.obj)
-
+            
             #print(obj_tab[-1])
 
             n_iter_linesearch, max_displacement = self.perform_linesearch(f, gradient)
-
+            print("weighted area:", self.state.weighted_area)
+            print("perimeter:", self.state.perimeter)
             iteration += 1
             convergence = (max_displacement < self.eps_stop)
 
