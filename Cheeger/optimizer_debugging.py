@@ -120,7 +120,7 @@ class CheegerOptimizer:
         print("max displacement", max_displacement)
         return iteration, max_displacement
 
-    def run(self, f, initial_set, verbose=False):
+    def run(self, f, initial_set, verbose=True):
         convergence = False
         obj_tab = []
         grad_norm_tab = []
@@ -150,7 +150,7 @@ class CheegerOptimizer:
             if self.num_iter_resampling is not None and iteration % self.num_iter_resampling == 0:
                 new_boundary_vertices = resample(self.state.set.boundary_vertices, num_points=self.num_points,
                                                  point_density=self.point_density)
-                new_set = SimpleSet(new_boundary_vertices, max_tri_area=self.max_tri_area)
+                new_set = RectangularSet(new_boundary_vertices, max_tri_area=self.max_tri_area)
                 self.state.update_set(new_set, f)
 
         return self.state.set, obj_tab, grad_norm_tab
