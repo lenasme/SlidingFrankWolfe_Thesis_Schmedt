@@ -162,15 +162,36 @@ def generate_triangle_aux(grid, weights, cut_off):
             #print("min und max tri", i, " 1",min(triangles[i, :, 1]), max(triangles[i, :, 1]))
             integral_value = 0
             for k in range(scheme_weights.size):
-                x = scheme_points[k, 0] * triangles[i, 0, 0] + \
-                    scheme_points[k, 1] * triangles[i, 1, 0] + \
-                    scheme_points[k, 2] * triangles[i, 2, 0]
-                y = scheme_points[k, 0] * triangles[i, 0, 1] + \
-                    scheme_points[k, 1] * triangles[i, 1, 1] + \
-                    scheme_points[k, 2] * triangles[i, 2, 1]
+                lambdas = scheme_points[k, :]  # [λ0, λ1, λ2]
+
+                # Bedingungen prüfen
+                if (0 <= lambdas[0] <= 1 and
+                    0 <= lambdas[1] <= 1 and
+                    0 <= lambdas[2] <= 1 and
+                    abs(sum(lambdas) - 1) < 1e-6):  # Summe ≈ 1
+
+                    # Punkt liegt innerhalb des Dreiecks
+                    x = lambdas[0] * triangles[i, 0, 0] + \
+                        lambdas[1] * triangles[i, 1, 0] + \
+                        lambdas[2] * triangles[i, 2, 0]
+
+                    y = lambdas[0] * triangles[i, 0, 1] + \
+                        lambdas[1] * triangles[i, 1, 1] + \
+                        lambdas[2] * triangles[i, 2, 1]
+
+                    integral_value += scheme_weights[k] * integrand(x, y)
+                else:
+                    print("Ungültige baryzentrische Koordinaten:", lambdas)
+            #for k in range(scheme_weights.size):
+                #x = scheme_points[k, 0] * triangles[i, 0, 0] + \
+                    #scheme_points[k, 1] * triangles[i, 1, 0] + \
+                    #scheme_points[k, 2] * triangles[i, 2, 0]
+                #y = scheme_points[k, 0] * triangles[i, 0, 1] + \
+                   # scheme_points[k, 1] * triangles[i, 1, 1] + \
+                    #scheme_points[k, 2] * triangles[i, 2, 1]
                 #print("x", x)
                 #print("y", y)
-                integral_value += scheme_weights[k] * integrand(x, y)
+                #integral_value += scheme_weights[k] * integrand(x, y)
                 #print("integral value:", integral_value)
             res[i] = integral_value * area
 
