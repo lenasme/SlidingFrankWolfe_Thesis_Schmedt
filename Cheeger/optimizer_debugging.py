@@ -48,6 +48,9 @@ class CheegerOptimizerState:
         area_gradient = self.set.compute_weighted_area_rec_gradient(f)
         gradient = (mean_perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 
+        print("Fläche:", self.weighted_area)
+        print("Perimeter:", self.perimeter)
+
         return np.sign(self.weighted_area) * gradient
 
 
@@ -74,6 +77,8 @@ class CheegerOptimizer:
 
         former_obj = self.state.obj
         former_boundary_vertices = self.state.set.boundary_vertices
+
+        print("original boundary vertices:", former_boundary_vertices)
 
         iteration = 0
         plt.figure()
