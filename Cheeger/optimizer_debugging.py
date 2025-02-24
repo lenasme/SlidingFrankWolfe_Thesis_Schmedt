@@ -98,6 +98,8 @@ class CheegerOptimizer:
             plt.title("new boundaries boundaries from iteration {}".format(iteration))
             plt.show()
 
+            print("new boundary vertices iteratiron", iteration, ":", new_boundary_vertices)
+
             self.state.update_boundary_vertices(new_boundary_vertices, f)
             new_obj = self.state.obj
 
