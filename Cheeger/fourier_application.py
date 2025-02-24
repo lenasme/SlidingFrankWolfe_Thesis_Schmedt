@@ -155,7 +155,7 @@ def generate_triangle_aux(grid, weights, cut_off):
                 #x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
                 #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
 
-                return 1
+                return 0.92
                 #return reconstructed_vanish[int(y_img), int(x_img)]
            # print("Index", i)
             #print("min und max tri", i, "0",min(triangles[i, :, 0]), max(triangles[i, :, 0]))
