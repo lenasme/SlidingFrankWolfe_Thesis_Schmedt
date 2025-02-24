@@ -116,6 +116,7 @@ class CheegerOptimizer:
 
         max_displacement = np.max(np.linalg.norm(new_boundary_vertices - former_boundary_vertices, axis=-1))
         print("AG condition satisfied:", ag_condition)
+        print("max displacement", max_displacement)
         return iteration, max_displacement
 
     def run(self, f, initial_set, verbose=False):
