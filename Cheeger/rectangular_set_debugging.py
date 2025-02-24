@@ -194,7 +194,7 @@ class RectangularSet:
 			gradient_left[x_min_mask, 0] = -1
 			gradient_right[x_min_mask, 0] = -1
 		else:
-			gradient_left[x_min_mask, 0] = -1  # Nach links verschieben → Perimeter steigt
+			gradient_left[x_min_mask, 0] = 0 # Nach links verschieben → Perimeter steigt
 			gradient_right[x_min_mask, 0] = 0  # Nach rechts verschieben -> Perimeter unverändert
 
 
@@ -203,7 +203,7 @@ class RectangularSet:
 			gradient_right[x_max_mask, 0] = 1
 		else:
 			gradient_left[x_max_mask, 0] = 0  # Nach links verschieben → Perimeter unverändert
-			gradient_right[x_max_mask, 0] = 1  # Nach rechts verschieben -> Perimeter steigt
+			gradient_right[x_max_mask, 0] = 0 # Nach rechts verschieben -> Perimeter steigt
 
 
 		if num_y_min == 1:
