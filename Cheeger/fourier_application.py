@@ -148,8 +148,8 @@ def generate_triangle_aux(grid, weights, cut_off):
 
             def integrand(x, y):
                 # Bildwert an der Stelle (x, y) im rekonstruierten Bild abrufen
-                x_img = x * grid.shape[1]  # Skalierung auf Bildkoordinaten
-                y_img = y * grid.shape[0]
+                x_img = x * (grid.shape[1]-1)  # Skalierung auf Bildkoordinaten
+                y_img = y *( grid.shape[0] -1)
 
                 # Begrenzung, um Index-Fehler zu vermeiden
                 #x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
@@ -170,7 +170,7 @@ def generate_triangle_aux(grid, weights, cut_off):
                 #print("x", x)
                 #print("y", y)
                 integral_value += scheme_weights[k] * integrand(x, y)
-
+                print("integral value:", integral_value)
             res[i] = integral_value * area
 
         print("weighted area tab:", res)
