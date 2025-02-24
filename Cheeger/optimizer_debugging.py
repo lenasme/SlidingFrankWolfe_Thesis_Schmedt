@@ -43,8 +43,9 @@ class CheegerOptimizerState:
         #perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
         #print("anisotropic perimeter gradients", perimeter_gradient)
         left_perimeter_gradient, right_perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
-        print("left anisotropic perimeter gradients", left_perimeter_gradient, "right anisotropic perimeter gradient:", right_perimeter_gradient)
+        #print("left anisotropic perimeter gradients", left_perimeter_gradient, "right anisotropic perimeter gradient:", right_perimeter_gradient)
         mean_perimeter_gradient = (left_perimeter_gradient + right_perimeter_gradient) / 2
+        print("mean perimeter gradient:", mean_perimeter_gradient)
         area_gradient = self.set.compute_weighted_area_rec_gradient(f)
         gradient = (mean_perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 
