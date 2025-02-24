@@ -96,7 +96,7 @@ class CheegerOptimizer:
         print("Former boundary vertices min/max y:", np.min(former_boundary_vertices[:,1]), np.max(former_boundary_vertices[:,1]))
         #print("gradient for line search:", gradient)
         while not ag_condition:
-            new_boundary_vertices = former_boundary_vertices - t * gradient
+            new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
             
             plt.figure(figsize=(6,6))
             plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
