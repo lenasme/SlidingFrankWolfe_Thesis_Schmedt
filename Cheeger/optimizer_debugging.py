@@ -108,7 +108,8 @@ class CheegerOptimizer:
 
             self.state.update_boundary_vertices(new_boundary_vertices, f)
             new_obj = self.state.obj
-
+            print("new objective:", new_obj)
+            print("former objective:" , former_obj)
             ag_condition = (new_obj <= former_obj - self.alpha * t * np.abs(gradient).sum())
             t = self.beta * t
 
