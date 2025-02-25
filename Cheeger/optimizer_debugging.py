@@ -80,7 +80,7 @@ class CheegerOptimizer:
         former_obj = self.state.obj
         former_boundary_vertices = self.state.set.boundary_vertices
 
-        print("original boundary vertices:", former_boundary_vertices)
+        #print("original boundary vertices:", former_boundary_vertices)
 
         iteration = 0
         plt.figure()
