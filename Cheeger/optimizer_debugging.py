@@ -141,18 +141,42 @@ class CheegerOptimizer:
             #print(obj_tab[-1])
 
             n_iter_linesearch, max_displacement = self.perform_linesearch(f, gradient)
-            print("weighted area:", self.state.weighted_area)
-            print("perimeter:", self.state.perimeter)
+            #print("weighted area:", self.state.weighted_area)
+            #print("perimeter:", self.state.perimeter)
             iteration += 1
             convergence = (max_displacement < self.eps_stop)
 
             if verbose:
                 print("iteration {}: {} linesearch steps".format(iteration, n_iter_linesearch))
 
+
+                iterations = range(1, len(obj_tab) + 1)
+
+                fig, ax1 = plt.subplots(figsize=(10, 5))
+
+                # Plot für die Zielfunktion
+                color = 'tab:blue'
+                ax1.set_xlabel('Iteration')
+                ax1.set_ylabel('Zielfunktion', color=color)
+                ax1.plot(iterations, obj_tab, color=color, label='Zielfunktion')
+                ax1.tick_params(axis='y', labelcolor=color)
+                ax1.legend(loc='upper left')
+
+                # Zweite Achse für Gradienten-Norm
+                ax2 = ax1.twinx()
+                color = 'tab:red'
+                ax2.set_ylabel('Gradienten-Norm', color=color)
+                ax2.plot(iterations, grad_norm_tab, color=color, linestyle='--', label='Gradienten-Norm')
+                ax2.tick_params(axis='y', labelcolor=color)
+                ax2.legend(loc='upper right')
+
+                plt.title('Verlauf der Zielfunktion und Gradienten-Norm', "iteration:", iteration)
+                plt.show()
+
             if self.num_iter_resampling is not None and iteration % self.num_iter_resampling == 0:
                 new_boundary_vertices = resample(self.state.set.boundary_vertices, num_points=self.num_points,
                                                  point_density=self.point_density)
                 new_set = RectangularSet(new_boundary_vertices, max_tri_area=self.max_tri_area)
                 self.state.update_set(new_set, f)
-
+        
         return self.state.set, obj_tab, grad_norm_tab
