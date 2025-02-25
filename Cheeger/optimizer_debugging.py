@@ -89,12 +89,12 @@ class CheegerOptimizer:
         plt.title("original boundaries")
         plt.show()
 
-        print("Gradient shape:", gradient.shape)
-        print("Gradient min/max:", np.min(gradient), np.max(gradient))
-        print("Gradient values (first 5 rows):", gradient[:5])
+        #print("Gradient shape:", gradient.shape)
+        #print("Gradient min/max:", np.min(gradient), np.max(gradient))
+        #print("Gradient values (first 5 rows):", gradient[:5])
 
-        print("Former boundary vertices min/max x:", np.min(former_boundary_vertices[:,0]), np.max(former_boundary_vertices[:,0]))
-        print("Former boundary vertices min/max y:", np.min(former_boundary_vertices[:,1]), np.max(former_boundary_vertices[:,1]))
+        #print("Former boundary vertices min/max x:", np.min(former_boundary_vertices[:,0]), np.max(former_boundary_vertices[:,0]))
+        #print("Former boundary vertices min/max y:", np.min(former_boundary_vertices[:,1]), np.max(former_boundary_vertices[:,1]))
         #print("gradient for line search:", gradient)
         while not ag_condition:
             new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
@@ -105,7 +105,7 @@ class CheegerOptimizer:
             plt.title("new boundaries boundaries from iteration {}".format(iteration))
             plt.show()
 
-            print("new boundary vertices iteratiron", iteration, ":", new_boundary_vertices)
+            #print("new boundary vertices iteratiron", iteration, ":", new_boundary_vertices)
 
             self.state.update_boundary_vertices(new_boundary_vertices, f)
             new_obj = self.state.obj
