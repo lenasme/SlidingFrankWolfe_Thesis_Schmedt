@@ -163,7 +163,7 @@ def generate_triangle_aux(grid, weights, cut_off):
             integral_value = 0
             for k in range(scheme_weights.size):
                 lambdas = scheme_points[k, :]  # [λ0, λ1, λ2]
-
+                print("lambdas from triangel ", k, ":", lambdas)
                 # Bedingungen prüfen
                 if (0 <= lambdas[0] <= 1 and
                     0 <= lambdas[1] <= 1 and
@@ -195,7 +195,7 @@ def generate_triangle_aux(grid, weights, cut_off):
                 #print("integral value:", integral_value)
             res[i] = integral_value * area
 
-        print("weighted area tab:", res)
+        #print("weighted area tab:", res)
         #print("Ich habe generate triangle aux einmal durchgelaufen.")
     return aux
 
