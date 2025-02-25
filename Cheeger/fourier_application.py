@@ -121,7 +121,7 @@ def plot_triangles_with_image(reconstructed_vanish, triangles):
     fig, ax = plt.subplots(figsize=(10, 8))
 
     # 1️⃣ Reconstructed Image anzeigen
-    cax = ax.imshow(reconstructed_vanish, cmap='viridis', origin = 'lower', extent=[0, 1, 0, 1])
+    cax = ax.imshow(reconstructed_vanish.T, cmap='viridis', origin = 'lower', extent=[0, 1, 0, 1])
     fig.colorbar(cax, ax=ax, label='Reconstructed Values')
 
     # 2️⃣ Dreiecke drüber plotten
@@ -134,7 +134,7 @@ def plot_triangles_with_image(reconstructed_vanish, triangles):
 
         # Optional: Eckpunkte markieren
         for j in range(3):
-            ax.plot(tri[j, 1], tri[j, 0], 'ro')  # Eckpunkte rot markieren
+            ax.plot(tri[j, 0], tri[j, 1], 'ro')  # Eckpunkte rot markieren
 
     # 3️⃣ Achsen und Titel
     ax.set_title('Reconstructed Image mit Dreiecken')
