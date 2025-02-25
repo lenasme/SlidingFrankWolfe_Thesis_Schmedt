@@ -14,6 +14,8 @@ class CheegerOptimizerState:
         self.perimeter = None
         self.obj = None
 
+        self.grid_size = None
+
         self.update_set(initial_set, f)
 
     def update_obj(self):
@@ -32,6 +34,7 @@ class CheegerOptimizerState:
 
     def update_set(self, new_set, f):
         self.set = new_set
+        self.grid_size = f.grid_size
 
         weighted_area_tab = self.set.compute_weighted_area_rec_tab(f)
         self.weighted_area_tab = weighted_area_tab
@@ -133,15 +136,21 @@ class CheegerOptimizer:
         while not convergence and iteration < self.max_iter:
             gradient = self.state.compute_gradient(f)
 
-            gradient_magnitude = np.linalg.norm(gradient, axis=-1)
+
+            gradient_field = np.zeros_like(self.state.grid_size)
+            grad_norm = np.linalg.norm(gradient, axis=1)
+            for i, (x, y) in enumerate(self.state.set.boundary_vertices):
+                gradient_field[int(y), int(x)] = grad_norm[i]
+
+            #gradient_magnitude = np.linalg.norm(gradient, axis=-1)
 
             # Visualisierung
             plt.figure(figsize=(8, 6))
-            plt.plot(gradient_magnitude, marker = 'o')
-            #plt.colorbar(label="Gradient Magnitude")
-            #plt.title("Gradientenbetrag des Funktionals")
-            plt.xlabel("x-Index")
-            plt.ylabel("y-Index")
+            plt.imshow(gradient_field, cmap = 'viridis', origin = 'lower')
+            plt.colorbar(label="Gradient Magnitude")
+            plt.title("Gradientenbetrag des Funktionals")
+            plt.xlabel("x")
+            plt.ylabel("y")
             plt.show()
 
             grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
