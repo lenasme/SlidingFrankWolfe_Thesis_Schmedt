@@ -5,6 +5,8 @@ import quadpy
 import matplotlib.pyplot as plt
 from scipy.ndimage import zoom
 from scipy.ndimage import map_coordinates
+from matplotlib.patches import Polygon
+from matplotlib.collections import PatchCollection
 
 
 
@@ -115,6 +117,32 @@ def generate_square_aux(grid, weights, cut_off):
     return aux
 
 
+def plot_triangles_with_image(reconstructed_vanish, triangles):
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    # 1️⃣ Reconstructed Image anzeigen
+    cax = ax.imshow(reconstructed_vanish, cmap='viridis', origin='lower', extent=[0, 1, 0, 1])
+    fig.colorbar(cax, ax=ax, label='Reconstructed Values')
+
+    # 2️⃣ Dreiecke drüber plotten
+    patches = []
+    for i, tri in enumerate(triangles):
+        # Dreieck als Polygon erstellen
+        polygon = Polygon(tri, closed=True, edgecolor='red', fill=False, linewidth=1.5)
+        patches.append(polygon)
+        ax.add_patch(polygon)
+
+        # Optional: Eckpunkte markieren
+        for j in range(3):
+            ax.plot(tri[j, 0], tri[j, 1], 'ro')  # Eckpunkte rot markieren
+
+    # 3️⃣ Achsen und Titel
+    ax.set_title('Reconstructed Image mit Dreiecken')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    plt.show()
+
+
        
 def generate_triangle_aux(grid, weights, cut_off):
     scheme = quadpy.t2.get_good_scheme(5)
@@ -138,6 +166,7 @@ def generate_triangle_aux(grid, weights, cut_off):
     reconstructed_vanish = reconstructed_not_vanish - np.mean(reconstructed_not_vanish)
 
     def aux(triangles, res):
+        plot_triangles_with_image(reconstructed_vanish, triangles)
         for i in range(len(triangles)):
             # Dreiecksfläche mit Heron-Formel berechnen
             a = np.sqrt((triangles[i, 1, 0] - triangles[i, 0, 0]) ** 2 + (triangles[i, 1, 1] - triangles[i, 0, 1]) ** 2)
@@ -163,7 +192,7 @@ def generate_triangle_aux(grid, weights, cut_off):
             integral_value = 0
             for k in range(scheme_weights.size):
                 lambdas = scheme_points[k, :]  # [λ0, λ1, λ2]
-                print("lambdas from triangel ", k, ":", lambdas)
+                #print("lambdas from triangel ", k, ":", lambdas)
                 # Bedingungen prüfen
                 if (0 <= lambdas[0] <= 1 and
                     0 <= lambdas[1] <= 1 and
