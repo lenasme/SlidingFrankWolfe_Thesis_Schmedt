@@ -170,7 +170,7 @@ class CheegerOptimizer:
                 ax2.tick_params(axis='y', labelcolor=color)
                 ax2.legend(loc='upper right')
 
-                plt.title('Verlauf der Zielfunktion und Gradienten-Norm', "iteration:", iteration)
+                plt.title('Verlauf der Zielfunktion und Gradienten-Norm (iteration: {iteration})')
                 plt.show()
 
             if self.num_iter_resampling is not None and iteration % self.num_iter_resampling == 0:
