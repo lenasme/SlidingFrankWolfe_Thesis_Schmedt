@@ -133,6 +133,17 @@ class CheegerOptimizer:
         while not convergence and iteration < self.max_iter:
             gradient = self.state.compute_gradient(f)
             
+            gradient_magnitude = np.linalg.norm(gradient, axis=-1)
+
+            # Visualisierung
+            plt.figure(figsize=(8, 6))
+            plt.imshow(gradient_magnitude, cmap='viridis', origin='lower')
+            plt.colorbar(label="Gradient Magnitude")
+            plt.title("Gradientenbetrag des Funktionals")
+            plt.xlabel("x-Index")
+            plt.ylabel("y-Index")
+            plt.show()
+
             grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
             
             #grad_norm_tab.append(np.sum(np.linalg.norm(gradient, ord=1, axis=-1)))
