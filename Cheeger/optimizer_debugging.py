@@ -137,7 +137,8 @@ class CheegerOptimizer:
             gradient = self.state.compute_gradient(f)
 
 
-            gradient_field = np.zeros_like(self.state.grid_size)
+            gradient_field = np.zeros_like((self.state.grid_size, self.state.grid_size))
+            print(gradient_field.shape)
             grad_norm = np.linalg.norm(gradient, axis=1)
             for i, (x, y) in enumerate(self.state.set.boundary_vertices):
                 gradient_field[int(y), int(x)] = grad_norm[i]
