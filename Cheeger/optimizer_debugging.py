@@ -56,6 +56,30 @@ class CheegerOptimizerState:
         print("Perimeter:", self.perimeter)
         print("Norm Perimetergradient:", np.linalg.norm(mean_perimeter_gradient))
         print("Norm Flächengradient:", np.linalg.norm(area_gradient))
+        
+        
+        # Extrahiere die Koordinaten der Boundary-Vertices
+        x, y = self.set.boundary_vertices[:, 0], self.set.boundary_vertices[:, 1]
+
+        # Berechnung der Gradientennormen
+        grad_per = np.linalg.norm(mean_perimeter_gradient, axis=1)
+        grad_area = np.linalg.norm(area_gradient, axis=1)
+
+        # Erstelle zwei Plots
+        fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+        # Plot für den Perimeter-Gradienten
+        sc1 = axes[0].scatter(x, y, c=grad_per, cmap='coolwarm', edgecolor='k')
+        axes[0].set_title("Perimeter-Gradient |∇Per(E)|")
+        fig.colorbar(sc1, ax=axes[0])
+
+        # Plot für den Flächen-Gradienten
+        sc2 = axes[1].scatter(x, y, c=grad_area, cmap='viridis', edgecolor='k')
+        axes[1].set_title("Flächen-Gradient |∇|∫_E η||")
+        fig.colorbar(sc2, ax=axes[1])
+
+        plt.show()
+        
         return np.sign(self.weighted_area) * gradient
 
 
