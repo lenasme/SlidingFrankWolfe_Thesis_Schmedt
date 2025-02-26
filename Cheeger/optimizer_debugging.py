@@ -69,14 +69,14 @@ class CheegerOptimizerState:
         fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
          # Plot für den Perimeter-Gradienten
-        im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, grid_size, 0, grid_size])
+        im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
         sc1 = axes[0].scatter(x, y, c=grad_per, cmap='viridis', edgecolor='k')
         axes[0].set_title("Perimeter-Gradient ")
         fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
         fig.colorbar(sc1, ax=axes[0], label="Gradient")
 
         # Plot für den Flächen-Gradienten
-        im2 = axes[1].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, grid_size, 0, grid_size])
+        im2 = axes[1].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
         sc2 = axes[1].scatter(x, y, c=grad_area, cmap='viridis', edgecolor='k')
         axes[1].set_title("Flächen-Gradient ")
         fig.colorbar(im2, ax=axes[1], label=r'$\eta$')
