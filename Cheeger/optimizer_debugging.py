@@ -70,12 +70,12 @@ class CheegerOptimizerState:
 
         # Plot für den Perimeter-Gradienten
         sc1 = axes[0].scatter(x, y, c=grad_per, cmap='coolwarm', edgecolor='k')
-        axes[0].set_title("Perimeter-Gradient |∇Per(E)|")
+        axes[0].set_title("Perimeter-Gradient ")
         fig.colorbar(sc1, ax=axes[0])
 
         # Plot für den Flächen-Gradienten
         sc2 = axes[1].scatter(x, y, c=grad_area, cmap='viridis', edgecolor='k')
-        axes[1].set_title("Flächen-Gradient |∇|∫_E η||")
+        axes[1].set_title("Flächen-Gradient ")
         fig.colorbar(sc2, ax=axes[1])
 
         plt.show()
