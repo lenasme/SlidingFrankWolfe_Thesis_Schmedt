@@ -334,6 +334,10 @@ class RectangularSet:
 		else:
 			gradient = weights[:, :, 0, None] * normals1[:, None, :] + weights[:, :, 1, None] * normals2[:, None, :]
 
+		x, y = self.boundary_vertices[:, 0], self.boundary_vertices[:, 1]
+		plt.plot()
+		plt.quiver(x,y, gradient[:,0], gradient[:,1], color='r', angles='xy', scale_units ='xy', scale=1 )
+		plt.show()
 		return gradient
 	
 	def numerical_gradient_check(self, fourier, epsilon = 1e-6):
