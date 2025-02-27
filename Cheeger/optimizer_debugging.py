@@ -85,7 +85,7 @@ class CheegerOptimizerState:
 		plt.tight_layout()
 		plt.show()
 
-		x, y = self.set.boundary_vertices[:, 0], self.self.boundary_vertices[:, 1]
+		x, y = self.set.boundary_vertices[:, 0], self.set.boundary_vertices[:, 1]
 		plt.plot()
 		plt.quiver(x,y, np.sign(self.weighted_area)*gradient[:,0], np.sign(self.weighted_area) * gradient[:,1], color='r', angles='xy', scale_units ='xy', scale=1 )
 		plt.show()
