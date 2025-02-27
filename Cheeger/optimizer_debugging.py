@@ -201,7 +201,7 @@ class CheegerOptimizer:
 			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
 			plt.imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
 			plt.quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
-			plt.set_title("Perimeter-Gradient ")
+			plt.title("Perimeter-Gradient ")
 			#fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
 			plt.colorbar()
