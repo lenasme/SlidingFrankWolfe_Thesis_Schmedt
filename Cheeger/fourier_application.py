@@ -232,7 +232,7 @@ def generate_triangle_aux(grid, weights, cut_off):
 
 
 def generate_line_aux(grid, weights, cut_off):
-    scheme = quadpy.c1.gauss_patterson(3)
+    scheme = quadpy.c1.gauss_patterson(5)
     scheme_weights = scheme.weights
     scheme_points = (1 + scheme.points) / 2
 
