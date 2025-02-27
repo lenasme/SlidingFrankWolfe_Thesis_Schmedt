@@ -62,22 +62,22 @@ class CheegerOptimizerState:
 		x, y = self.set.boundary_vertices[:, 0]*self.grid_size, self.set.boundary_vertices[:, 1]*self.grid_size
 		eta_grid = f.integrate_on_pixel_grid(self.grid_size)
 		# Berechnung der Gradientennormen
-		grad_per = np.linalg.norm(mean_perimeter_gradient, axis=1)
-		grad_area = np.linalg.norm(area_gradient, axis=1)
+		#grad_per = np.linalg.norm(mean_perimeter_gradient, axis=1)
+		#grad_area = np.linalg.norm(area_gradient, axis=1)
 
 		# Erstelle zwei Plots
 		fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
 		 # Plot für den Perimeter-Gradienten
 		im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
-		sc1 = axes[0].quiver(x, y, c=grad_per, cmap='viridis', edgecolor='k')
+		sc1 = axes[0].quiver(x, y, mean_perimeter_gradient[:,0], mean_perimeter_gradient[:,1], cmap='viridis', color='k')
 		axes[0].set_title("Perimeter-Gradient ")
 		fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 		fig.colorbar(sc1, ax=axes[0], label="Gradient")
 
 		# Plot für den Flächen-Gradienten
 		im2 = axes[1].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
-		sc2 = axes[1].quiver(x, y, c=grad_area, cmap='viridis', edgecolor='k')
+		sc2 = axes[1].quiver(x, y, area_gradient[:,0], area_gradient[:,1], cmap='viridis', color='k')
 		axes[1].set_title("Flächen-Gradient ")
 		fig.colorbar(im2, ax=axes[1], label=r'$\eta$')
 		fig.colorbar(sc2, ax=axes[1], label="Gradient")
