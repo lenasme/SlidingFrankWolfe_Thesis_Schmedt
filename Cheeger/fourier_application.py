@@ -262,7 +262,7 @@ def generate_line_aux(grid, weights, cut_off):
                 y_img = y * (grid.shape[0] - 1)
 
                 # Bilineare Interpolation (order=1) oder bikubisch (order=3)
-                interpolated_value = map_coordinates(reconstructed_vanish, [[y_img], [x_img]], order=1, mode='nearest')
+                interpolated_value = map_coordinates(reconstructed_vanish, [[y_img], [x_img]], order=3, mode='nearest')
                 return interpolated_value[0]
 
 
