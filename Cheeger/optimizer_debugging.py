@@ -185,7 +185,7 @@ class CheegerOptimizer:
 			#plt.ylabel("y")
 			#plt.show()
 			x, y = self.state.set.boundary_vertices[:, 0]*self.state.grid_size, self.state.set.boundary_vertices[:, 1]*self.state.grid_size
-			eta_grid = f.integrate_on_pixel_grid(self.grid_size)
+			eta_grid = f.integrate_on_pixel_grid(self.state.grid_size)
 		
 
 		 	# Plot für den Perimeter-Gradienten
