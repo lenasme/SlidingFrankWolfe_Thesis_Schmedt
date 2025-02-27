@@ -70,14 +70,14 @@ class CheegerOptimizerState:
 
 		 # Plot für den Perimeter-Gradienten
 		im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
-		sc1 = axes[0].scatter(x, y, c=grad_per, cmap='viridis', edgecolor='k')
+		sc1 = axes[0].quiver(x, y, c=grad_per, cmap='viridis', edgecolor='k')
 		axes[0].set_title("Perimeter-Gradient ")
 		fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 		fig.colorbar(sc1, ax=axes[0], label="Gradient")
 
 		# Plot für den Flächen-Gradienten
 		im2 = axes[1].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
-		sc2 = axes[1].scatter(x, y, c=grad_area, cmap='viridis', edgecolor='k')
+		sc2 = axes[1].quiver(x, y, c=grad_area, cmap='viridis', edgecolor='k')
 		axes[1].set_title("Flächen-Gradient ")
 		fig.colorbar(im2, ax=axes[1], label=r'$\eta$')
 		fig.colorbar(sc2, ax=axes[1], label="Gradient")
@@ -85,10 +85,7 @@ class CheegerOptimizerState:
 		plt.tight_layout()
 		plt.show()
 
-		x, y = self.set.boundary_vertices[:, 0], self.set.boundary_vertices[:, 1]
-		plt.plot()
-		plt.quiver(x,y, np.sign(self.weighted_area)*gradient[:,0], np.sign(self.weighted_area) * gradient[:,1], color='r', angles='xy', scale_units ='xy', scale=1 )
-		plt.show()
+		
 		
 		return np.sign(self.weighted_area) * gradient
 
