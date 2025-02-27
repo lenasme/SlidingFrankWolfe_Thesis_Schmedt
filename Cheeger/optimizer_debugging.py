@@ -184,7 +184,7 @@ class CheegerOptimizer:
 			#plt.xlabel("x")
 			#plt.ylabel("y")
 			#plt.show()
-			x, y = self.set.boundary_vertices[:, 0]*self.grid_size, self.set.boundary_vertices[:, 1]*self.grid_size
+			x, y = self.state.set.boundary_vertices[:, 0]*self.state.grid_size, self.state.set.boundary_vertices[:, 1]*self.state.grid_size
 			eta_grid = f.integrate_on_pixel_grid(self.grid_size)
 		
 
@@ -194,7 +194,7 @@ class CheegerOptimizer:
 			fig, axes = plt.subplots(1, 1, figsize=(12, 6))
 
 			 # Plot für den Perimeter-Gradienten
-			im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
+			im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
 			sc1 = axes[0].quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
 			axes[0].set_title("Perimeter-Gradient ")
 			fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
