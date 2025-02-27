@@ -170,7 +170,7 @@ class CheegerOptimizer:
             print(gradient_field.shape)
             grad_norm = np.linalg.norm(gradient, axis=1)
             for i, (x, y) in enumerate(self.state.set.boundary_vertices):
-                gradient_field[int(y*self.state.grid_size), int(x*self.state.grid_size)] = grad_norm[i]
+                gradient_field[int(y*self.state.grid_size -1), int(x*self.state.grid_size -1 )] = grad_norm[i]
 
             #gradient_magnitude = np.linalg.norm(gradient, axis=-1)
 
