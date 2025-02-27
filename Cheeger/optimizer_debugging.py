@@ -191,15 +191,20 @@ class CheegerOptimizer:
 		 	# Plot für den Perimeter-Gradienten
 		
 
-			fig, axes = plt.subplots(1, 1, figsize=(12, 6))
-
+			#fig, axes = plt.subplots(1, 1, figsize=(12, 6))
+			plt.plot()
 			 # Plot für den Perimeter-Gradienten
-			im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
-			sc1 = axes[0].quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
-			axes[0].set_title("Perimeter-Gradient ")
-			fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
-			fig.colorbar(sc1, ax=axes[0], label="Gradient")
-
+			#im1 = axes.imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
+			#sc1 = axes.quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
+			#axes.set_title("Perimeter-Gradient ")
+			#fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
+			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
+			plt.imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
+			plt.quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
+			plt.set_title("Perimeter-Gradient ")
+			#fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
+			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
+			plt.colorbar()
 			plt.show()
 
 			grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
