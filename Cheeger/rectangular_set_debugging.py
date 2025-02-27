@@ -335,6 +335,48 @@ class RectangularSet:
 			gradient = weights[:, :, 0, None] * normals1[:, None, :] + weights[:, :, 1, None] * normals2[:, None, :]
 
 		return gradient
+	
+	def numerical_gradient_check(self, fourier, epsilon = 1e-6):
+		"""
+		Vergleicht den analytischen Gradienten mit einer numerischen Approximation.
+
+		Parameters
+		----------
+		instance : Deine Klasse mit boundary_vertices und compute_weighted_area_rec_gradient
+		fourier : Fourier-Objekt zur Berechnung von Integralen
+		epsilon : Kleine Verschiebung für die numerische Ableitung
+
+		Returns
+		------
+		numerical_gradient : Numerischer Gradient an den Randpunkten
+		analytical_gradient : Vom Code berechneter Gradient
+		"""
+		boundary_vertices = self.boundary_vertices.copy()
+		analytical_gradient = self.compute_weighted_area_rec_gradient(fourier)
+
+		numerical_gradient = np.zeros_like(boundary_vertices)
+
+		for i in range(len(boundary_vertices)):
+			for d in range(2):  # x- und y-Richtung
+				# Verschiebung des Punktes in Normalenrichtung
+				boundary_vertices[i, d] += epsilon
+				self.boundary_vertices = boundary_vertices
+				I_plus = fourier.integrate_on_polygonal_curve(self.boundary_vertices).sum()
+			
+				boundary_vertices[i, d] -= 2 * epsilon
+				self.boundary_vertices = boundary_vertices
+				I_minus = fourier.integrate_on_polygonal_curve(self.boundary_vertices).sum()
+
+				# Rücksetzen des Punktes
+				boundary_vertices[i, d] += epsilon
+
+				# Finite Differenz
+				numerical_gradient[i, d] = (I_plus - I_minus) / (2 * epsilon)
+
+		# Setze die boundary_vertices zurück
+		self.boundary_vertices = boundary_vertices.copy()
+
+		return numerical_gradient, analytical_gradient
 
 	def compute_mesh_faces_orientation(self):
 		faces = self.mesh_vertices[self.mesh_faces]
