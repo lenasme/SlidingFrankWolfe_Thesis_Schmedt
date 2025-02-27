@@ -168,21 +168,38 @@ class CheegerOptimizer:
 			gradient = self.state.compute_gradient(f)
 
 
-			gradient_field = np.zeros((self.state.grid_size, self.state.grid_size))
-			print(gradient_field.shape)
-			grad_norm = np.linalg.norm(gradient, axis=1)
-			for i, (x, y) in enumerate(self.state.set.boundary_vertices):
-				gradient_field[int(y*self.state.grid_size -1), int(x*self.state.grid_size -1 )] = grad_norm[i]
+			#gradient_field = np.zeros((self.state.grid_size, self.state.grid_size))
+			#print(gradient_field.shape)
+			#grad_norm = np.linalg.norm(gradient, axis=1)
+			#for i, (x, y) in enumerate(self.state.set.boundary_vertices):
+			#	gradient_field[int(y*self.state.grid_size -1), int(x*self.state.grid_size -1 )] = grad_norm[i]
 
 			#gradient_magnitude = np.linalg.norm(gradient, axis=-1)
 
 			# Visualisierung
-			plt.figure(figsize=(8, 6))
-			plt.imshow(gradient_field, cmap = 'viridis', origin = 'lower')
-			plt.colorbar(label="Gradient Magnitude")
-			plt.title("Gradientenbetrag des Funktionals")
-			plt.xlabel("x")
-			plt.ylabel("y")
+			#plt.figure(figsize=(8, 6))
+			#plt.imshow(gradient_field, cmap = 'viridis', origin = 'lower')
+			#plt.colorbar(label="Gradient Magnitude")
+			#plt.title("Gradientenbetrag des Funktionals")
+			#plt.xlabel("x")
+			#plt.ylabel("y")
+			#plt.show()
+			x, y = self.set.boundary_vertices[:, 0]*self.grid_size, self.set.boundary_vertices[:, 1]*self.grid_size
+			eta_grid = f.integrate_on_pixel_grid(self.grid_size)
+		
+
+		 	# Plot für den Perimeter-Gradienten
+		
+
+			fig, axes = plt.subplots(1, 1, figsize=(12, 6))
+
+			 # Plot für den Perimeter-Gradienten
+			im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
+			sc1 = axes[0].quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
+			axes[0].set_title("Perimeter-Gradient ")
+			fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
+			fig.colorbar(sc1, ax=axes[0], label="Gradient")
+
 			plt.show()
 
 			grad_norm_tab.append(np.sum(np.linalg.norm(gradient, axis=-1)))
