@@ -165,7 +165,7 @@ def generate_triangle_aux(grid, weights, cut_off):
     reconstructed_not_vanish = np.fft.ifft2(frequency_image).real  
     reconstructed_vanish = reconstructed_not_vanish - np.mean(reconstructed_not_vanish)
 
-    @jit(nopython=True, parallel=True)
+    @jit(nopython=False, parallel=True)
     def aux(triangles, res):
         plot_triangles_with_image(reconstructed_vanish, triangles)
         for i in range(len(triangles)):
