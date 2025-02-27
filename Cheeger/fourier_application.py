@@ -248,22 +248,22 @@ def generate_line_aux(grid, weights, cut_off):
 
             def integrand(x, y):
                 # Bildkoordinaten berechnen
-                #x_img = x * grid.shape[1]
-                #y_img = y * grid.shape[0]
+                x_img = x * grid.shape[1]
+                y_img = y * grid.shape[0]
 
                 # Begrenzung, um Index-Fehler zu vermeiden
-                #x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
-                #y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
+                x_img = max(0, min(grid.shape[1] - 1, int(x_img)))
+                y_img = max(0, min(grid.shape[0] - 1, int(y_img)))
 
-                #return reconstructed_vanish[(y_img), (x_img)]
+                return reconstructed_vanish[(x_img), (y_img)]
 
                 # Richtige Skalierung auf Gitterindizes
-                x_img = x * (grid.shape[1] - 1)
-                y_img = y * (grid.shape[0] - 1)
+                #x_img = x * (grid.shape[1] - 1)
+                #y_img = y * (grid.shape[0] - 1)
 
                 # Bilineare Interpolation (order=1) oder bikubisch (order=3)
-                interpolated_value = map_coordinates(reconstructed_vanish, [[y_img], [x_img]], order=3, mode='nearest')
-                return interpolated_value[0]
+                #interpolated_value = map_coordinates(reconstructed_vanish, [[y_img], [x_img]], order=3, mode='nearest')
+                #return interpolated_value[0]
 
 
 
