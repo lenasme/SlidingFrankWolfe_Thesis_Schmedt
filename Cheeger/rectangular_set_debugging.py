@@ -170,8 +170,33 @@ class RectangularSet:
 		return gradient
 	
 
+	def compute_anisotropic_perimeter_gradient(self): 
+		"""
+   		Compute the anisotropic perimeter gradient (L1-norm-based)
 
-	def compute_anisotropic_perimeter_gradient(self):
+		Returns
+		-------
+		array, shape (N, 2)
+			Each row contains the two coordinates of the translation to apply at each boundary vertex
+		"""
+		gradient = np.zeros_like(self.boundary_vertices)
+
+		for i in range(self.num_boundary_vertices):
+			e1 = self.boundary_vertices[(i-1) % self.num_boundary_vertices] - self.boundary_vertices[i]
+			e2 = self.boundary_vertices[(i+1) % self.num_boundary_vertices] - self.boundary_vertices[i]
+
+			# Gewichtung mit der L1-Norm statt der L2-Norm
+			weight_e1 = np.abs(e1[0]) + np.abs(e1[1])
+			weight_e2 = np.abs(e2[0]) + np.abs(e2[1])
+
+			gradient[i] = - (e1 / weight_e1 + e2 / weight_e2)
+
+		return gradient
+
+	
+
+
+	#def compute_anisotropic_perimeter_gradient(self):
 		gradient_left = np.zeros_like(self.boundary_vertices)
 		gradient_right = np.zeros_like(self.boundary_vertices)
 
