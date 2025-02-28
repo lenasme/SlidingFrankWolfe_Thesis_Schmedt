@@ -43,19 +43,19 @@ class CheegerOptimizerState:
 
 	#hier überall rec hinzu
 	def compute_gradient(self, f):
-		#perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
+		perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
 		#print("anisotropic perimeter gradients", perimeter_gradient)
-		left_perimeter_gradient, right_perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
+		#left_perimeter_gradient, right_perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient()
 		#print("left anisotropic perimeter gradients", left_perimeter_gradient, "right anisotropic perimeter gradient:", right_perimeter_gradient)
-		mean_perimeter_gradient = (left_perimeter_gradient + right_perimeter_gradient) / 2
-		print("mean perimeter gradient:", mean_perimeter_gradient)
+		#mean_perimeter_gradient = (left_perimeter_gradient + right_perimeter_gradient) / 2
+		#print("mean perimeter gradient:", mean_perimeter_gradient)
 		area_gradient = self.set.compute_weighted_area_rec_gradient(f)
-		gradient = (mean_perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
-
+		#gradient = (mean_perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
+		gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 		print("Fläche:", self.weighted_area)
 		print("Perimeter:", self.perimeter)
-		print("Norm Perimetergradient:", np.linalg.norm(mean_perimeter_gradient))
-		print("Norm Flächengradient:", np.linalg.norm(area_gradient))
+		#print("Norm Perimetergradient:", np.linalg.norm(mean_perimeter_gradient))
+		#print("Norm Flächengradient:", np.linalg.norm(area_gradient))
 		
 		
 		# Extrahiere die Koordinaten der Boundary-Vertices
@@ -70,7 +70,7 @@ class CheegerOptimizerState:
 
 		 # Plot für den Perimeter-Gradienten
 		im1 = axes[0].imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.grid_size, 0, self.grid_size])
-		sc1 = axes[0].quiver(x, y, mean_perimeter_gradient[:,0], mean_perimeter_gradient[:,1], cmap='viridis', color='k')
+		sc1 = axes[0].quiver(x, y, perimeter_gradient[:,0], perimeter_gradient[:,1], cmap='viridis', color='k')
 		axes[0].set_title("Perimeter-Gradient ")
 		fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 		fig.colorbar(sc1, ax=axes[0], label="Gradient")
