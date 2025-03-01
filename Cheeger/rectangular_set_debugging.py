@@ -132,10 +132,31 @@ class RectangularSet:
 		
 		return res
 	
-	def compute_anisotropic_perimeter(self):
+	#def compute_anisotropic_perimeter(self):
 		x_min, y_min = np.min(self.boundary_vertices, axis=0)
 		x_max, y_max = np.max(self.boundary_vertices, axis=0)
 		return 2 * ((x_max - x_min) + (y_max - y_min))
+	
+	def compute_anisotropic_perimeter(self):
+		"""
+		Compute the anisotropic perimeter of the set.
+	
+		Returns
+		-------
+		float
+			The anisotropic perimeter, computed as the sum of L1-norms of boundary edges.
+		"""
+		perimeter = 0.0
+
+		for i in range(self.num_boundary_vertices):
+			# Betrachte die Kante zwischen zwei aufeinanderfolgenden Randpunkte
+			v1 = self.boundary_vertices[i]
+			v2 = self.boundary_vertices[(i + 1) % self.num_boundary_vertices]
+
+			# L1-Norm der Differenz = Summe der absoluten Differenzen in x- und y-Richtung
+			perimeter += np.abs(v1[0] - v2[0]) + np.abs(v1[1] - v2[1])
+
+		return perimeter
 	
 	
 	def compute_perimeter_rec_gradient(self):
