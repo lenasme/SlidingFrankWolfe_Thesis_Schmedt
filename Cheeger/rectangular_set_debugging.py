@@ -191,7 +191,7 @@ class RectangularSet:
 		return gradient
 	
 
-	def compute_anisotropic_perimeter_gradient(self): 
+	#def compute_anisotropic_perimeter_gradient(self): 
 		"""
    		Compute the anisotropic perimeter gradient (L1-norm-based)
 
@@ -214,6 +214,38 @@ class RectangularSet:
 
 		return gradient
 
+
+	def compute_anisotropic_perimeter_gradient(self):
+		"""
+		Compute the gradient of the anisotropic perimeter.
+		The anisotropic perimeter considers only horizontal and vertical projections.
+	
+		Returns
+		-------
+		array, shape (N, 2)
+			Each row contains the two coordinates of the translation to apply at each boundary vertex.
+		"""
+		gradient = np.zeros_like(self.boundary_vertices)
+
+		for i in range(self.num_boundary_vertices):
+			# Bestimme die beiden benachbarten Punkte
+			prev_vertex = self.boundary_vertices[(i - 1) % self.num_boundary_vertices]
+			next_vertex = self.boundary_vertices[(i + 1) % self.num_boundary_vertices]
+			current_vertex = self.boundary_vertices[i]
+
+			# Berechne Kantenrichtungen
+			edge1 = current_vertex - prev_vertex
+			edge2 = next_vertex - current_vertex
+
+			# Berechne horizontale und vertikale Projektionen
+			dx1, dy1 = np.abs(edge1)
+			dx2, dy2 = np.abs(edge2)
+
+			# Der Gradient zeigt in die Richtung der größten Perimeteränderung
+			gradient[i] = np.array([np.sign(edge1[0]) * dx1 + np.sign(edge2[0]) * dx2,
+								np.sign(edge1[1]) * dy1 + np.sign(edge2[1]) * dy2])
+
+		return -gradient
 	
 
 
