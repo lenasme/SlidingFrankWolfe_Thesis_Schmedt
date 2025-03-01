@@ -210,7 +210,7 @@ class RectangularSet:
 			weight_e1 = np.abs(e1[0]) + np.abs(e1[1])
 			weight_e2 = np.abs(e2[0]) + np.abs(e2[1])
 
-			gradient[i] = (e1 / weight_e1 + e2 / weight_e2)
+			gradient[i] = -(e1 / weight_e1 + e2 / weight_e2)
 
 		return gradient
 
