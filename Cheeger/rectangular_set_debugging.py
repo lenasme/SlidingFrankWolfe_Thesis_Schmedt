@@ -238,32 +238,24 @@ class RectangularSet:
 			edge2 = next_vertex - current_vertex
 
 
-			mean_direction = (edge1 + edge2) / 2
-
-			# Bestimmen, ob die Richtung eher horizontal oder vertikal ist
-			if np.abs(mean_direction[0]) > np.abs(mean_direction[1]):
-			# Falls die Kante eher horizontal ist, soll der Gradient vertikal sein
-				gradient[i] = np.array([0, np.sign(mean_direction[1])])
-			else:
-			# Falls die Kante eher vertikal ist, soll der Gradient horizontal sein
-				gradient[i] = np.array([np.sign(mean_direction[0]), 0])
+			
 			# Gradient bestimmen (nur orthogonale Richtungen zählen)
-			#grad_x = 0
-			#grad_y = 0
+			grad_x = 0
+			grad_y = 0
 
 			# Prüfe, ob die Kante horizontal oder vertikal ist
-			#if np.abs(edge1[0]) > np.abs(edge1[1]):  # Fast horizontale Kante
-			#	grad_y += np.sign(edge1[1])
-			#else:  # Fast vertikale Kante
-			#	grad_x += np.sign(edge1[0])
+			if np.abs(edge1[0]) > np.abs(edge1[1]):  # Fast horizontale Kante
+				grad_y += np.sign(edge1[1])
+			else:  # Fast vertikale Kante
+				grad_x += np.sign(edge1[0])
 
-			#if np.abs(edge2[0]) > np.abs(edge2[1]):  # Fast horizontale Kante
-			#	grad_y += np.sign(edge2[1])
-			#else:  # Fast vertikale Kante
-			#	grad_x += np.sign(edge2[0])
+			if np.abs(edge2[0]) > np.abs(edge2[1]):  # Fast horizontale Kante
+				grad_y += np.sign(edge2[1])
+			else:  # Fast vertikale Kante
+				grad_x += np.sign(edge2[0])
 
 			# Setze den Gradient für diesen Punkt
-			#gradient[i] = np.array([grad_x, grad_y])
+			gradient[i] = np.array([grad_x, grad_y])
 
 		return -gradient  # Minuszeichen, da wir minimieren wollen
 	
