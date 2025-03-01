@@ -191,7 +191,7 @@ class RectangularSet:
 		return gradient
 	
 
-	def compute_anisotropic_perimeter_gradient(self): 
+	#def compute_anisotropic_perimeter_gradient(self): 
 		"""
    		Compute the anisotropic perimeter gradient (L1-norm-based)
 
@@ -217,7 +217,7 @@ class RectangularSet:
 	
 
 
-	#def compute_anisotropic_perimeter_gradient(self):
+	def compute_anisotropic_perimeter_gradient(self):
 		gradient_left = np.zeros_like(self.boundary_vertices)
 		gradient_right = np.zeros_like(self.boundary_vertices)
 
