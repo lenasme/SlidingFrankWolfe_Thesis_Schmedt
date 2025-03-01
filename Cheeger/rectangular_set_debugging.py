@@ -132,7 +132,7 @@ class RectangularSet:
 		
 		return res
 	
-	#def compute_anisotropic_perimeter(self):
+	def compute_anisotropic_perimeter_convex(self):
 		x_min, y_min = np.min(self.boundary_vertices, axis=0)
 		x_max, y_max = np.max(self.boundary_vertices, axis=0)
 		return 2 * ((x_max - x_min) + (y_max - y_min))
