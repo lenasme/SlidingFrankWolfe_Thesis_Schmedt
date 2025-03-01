@@ -145,6 +145,8 @@ class CheegerOptimizer:
 			new_obj = self.state.obj
 			print("new objective:", new_obj)
 			print("former objective:" , former_obj)
+			print("perimeter calculation convex:", self.state.set.compute_anisotropic_perimeter_convex())
+			print("perimeter calculation correct:", self.state.set.compute_anisotropic_perimeter())
 			ag_condition = (new_obj <= former_obj - self.alpha * t * np.abs(gradient).sum())
 			t = self.beta * t
 
