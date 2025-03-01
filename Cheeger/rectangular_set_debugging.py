@@ -217,7 +217,7 @@ class RectangularSet:
 
 	def compute_anisotropic_perimeter_gradient(self):
 		"""
-		Compute the gradient of the anisotropic perimeter.
+			Compute the gradient of the anisotropic perimeter.
 		The anisotropic perimeter considers only horizontal and vertical projections.
 	
 		Returns
@@ -228,24 +228,34 @@ class RectangularSet:
 		gradient = np.zeros_like(self.boundary_vertices)
 
 		for i in range(self.num_boundary_vertices):
-			# Bestimme die beiden benachbarten Punkte
+			# Nachbarn der aktuellen Ecke bestimmen
 			prev_vertex = self.boundary_vertices[(i - 1) % self.num_boundary_vertices]
 			next_vertex = self.boundary_vertices[(i + 1) % self.num_boundary_vertices]
 			current_vertex = self.boundary_vertices[i]
 
-			# Berechne Kantenrichtungen
-			edge1 = current_vertex - prev_vertex
+			# Kantenrichtungen berechnen
+			edge1 = prev_vertex - current_vertex
 			edge2 = next_vertex - current_vertex
 
-			# Berechne horizontale und vertikale Projektionen
-			dx1, dy1 = np.abs(edge1)
-			dx2, dy2 = np.abs(edge2)
+			# Gradient bestimmen (nur orthogonale Richtungen zählen)
+			grad_x = 0
+			grad_y = 0
 
-			# Der Gradient zeigt in die Richtung der größten Perimeteränderung
-			gradient[i] = np.array([np.sign(edge1[0]) * dx1 + np.sign(edge2[0]) * dx2,
-								np.sign(edge1[1]) * dy1 + np.sign(edge2[1]) * dy2])
+			# Prüfe, ob die Kante horizontal oder vertikal ist
+			if np.abs(edge1[0]) > np.abs(edge1[1]):  # Fast horizontale Kante
+				grad_y += np.sign(edge1[1])
+			else:  # Fast vertikale Kante
+				grad_x += np.sign(edge1[0])
 
-		return -gradient
+			if np.abs(edge2[0]) > np.abs(edge2[1]):  # Fast horizontale Kante
+				grad_y += np.sign(edge2[1])
+			else:  # Fast vertikale Kante
+				grad_x += np.sign(edge2[0])
+
+			# Setze den Gradient für diesen Punkt
+			gradient[i] = np.array([grad_x, grad_y])
+
+		return -gradient  # Minuszeichen, da wir minimieren wollen
 	
 
 
