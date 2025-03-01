@@ -191,7 +191,7 @@ class RectangularSet:
 		return gradient
 	
 
-	#def compute_anisotropic_perimeter_gradient(self): 
+	def compute_anisotropic_perimeter_gradient(self): 
 		"""
    		Compute the anisotropic perimeter gradient (L1-norm-based)
 
@@ -215,7 +215,7 @@ class RectangularSet:
 		return gradient
 
 
-	def compute_anisotropic_perimeter_gradient(self):
+	#def compute_anisotropic_perimeter_gradient(self):
 		"""
 			Compute the gradient of the anisotropic perimeter.
 		The anisotropic perimeter considers only horizontal and vertical projections.
