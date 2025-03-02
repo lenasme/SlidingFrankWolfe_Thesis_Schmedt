@@ -563,3 +563,7 @@ class RectangularSet:
 		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)	
 
 		
+
+	def compute_objective(self, fourier ):
+		res = self.compute_anisotropic_perimeter() /  np.abs(self.compute_weighted_area_rec(fourier) )
+		return res
