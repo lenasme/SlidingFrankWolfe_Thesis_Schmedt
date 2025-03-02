@@ -1,7 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+
+from scipy.optimize import minimize
 
 from .tools import resample
+from .plot_utils import plot_rectangular_set
 #from .simple_set import SimpleSet
 from .rectangular_set_debugging import RectangularSet
 
@@ -256,3 +260,47 @@ class CheegerOptimizer:
 				self.state.update_set(new_set, f)
 		
 		return self.state.set, obj_tab, grad_norm_tab
+
+	def run_rectangular(self, f, initial_set):
+		#convergence = False
+		#obj_tab = []
+		#grad_norm_tab = []
+
+		#iteration = 0
+
+		#self.state = CheegerOptimizerState(initial_set, f)
+		x_values = [v[0] for v in initial_set.boundary_vertices]
+		y_values = [v[1] for v in initial_set.boundary_vertices]                 
+
+		x_min= np.clip(min(x_values), 0,1)
+		x_max= np.clip(max(x_values), 0,1)
+		y_min= np.clip(min(y_values), 0,1)
+		y_max= np.clip(max(y_values), 0,1)
+
+		outer_vertices= np.array([x_min, x_max, y_min, y_max])
+		rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
+		rectangle_set = RectangularSet(rectangle_boundary_vertices)
+		
+		start = time.time()
+
+		result = minimize(rectangle_set.compute_objective, outer_vertices, args=(f,), bounds=[(0,1),(0,1), (0,1), (0,1)] , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
+					  
+		end = time.time()
+
+		optimal_rectangle = result.x
+		optimal_objective = result.fun
+		print("Optimales Rechteck:", optimal_rectangle)
+		print("Optimales Objective:", optimal_objective)
+					  
+		opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
+		opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
+	
+		plot_rectangular_set(opt_rect_set, eta=f.integrate_on_pixel_grid, display_inner_mesh=False)
+		print("Die Berechnung des Rechtecks hat ", end - start, " Sekunden gedauert." )
+		print("Perimeter korrekt:", opt_rect_set.compute_anisotropic_perimeter())
+		print("Perimeter Rechteck:", opt_rect_set.compute_anisotropic_perimeter_convex())
+		print("Value integral :", opt_rect_set.compute_weighted_area_rec(f))
+		print("Objective:", opt_rect_set.compute_objective)
+					  
+		#return simple_set, obj_tab, grad_norm_tab, opt_rect_set
+		return  opt_rect_set
