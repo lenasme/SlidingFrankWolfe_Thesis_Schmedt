@@ -108,11 +108,31 @@ class CheegerOptimizerState:
 		
 		
 		# Extrahiere die Koordinaten der Boundary-Vertices
-		x, y = self.set.boundary_vertices[:, 0]*self.grid_size, self.set.boundary_vertices[:, 1]*self.grid_size
+		#x, y = self.set.boundary_vertices[:, 0]*self.grid_size, self.set.boundary_vertices[:, 1]*self.grid_size
+		x_min, x_max = np.min(self.set.boundary_vertices[:, 0]), np.max(self.set.boundary_vertices[:, 0])
+		y_min, y_max = np.min(self.set.boundary_vertices[:, 1]), np.max(self.set.boundary_vertices[:, 1])
+
+		x = np.array([x_min, x_max, (x_min + x_max) / 2, (x_min + x_max) / 2]) * self.grid_size
+		y = np.array([(y_min + y_max) / 2, (y_min + y_max) / 2, y_min, y_max]) * self.grid_size
+		
 		eta_grid = f.integrate_on_pixel_grid(self.grid_size)
 		# Berechnung der Gradientennormen
 		#grad_per = np.linalg.norm(mean_perimeter_gradient, axis=1)
 		#grad_area = np.linalg.norm(area_gradient, axis=1)
+
+		perimeter_gradient = np.array([
+    	[perimeter_gradient[0], 0],  # x_min: Änderung nur in x-Richtung
+    	[perimeter_gradient[1], 0],  # x_max
+    	[0, perimeter_gradient[2]],  # y_min: Änderung nur in y-Richtung
+    	[0, perimeter_gradient[3]]   # y_max
+			])
+		
+		area_gradient = np.array([
+    	[area_gradient[0], 0],  # x_min: Änderung nur in x-Richtung
+    	[area_gradient[1], 0],  # x_max
+    	[0, area_gradient[2]],  # y_min: Änderung nur in y-Richtung
+    	[0, area_gradient[3]]   # y_max
+			])
 
 		# Erstelle zwei Plots
 		fig, axes = plt.subplots(1, 2, figsize=(12, 6))
