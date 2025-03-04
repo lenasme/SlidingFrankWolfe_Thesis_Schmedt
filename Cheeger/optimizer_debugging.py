@@ -120,6 +120,9 @@ class CheegerOptimizerState:
 		#grad_per = np.linalg.norm(mean_perimeter_gradient, axis=1)
 		#grad_area = np.linalg.norm(area_gradient, axis=1)
 
+		print("Area Gradient (raw):", area_gradient)
+		print("Perimeter Gradient (raw):", perimeter_gradient)
+
 		perimeter_gradient = np.array([
     	[perimeter_gradient[0], 0],  # x_min: Änderung nur in x-Richtung
     	[perimeter_gradient[1], 0],  # x_max
