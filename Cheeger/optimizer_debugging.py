@@ -282,7 +282,7 @@ class CheegerOptimizer:
 		rectangle_set = RectangularSet(rectangle_boundary_vertices)
 		
 		num_vertices = rectangle_set.boundary_vertices.shape[0]  # Anzahl der Vertices
-		
+		print("original objective:" , rectangle_set.compute_objective(f))
 		start = time.time()
 		
 		result = minimize(rectangle_set.objective_wrapper, outer_vertices, args=(f,), bounds =[(0,1),(0,1), (0,1), (0,1)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
