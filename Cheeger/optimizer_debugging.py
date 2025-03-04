@@ -302,7 +302,7 @@ class CheegerOptimizer:
 		print("Perimeter korrekt:", opt_rect_set.compute_anisotropic_perimeter())
 		print("Perimeter Rechteck:", opt_rect_set.compute_anisotropic_perimeter_convex())
 		print("Value integral :", opt_rect_set.compute_weighted_area_rec(f))
-		print("Objective:", opt_rect_set.compute_objective)
+		print("Objective:", opt_rect_set.compute_objective(f))
 					  
 		#return simple_set, obj_tab, grad_norm_tab, opt_rect_set
 		return  opt_rect_set
