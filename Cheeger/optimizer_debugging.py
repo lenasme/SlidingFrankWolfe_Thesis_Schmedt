@@ -101,6 +101,8 @@ class CheegerOptimizerState:
 		area_gradient = self.set.compute_weighted_area_gradient_rectangular(f)
 		
 		gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
+		
+		print("dimension gradient", gradient.shape)
 		print("Fläche:", self.weighted_area)
 		print("Perimeter:", self.perimeter)
 		#print("Norm Perimetergradient:", np.linalg.norm(mean_perimeter_gradient))
