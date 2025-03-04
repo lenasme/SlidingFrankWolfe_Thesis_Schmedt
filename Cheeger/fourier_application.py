@@ -292,6 +292,39 @@ def generate_line_aux(grid, weights, cut_off):
     return aux
 
 
+def generate_single_line_aux(grid, weights, cut_off):
+    scheme = quadpy.c1.gauss_patterson(3)  # 7 Stützstellen
+    scheme_weights = scheme.weights
+    scheme_points = (scheme.points + 1) / 2  # Skaliere von [-1,1] auf [0,1]
+
+    # Bild aus Fourier-Koeffizienten rekonstruieren
+    frequency_image = weights.reshape(grid.shape[0], grid.shape[1])
+    reconstructed_not_vanish = np.fft.ifft2(frequency_image).real
+    reconstructed_vanish = reconstructed_not_vanish - np.mean(reconstructed_not_vanish)
+
+    def aux(vertices, res):
+        
+        x1, y1 = vertices[0]
+        x2, y2 = vertices[1]
+
+        # Länge der Kante berechnen
+        edge_length = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+        # Transformiere Stützstellen auf die Kante
+        x_vals = scheme_points * x1 + (1 - scheme_points) * x2
+        y_vals = scheme_points * y1 + (1 - scheme_points) * y2
+
+        # Berechne Integral mit gewichteten Stützstellen
+        integral_value = np.sum(scheme_weights * reconstructed_vanish[x_vals.astype(int), y_vals.astype(int)])
+
+        res[0] = integral_value * (edge_length / 2)
+
+    return aux
+
+
+
+
+
 
 class FourierApplication:
     def __init__(self, grid, weights, cut_off, normalization = False):
@@ -304,7 +337,7 @@ class FourierApplication:
         self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
         self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
         self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
-
+        self._single_line_aux(vertices, res) = generate_single_line_aux(self.grid, self.weights, self.cut_off)
 
     @property
     def grid_size(self):
@@ -335,4 +368,9 @@ class FourierApplication:
     def integrate_on_polygonal_curve(self, vertices):
         res = np.zeros((len(vertices), 2))
         self._line_aux(vertices, res)
+        return res
+    
+    def integrate_on_single_line(self, vertices):
+        res= np.zeros(1)
+        self._single_line_aux(vertices, res)
         return res
