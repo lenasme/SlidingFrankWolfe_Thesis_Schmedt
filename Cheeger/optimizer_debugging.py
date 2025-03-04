@@ -264,7 +264,7 @@ class CheegerOptimizer:
 			#new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
 			new_parameters = np.clip(former_parameters - t * gradient, 0, 1)
 			new_boundary_vertices = np.array([[new_parameters[0],new_parameters[2]], [new_parameters[1],new_parameters[2]], [new_parameters[1],new_parameters[3]], [new_parameters[0],new_parameters[3]]])
-			
+			print("new boundary vertices:",new_boundary_vertices)
 			plt.figure(figsize=(6,6))
 			plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
 			plt.scatter(new_boundary_vertices[:, 0]*80, new_boundary_vertices[:, 1]*80)
