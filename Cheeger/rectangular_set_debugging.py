@@ -571,5 +571,16 @@ class RectangularSet:
 	def objective_wrapper(self, x, fourier):
 		#x ist hier boundary vertices flatten
 		"""Setzt boundary_vertices neu und berechnet das Objektiv"""
-		self.boundary_vertices = x.reshape((-1, 2))
+		
+		x_min, y_min, x_max, y_max = x  # Extrahiere die Variablen
+		self.boundary_vertices = np.array([
+			[x_min, y_min],  # untere linke Ecke
+			[x_max, y_min],  # untere rechte Ecke
+			[x_max, y_max],  # obere rechte Ecke
+			[x_min, y_max],  # obere linke Ecke
+		])
+		
+		
+		
+		#self.boundary_vertices = x.reshape((-1, 2))
 		return self.compute_objective(fourier)
