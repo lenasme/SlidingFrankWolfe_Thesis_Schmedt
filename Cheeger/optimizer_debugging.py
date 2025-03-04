@@ -131,10 +131,10 @@ class CheegerOptimizerState:
 			])
 		
 		area_gradient = np.array([
-    	[area_gradient[0], 0],  # x_min: Änderung nur in x-Richtung
-    	[area_gradient[1], 0],  # x_max
-    	[0, area_gradient[2]],  # y_min: Änderung nur in y-Richtung
-    	[0, area_gradient[3]]   # y_max
+    	[area_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+    	[area_gradient[1,0], 0],  # x_max
+    	[0, area_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+    	[0, area_gradient[3,0]]   # y_max
 			])
 
 		# Erstelle zwei Plots
