@@ -128,17 +128,17 @@ class CheegerOptimizerState:
 		print("Perimeter Gradient (raw):", perimeter_gradient)
 
 		perimeter_gradient = np.array([
-    	[perimeter_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
-    	[perimeter_gradient[1,0], 0],  # x_max
-    	[0, perimeter_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
-    	[0, perimeter_gradient[3,0]]   # y_max
+		[perimeter_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+		[perimeter_gradient[1,0], 0],  # x_max
+		[0, perimeter_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+		[0, perimeter_gradient[3,0]]   # y_max
 			])
 		
 		area_gradient = np.array([
-    	[area_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
-    	[area_gradient[1,0], 0],  # x_max
-    	[0, area_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
-    	[0, area_gradient[3,0]]   # y_max
+		[area_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+		[area_gradient[1,0], 0],  # x_max
+		[0, area_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+		[0, area_gradient[3,0]]   # y_max
 			])
 
 		# Erstelle zwei Plots
@@ -266,6 +266,9 @@ class CheegerOptimizer:
 		#print("gradient for line search:", gradient)
 		while not ag_condition:
 			print("gradient:", gradient)
+			print("shape gradient:" ,gradient.shape)
+			print("former boundaries shape", former_boundary_vertices.shape)
+			print("former parameters shape", former_parameters.shape)
 			#new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
 			new_parameters = np.clip(former_parameters - t * gradient, 0, 1)
 			new_boundary_vertices = np.array([[new_parameters[0],new_parameters[2]], [new_parameters[1],new_parameters[2]], [new_parameters[1],new_parameters[3]], [new_parameters[0],new_parameters[3]]])
@@ -458,10 +461,10 @@ class CheegerOptimizer:
 
 		# Erstelle ein Array für die Eckpunkte im Uhrzeigersinn (oder gegen den Uhrzeigersinn)
 		rect_vertices = np.array([
-    		[x_min, y_min],  # untere linke Ecke
-    		[x_max, y_min],  # untere rechte Ecke
-    		[x_max, y_max],  # obere rechte Ecke
-    		[x_min, y_max]   # obere linke Ecke
+			[x_min, y_min],  # untere linke Ecke
+			[x_max, y_min],  # untere rechte Ecke
+			[x_max, y_max],  # obere rechte Ecke
+			[x_min, y_max]   # obere linke Ecke
 		])
 
 		# Falls deine Set-Klasse eine Methode hat, um Boundary-Vertices zu setzen:
@@ -504,10 +507,10 @@ class CheegerOptimizer:
 		 	# Plot für den Perimeter-Gradienten
 		
 			gradient_array = np.array([
-    		[gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
-    		[gradient[1,0], 0],  # x_max
-    		[0, gradient[2,0]],  # y_min: Änderung nur in y-Richtung
-    		[0, gradient[3,0]]   # y_max
+			[gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+			[gradient[1,0], 0],  # x_max
+			[0, gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+			[0, gradient[3,0]]   # y_max
 				])
 
 			#fig, axes = plt.subplots(1, 1, figsize=(12, 6))
