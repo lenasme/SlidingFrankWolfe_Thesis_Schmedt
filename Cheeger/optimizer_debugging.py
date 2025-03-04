@@ -102,6 +102,8 @@ class CheegerOptimizerState:
 		
 		gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
 		
+		print("dimension perimeter gradient", perimeter_gradient.shape)
+		print("dimension area ", area_gradient.shape)
 		print("dimension gradient", gradient.shape)
 		print("Fläche:", self.weighted_area)
 		print("Perimeter:", self.perimeter)
