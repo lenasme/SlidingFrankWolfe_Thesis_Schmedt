@@ -269,6 +269,7 @@ class CheegerOptimizer:
 			print("shape gradient:" ,gradient.shape)
 			print("former boundaries shape", former_boundary_vertices.shape)
 			print("former parameters shape", former_parameters.shape)
+			former_parameters = former_parameters[:, np.newaxis]
 			#new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
 			new_parameters = np.clip(former_parameters - t * gradient, 0, 1)
 			new_boundary_vertices = np.array([[new_parameters[0],new_parameters[2]], [new_parameters[1],new_parameters[2]], [new_parameters[1],new_parameters[3]], [new_parameters[0],new_parameters[3]]])
