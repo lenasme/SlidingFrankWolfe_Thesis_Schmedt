@@ -297,7 +297,7 @@ class CheegerOptimizer:
 		opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
 		opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
 	
-		plot_rectangular_set(opt_rect_set, eta=f.integrate_on_pixel_grid, display_inner_mesh=False)
+		plot_rectangular_set(opt_rect_set, eta=f, display_inner_mesh=False)
 		print("Die Berechnung des Rechtecks hat ", end - start, " Sekunden gedauert." )
 		print("Perimeter korrekt:", opt_rect_set.compute_anisotropic_perimeter())
 		print("Perimeter Rechteck:", opt_rect_set.compute_anisotropic_perimeter_convex())
