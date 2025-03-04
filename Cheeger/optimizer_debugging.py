@@ -157,7 +157,7 @@ class CheegerOptimizerState:
 		plt.tight_layout()
 		plt.show()
 
-		
+		print("gradient:", np.sign(self.weighted_area)*gradient)
 		
 		return np.sign(self.weighted_area) * gradient
 
