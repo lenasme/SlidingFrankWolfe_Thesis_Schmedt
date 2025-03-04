@@ -213,6 +213,12 @@ class RectangularSet:
 			gradient[i] = -(e1 / weight_e1 + e2 / weight_e2)
 
 		return gradient
+	
+	def compute_anisotropic_perimeter_gradient_rectangular(self):
+		''' gradient für die 4 kanten des rechteck.. sortiert nach x_min, x_max, y_min, y_max'''
+		gradient = np.array([-2, 2, -2, 2])
+		return gradient
+
 
 
 	#def compute_anisotropic_perimeter_gradient(self):
@@ -426,6 +432,31 @@ class RectangularSet:
 
 		
 		return gradient
+	
+	def compute_weighted_area_gradient_rectangular(self, fourier):
+		"""
+		Berechnet den Gradienten der gewichteten Fläche für ein Rechteck.
+
+		Returns:
+		--------
+		gradient: np.array mit Länge 4 (Gradient für x_min, x_max, y_min, y_max)
+		"""
+		x_min, x_max = np.min(self.boundary_vertices[:, 0]), np.max(self.boundary_vertices[:, 0])
+		y_min, y_max = np.min(self.boundary_vertices[:, 1]), np.max(self.boundary_vertices[:, 1])
+
+		# Integriere entlang der vertikalen Kanten (links x_min, rechts x_max)
+		integral_x_min = fourier.integrate_on_vertical_line(x_min, y_min, y_max)
+		integral_x_max = fourier.integrate_on_vertical_line(x_max, y_min, y_max)
+
+		# Integriere entlang der horizontalen Kanten (unten y_min, oben y_max)
+		integral_y_min = fourier.integrate_on_horizontal_line(y_min, x_min, x_max)
+		integral_y_max = fourier.integrate_on_horizontal_line(y_max, x_min, x_max)
+
+		# Setze die Gradienten mit den Vorzeichen aus der Ableitung
+		return np.array([-integral_x_min, integral_x_max, -integral_y_min, integral_y_max])
+	
+	
+	
 	
 	def numerical_gradient_check(self, fourier, epsilon = 1e-6):
 		"""
