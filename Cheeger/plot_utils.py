@@ -108,6 +108,7 @@ def plot_rectangular_set(rectangular_set, eta=None, display_inner_mesh=False, bo
                 z_grid[i, j] = eta(np.array([x_grid[i, j], y_grid[i, j]]))
                 #z_grid[i, j] = eta(np.array([y_grid[i, j], x_grid[i, j]]))
         v_abs_max = np.max(np.abs(z_grid))
+        print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
 
         im = ax.contourf(y_grid, 1-x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
