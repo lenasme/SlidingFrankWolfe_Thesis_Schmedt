@@ -105,7 +105,7 @@ def plot_rectangular_set(rectangular_set, eta=None, display_inner_mesh=False, bo
 
         for i in range(x_grid.shape[0]):
             for j in range(x_grid.shape[1]):
-                z_grid[i, j] = eta(np.array([x_grid[i, j], y_grid[i, j]]))
+                z_grid[i, j] = eta(eta.grid_size * np.array([x_grid[i, j], y_grid[i, j]]))
                 #z_grid[i, j] = eta(np.array([y_grid[i, j], x_grid[i, j]]))
         v_abs_max = np.max(np.abs(z_grid))
         print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
