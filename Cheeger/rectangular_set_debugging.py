@@ -446,12 +446,12 @@ class RectangularSet:
 
 		# Integriere entlang der vertikalen Kanten (links x_min, rechts x_max)
 		integral_x_min = fourier.integrate_on_single_line(np.array([ self.boundary_vertices[0], self.boundary_vertices[3]]))
-		print("integralx_min:", integral_x_min)
-		integral_x_max = fourier.integrate_on_vertical_line(x_max, y_min, y_max)
+		
+		integral_x_max = fourier.integrate_on_single_line(np.array([ self.boundary_vertices[1], self.boundary_vertices[2]]))
 
 		# Integriere entlang der horizontalen Kanten (unten y_min, oben y_max)
-		integral_y_min = fourier.integrate_on_horizontal_line(y_min, x_min, x_max)
-		integral_y_max = fourier.integrate_on_horizontal_line(y_max, x_min, x_max)
+		integral_y_min = fourier.integrate_on_single_line(np.array([ self.boundary_vertices[0], self.boundary_vertices[1]]))
+		integral_y_max = fourier.integrate_on_single_line(np.array([ self.boundary_vertices[3], self.boundary_vertices[2]]))
 
 		# Setze die Gradienten mit den Vorzeichen aus der Ableitung
 		return np.array([-integral_x_min, integral_x_max, -integral_y_min, integral_y_max])
