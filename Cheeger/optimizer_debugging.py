@@ -499,10 +499,10 @@ class CheegerOptimizer:
 		 	# Plot für den Perimeter-Gradienten
 		
 			gradient_array = np.array([
-    		[gradient[0], 0],  # x_min: Änderung nur in x-Richtung
-    		[gradient[1], 0],  # x_max
-    		[0, gradient[2]],  # y_min: Änderung nur in y-Richtung
-    		[0, gradient[3]]   # y_max
+    		[gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+    		[gradient[1,0], 0],  # x_max
+    		[0, gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+    		[0, gradient[3,0]]   # y_max
 				])
 
 			#fig, axes = plt.subplots(1, 1, figsize=(12, 6))
