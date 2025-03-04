@@ -293,7 +293,9 @@ class CheegerOptimizer:
 		optimal_objective = result.fun
 		print("Optimales Rechteck:", optimal_rectangle)
 		print("Optimales Objective:", optimal_objective)
-					  
+		
+		
+
 		opt_rectangle_boundary_vertices= np.array([[optimal_rectangle[0], optimal_rectangle[2]], [optimal_rectangle[0], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[3]], [optimal_rectangle[1], optimal_rectangle[2]]])
 		opt_rect_set = RectangularSet(opt_rectangle_boundary_vertices)      
 		print("hab optimales rechteck gefunden")
@@ -303,6 +305,6 @@ class CheegerOptimizer:
 		print("Perimeter Rechteck:", opt_rect_set.compute_anisotropic_perimeter_convex())
 		print("Value integral :", opt_rect_set.compute_weighted_area_rec(f))
 		print("Objective:", opt_rect_set.compute_objective(f))
-					  
+		print("Unterschied in objective vom original zu optimal:", rectangle_set.compute_objective(f)-  opt_rect_set.compute_objective(f))		  
 		#return simple_set, obj_tab, grad_norm_tab, opt_rect_set
 		return  opt_rect_set
