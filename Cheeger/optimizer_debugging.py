@@ -490,8 +490,8 @@ class CheegerOptimizer:
 			x_min, x_max = np.min(self.state.set.boundary_vertices[:, 0]) * self.state.grid_size, np.max(self.state.set.boundary_vertices[:, 0])* self.state.grid_size
 			y_min, y_max = np.min(self.state.set.boundary_vertices[:, 1])* self.state.grid_size, np.max(self.state.set.boundary_vertices[:, 1])* self.state.grid_size
 
-			x = np.array([x_min, x_max, (x_min + x_max) / 2, (x_min + x_max) / 2]) * self.grid_size
-			y = np.array([(y_min + y_max) / 2, (y_min + y_max) / 2, y_min, y_max]) * self.grid_size
+			x = np.array([x_min, x_max, (x_min + x_max) / 2, (x_min + x_max) / 2]) 
+			y = np.array([(y_min + y_max) / 2, (y_min + y_max) / 2, y_min, y_max]) 
 			
 			eta_grid = f.integrate_on_pixel_grid(self.state.grid_size)
 		
