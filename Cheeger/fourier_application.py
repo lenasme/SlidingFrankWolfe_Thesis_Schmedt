@@ -28,12 +28,12 @@ def generate_eval_aux(grid, weights, cut_off):
         reconstructed_image_not_vanish = np.fft.ifft2(frequency_image).real 
         reconstructed_image = reconstructed_image_not_vanish - (np.sum(reconstructed_image_not_vanish)/(grid.shape[0]*grid.shape[1]))
 
-        plt.plot()
-        plt.imshow(reconstructed_image, cmap = 'bwr')
-        plt.colorbar()
-        plt.show()
+        #plt.plot()
+        #plt.imshow(reconstructed_image, cmap = 'bwr')
+        #plt.colorbar()
+        #plt.show()
 
-        print("Summe",np.sum(reconstructed_image))
+        #print("Summe",np.sum(reconstructed_image))
 
         for i in prange(x.shape[0]):
             res[i]= reconstructed_image[int(x[i, 0]), int(x[i, 1])]
