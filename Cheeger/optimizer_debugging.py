@@ -292,6 +292,8 @@ class CheegerOptimizer:
 
 		optimal_rectangle = result.x
 		optimal_objective = result.fun
+		print("Erfolg:", result.success)
+		print("Nachricht:", result.message)
 		print("Optimales Rechteck:", optimal_rectangle)
 		print("Optimales Objective:", optimal_objective)
 		
