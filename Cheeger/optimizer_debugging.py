@@ -261,6 +261,7 @@ class CheegerOptimizer:
 		#print("Former boundary vertices min/max y:", np.min(former_boundary_vertices[:,1]), np.max(former_boundary_vertices[:,1]))
 		#print("gradient for line search:", gradient)
 		while not ag_condition:
+			print("gradient:", gradient)
 			#new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
 			new_parameters = np.clip(former_parameters - t * gradient, 0, 1)
 			new_boundary_vertices = np.array([[new_parameters[0],new_parameters[2]], [new_parameters[1],new_parameters[2]], [new_parameters[1],new_parameters[3]], [new_parameters[0],new_parameters[3]]])
