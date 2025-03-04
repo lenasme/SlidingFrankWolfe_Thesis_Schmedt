@@ -337,7 +337,7 @@ class FourierApplication:
         self._square_aux = generate_square_aux(self.grid, self.weights, self.cut_off)
         self._triangle_aux = generate_triangle_aux(self.grid, self.weights, self.cut_off)
         self._line_aux = generate_line_aux(self.grid, self.weights, self.cut_off)
-        self._single_line_aux(vertices, res) = generate_single_line_aux(self.grid, self.weights, self.cut_off)
+        self._single_line_aux = generate_single_line_aux(self.grid, self.weights, self.cut_off)
 
     @property
     def grid_size(self):
