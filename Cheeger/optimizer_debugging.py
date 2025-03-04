@@ -280,10 +280,11 @@ class CheegerOptimizer:
 		outer_vertices= np.array([x_min, x_max, y_min, y_max])
 		rectangle_boundary_vertices= np.array([[x_min,y_min], [x_min, y_max], [x_max, y_max], [x_max, y_min]])
 		rectangle_set = RectangularSet(rectangle_boundary_vertices)
-		
+		x0 = rectangle_set.boundary_vertices.flatten()
+
 		start = time.time()
 
-		result = minimize(rectangle_set.compute_objective, outer_vertices, args=(f), bounds=[(0,1),(0,1), (0,1), (0,1)] , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
+		result = minimize(rectangle_set.objective_wrapper, x0, args=(f,), bounds=[(0,1),(0,1), (0,1), (0,1)] , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
 					  
 		end = time.time()
 
