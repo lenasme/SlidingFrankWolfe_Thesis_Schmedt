@@ -128,10 +128,10 @@ class CheegerOptimizerState:
 		print("Perimeter Gradient (raw):", perimeter_gradient)
 
 		perimeter_gradient = np.array([
-    	[perimeter_gradient[0], 0],  # x_min: Änderung nur in x-Richtung
-    	[perimeter_gradient[1], 0],  # x_max
-    	[0, perimeter_gradient[2]],  # y_min: Änderung nur in y-Richtung
-    	[0, perimeter_gradient[3]]   # y_max
+    	[perimeter_gradient[0,0], 0],  # x_min: Änderung nur in x-Richtung
+    	[perimeter_gradient[1,0], 0],  # x_max
+    	[0, perimeter_gradient[2,0]],  # y_min: Änderung nur in y-Richtung
+    	[0, perimeter_gradient[3,0]]   # y_max
 			])
 		
 		area_gradient = np.array([
