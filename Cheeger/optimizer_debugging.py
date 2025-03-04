@@ -97,7 +97,7 @@ class CheegerOptimizerState:
 
 	def compute_gradient_rectangular(self, f):
 		perimeter_gradient = self.set.compute_anisotropic_perimeter_gradient_rectangular()
-		
+		perimeter_gradient = perimeter_gradient[:, np.newaxis]
 		area_gradient = self.set.compute_weighted_area_gradient_rectangular(f)
 		
 		gradient = (perimeter_gradient * self.weighted_area - area_gradient * self.perimeter) / self.weighted_area ** 2
