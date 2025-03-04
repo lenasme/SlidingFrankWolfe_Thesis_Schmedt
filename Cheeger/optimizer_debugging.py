@@ -448,6 +448,21 @@ class CheegerOptimizer:
 
 		iteration = 0
 
+		x_min, x_max = np.min(initial_set.boundary_vertices[:, 0]), np.max(initial_set.boundary_vertices[:, 0])
+		y_min, y_max = np.min(initial_set.boundary_vertices[:, 1]), np.max(initial_set.boundary_vertices[:, 1])
+
+		# Erstelle ein Array für die Eckpunkte im Uhrzeigersinn (oder gegen den Uhrzeigersinn)
+		rect_vertices = np.array([
+    		[x_min, y_min],  # untere linke Ecke
+    		[x_max, y_min],  # untere rechte Ecke
+    		[x_max, y_max],  # obere rechte Ecke
+    		[x_min, y_max]   # obere linke Ecke
+		])
+
+		# Falls deine Set-Klasse eine Methode hat, um Boundary-Vertices zu setzen:
+		initial_set = RectangularSet(rect_vertices,  max_tri_area=self.max_tri_area)
+		
+
 		self.state = CheegerOptimizerState(initial_set, f)
 
 		while not convergence and iteration < self.max_iter:
@@ -470,12 +485,25 @@ class CheegerOptimizer:
 			#plt.xlabel("x")
 			#plt.ylabel("y")
 			#plt.show()
-			x, y = self.state.set.boundary_vertices[:, 0]*self.state.grid_size, self.state.set.boundary_vertices[:, 1]*self.state.grid_size
+
+			#x, y = self.state.set.boundary_vertices[:, 0]*self.state.grid_size, self.state.set.boundary_vertices[:, 1]*self.state.grid_size
+			x_min, x_max = np.min(self.state.set.boundary_vertices[:, 0]) * self.state.grid_size, np.max(self.state.set.boundary_vertices[:, 0])* self.state.grid_size
+			y_min, y_max = np.min(self.state.set.boundary_vertices[:, 1])* self.state.grid_size, np.max(self.state.set.boundary_vertices[:, 1])* self.state.grid_size
+
+			x = np.array([x_min, x_max, (x_min + x_max) / 2, (x_min + x_max) / 2]) * self.grid_size
+			y = np.array([(y_min + y_max) / 2, (y_min + y_max) / 2, y_min, y_max]) * self.grid_size
+			
 			eta_grid = f.integrate_on_pixel_grid(self.state.grid_size)
 		
 
 		 	# Plot für den Perimeter-Gradienten
 		
+			gradient_array = np.array([
+    		[gradient[0], 0],  # x_min: Änderung nur in x-Richtung
+    		[gradient[1], 0],  # x_max
+    		[0, gradient[2]],  # y_min: Änderung nur in y-Richtung
+    		[0, gradient[3]]   # y_max
+				])
 
 			#fig, axes = plt.subplots(1, 1, figsize=(12, 6))
 			plt.plot()
@@ -486,7 +514,7 @@ class CheegerOptimizer:
 			#fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
 			plt.imshow(eta_grid.T, cmap='bwr', origin='lower', extent=[0, self.state.grid_size, 0, self.state.grid_size])
-			plt.quiver(x, y, gradient[:,0],gradient[:,1], cmap='viridis', color='k')
+			plt.quiver(x, y, gradient_array[:,0],gradient_array[:,1], cmap='viridis', color='k')
 			plt.title("Gesamt-Gradient ")
 			#fig.colorbar(im1, ax=axes[0], label=r'$\eta$')
 			#fig.colorbar(sc1, ax=axes[0], label="Gradient")
