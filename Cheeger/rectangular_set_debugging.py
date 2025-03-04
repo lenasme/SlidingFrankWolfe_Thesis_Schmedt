@@ -445,7 +445,8 @@ class RectangularSet:
 		y_min, y_max = np.min(self.boundary_vertices[:, 1]), np.max(self.boundary_vertices[:, 1])
 
 		# Integriere entlang der vertikalen Kanten (links x_min, rechts x_max)
-		integral_x_min = fourier.integrate_on_vertical_line(x_min, y_min, y_max)
+		integral_x_min = fourier.integrate_on_single_line(np.array([ self.boundary_vertices[0], self.boundary_vertices[3]]))
+		print("integralx_min:", integral_x_min)
 		integral_x_max = fourier.integrate_on_vertical_line(x_max, y_min, y_max)
 
 		# Integriere entlang der horizontalen Kanten (unten y_min, oben y_max)
