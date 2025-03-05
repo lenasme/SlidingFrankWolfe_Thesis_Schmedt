@@ -249,7 +249,7 @@ class CheegerOptimizer:
 		
 		former_parameters = np.array([x_min, x_max, y_min, y_max])
 		#print("original boundary vertices:", former_boundary_vertices)
-
+		former_parameters = former_parameters[:, np.newaxis]
 		iteration = 0
 		plt.figure()
 		plt.imshow(f.integrate_on_pixel_grid(80).T,  cmap = 'bwr')
@@ -269,7 +269,7 @@ class CheegerOptimizer:
 			print("shape gradient:" ,gradient.shape)
 			print("former boundaries shape", former_boundary_vertices.shape)
 			print("former parameters shape", former_parameters.shape)
-			former_parameters = former_parameters[:, np.newaxis]
+			
 			#new_boundary_vertices = np.clip(former_boundary_vertices - t * gradient, 0, 1)
 			new_parameters = np.clip(former_parameters - t * gradient, 0, 1)
 			new_boundary_vertices = np.array([[new_parameters[0,0],new_parameters[2,0]], [new_parameters[1,0],new_parameters[2,0]], [new_parameters[1,0],new_parameters[3,0]], [new_parameters[0,0],new_parameters[3,0]]])
