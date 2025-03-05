@@ -314,9 +314,9 @@ def generate_single_line_aux(grid, weights, cut_off):
         x_vals = scheme_points * x1 + (1 - scheme_points) * x2
         y_vals = scheme_points * y1 + (1 - scheme_points) * y2
 
-        print("x_vals:", x_vals)
-        print("y_vals:", y_vals)
-        print("reconstructed_vanish values at x_vals, y_vals:", reconstructed_vanish[x_vals.astype(int), y_vals.astype(int)])
+        #print("x_vals:", x_vals)
+        #print("y_vals:", y_vals)
+        #print("reconstructed_vanish values at x_vals, y_vals:", reconstructed_vanish[x_vals.astype(int), y_vals.astype(int)])
 
         # Berechne Integral mit gewichteten Stützstellen
         integral_value = np.sum(scheme_weights * reconstructed_vanish[x_vals.astype(int), y_vals.astype(int)])
