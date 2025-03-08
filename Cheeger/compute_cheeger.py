@@ -9,6 +9,41 @@ from .tools import run_primal_dual, extract_contour, resample
 from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 from .rectangular_optimizer import objective
 from .rectangular_set import RectangularSet
+from Setup.ground_truth import GroundTruth, construction_of_example_source
+
+
+
+
+
+def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, plot=True):
+    ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
+
+    operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
+
+    freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freqs_y = np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
+    
+
+    
+    mask = np.zeros((grid_size, grid_size))
+    mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+
+    truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
+
+    if plot == True:
+        plt.subplot(1,2,1)
+        plt.imshow(operator_applied_on_ground_truth, cmap= 'bwr')
+        plt.subplot(1,2,2)
+        plt.imshow(truncated_operator_applied_on_ground_truth, cmap = 'bwr')
+        plt.show()
+
+
+
+
+
+
+
 
 
 def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=None, plot_results_fm=False,
