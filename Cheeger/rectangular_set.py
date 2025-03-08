@@ -1,285 +1,201 @@
-
 import numpy as np
-from .tools import winding, triangulate
+import matplotlib.pyplot as plt
+
 
 class RectangularSet:
 
-	def __init__(self, boundary_vertices, max_tri_area=None):
-		self.num_boundary_vertices = len(boundary_vertices)
-
-		# the curve is clockwise if and only if the sum over the edges of (x2-x1)(y2+y1) is positive
-		rolled_boundary_vertices = np.roll(boundary_vertices, -1, axis=0)
-		self.is_clockwise = (np.sum((rolled_boundary_vertices[:, 0] - boundary_vertices[:, 0]) *
-									(rolled_boundary_vertices[:, 1] + boundary_vertices[:, 1])) > 0)
-		self.mesh_vertices = None
-		self.mesh_faces = None
-		self.mesh_boundary_faces_indices = None
-		# creation of the inner mesh
-		self.create_mesh(boundary_vertices, max_tri_area)
-
-	@property
-	def boundary_vertices_indices(self):
-		return np.arange(self.num_boundary_vertices)
-
-	# TODO: attention du coup self.boundary_vertices est vue comme une fonction, a voir si probleme avec numba
-	@property
-	def boundary_vertices(self):
-		return self.mesh_vertices[self.boundary_vertices_indices]
-
-	@property
-	def mesh_boundary_faces(self):
-		return self.mesh_faces[self.mesh_boundary_faces_indices]
-
-	@property
-	def minimal_x(self):
-		x_values = [v[0] for v in self.boundary_vertices]
-		min_x = min(x_values)
-		return min_x
-
-	@property
-	def maximal_x(self):
-		x_values = [v[0] for v in self.boundary_vertices]
-		max_x = max(x_values)
-		return max_x
-
-	@property
-	def minimal_y(self):
-		y_values = [v[1] for v in self.boundary_vertices]
-		min_y = min(y_values)
-		return min_y
-
-	@property
-	def maximal_y(self):
-		y_values = [v[1] for v in self.boundary_vertices]
-		max_y = max(y_values)
-		return max_y
-
-
-	@boundary_vertices.setter
-	def boundary_vertices(self, new_boundary_vertices):
-		self.mesh_vertices[self.boundary_vertices_indices] = new_boundary_vertices
-
-	
-
-	def contains(self, x):
-		"""
-		Whether a given point x is inside the set or not
-
-		Parameters
-		----------
-		x : array, shape (2,)
-		The input point
-
-		Returns
-		------
-		bool
-		Whether x is in the set or not
-
-		"""
-		# The point is inside the set if and only if its winding number is non zero
-		return winding(x, self.boundary_vertices) != 0
-
-
-	def compute_area_rec(self):
-		res = np.abs(self.maximal_x - self.minimal_x) * np.abs(self.maximal_y - self.minimal_y)
-		return res
-	
-
-	def compute_perimeter_rec(self):
-		"""
-		Compute the perimeter of the set
-
-		Returns
-		-------
-		float
-		The perimeter
-
-		"""
-		x_values = [v[0] for v in self.boundary_vertices]
-		y_values = [v[1] for v in self.boundary_vertices]
-
-		min_x = min(x_values)
-		max_x = max(x_values)
-		min_y = min(y_values)
-		max_y = max(y_values) 
-
-		res = 2*(max_x - min_x) +2*(max_y - min_y)
-		# hier umschreiben mit properties von oben self.minimal_x etc?
+	def __init__(self, x_min, x_max, y_min, y_max):
 		
-		return res
+		self.x_min = x_min
+		self.x_max = x_max
+		self.y_min = y_min
+		self.y_max = y_max
+
+		self.coordinates = np.array([x_min, x_max, y_min, y_max])
+
+
 	
-	def compute_perimeter_rec_gradient(self):
-		"""
-		Compute the "gradient" of the perimeter
+	@property
+	def coordinates(self):
+		return  np.array([self.x_min, self.x_max, self.y_min, self.y_max])
 
-		Returns
-		-------
-		array, shape (N, 2)
-			Each row contains the two coordinates of the translation to apply at each boundary vertex
+	@coordinates.setter
+	def coordinates(self, new_coordinates):
+		self.x_min = new_coordinates[0]
+		self.x_max = new_coordinates[1]
+		self.y_min = new_coordinates[2]
+		self.y_max = new_coordinates[3]
 
-		Notes
-		-----
-		See [1]_ (first variation of the perimeter)
-
-		References
-		----------
-		.. [1] Maggi, F. (2012). Sets of finite perimeter and geometric variational problems: an introduction to
-			   Geometric Measure Theory (No. 135). Cambridge University Press.
-
-		"""
-		gradient = np.zeros_like(self.boundary_vertices)
-
-		for i in range(self.num_boundary_vertices):
-			e1 = self.boundary_vertices[(i-1) % self.num_boundary_vertices] - self.boundary_vertices[i]
-			e2 = self.boundary_vertices[(i+1) % self.num_boundary_vertices] - self.boundary_vertices[i]
-
-			# the i-th component of the gradient is -(ti_1 + ti_2) where ti_1 and ti_2 are the two tangent vectors
-			# going away from the i-th vertex TODO: clarify
-			gradient[i] = - (e1 / np.abs(e1).sum() + e2 / np.abs(e2).sum())
-
-		return gradient
 	
-
-	def compute_weighted_area_rec_tab(self, fourier, boundary_faces_only=False):
-		"""
-		Compute the integral of f on each face of the inner mesh
-
-		Parameters
-		----------
-		f : function
-			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
-		boundary_faces_only : bool
-			Whether to compute weighted areas only on boundary faces, defaut False
-
-		Returns
-		-------
-		array, shape (N,) or (N,D)
-			Value computed for the integral of f on each of the N triangles (if f takes values in dimension D, the shape
-			of the resulting array is (N, D))
-
-		"""
-		if boundary_faces_only:
-			triangles = self.mesh_vertices[self.mesh_boundary_faces]
-		else:
-			triangles = self.mesh_vertices[self.mesh_faces]
-
-		return fourier.integrate_on_triangles(triangles)
+	def plot_rectangle(self):
+		plt.figure(figsize=(8, 8))
 	
+		plt.plot(np.array([self.x_min, self.x_max, self.x_max, self.x_min, self.x_min]), np.array([self.y_min, self.y_min, self.y_max, self.y_max, self.y_min]))
+		
+		plt.xlabel("X")
+		plt.ylabel("Y")
+		plt.title("Rectangle")
+		plt.axis("equal") 
+		plt.show()
 
 
+	
+	""" Berechnung von Bausteinen für min \ frac{Per(E)}{abs(\int_E \eta)}"""
 
-	def compute_weighted_area_rec(self, fourier):
-		# TODO: decide whether output type instability should be dealt with or not
+	
+	
+	def compute_anisotropic_perimeter(self):
 		"""
-		Compute the integral of f over the set
-
-		Parameters
-		----------
-		f : function
-			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
-
-		Returns
-		-------
-		float or array of shape (D,)
-			Value computed for the integral of f over the set (if f takes values in dimension D, the result will be an
-			array of shape (D,))
+		Per(E)
+		
 		"""
-		return np.sum(self.compute_weighted_area_rec_tab(fourier))
-
-
-	def compute_weighted_area_rec_gradient(self, fourier, weights=None):
+		return 2 * ((self.x_max - self.x_min) + (self.y_max - self.y_min))
+	
+	
+	def compute_anisotropic_perimeter_gradient(self):
+		""" 
+		(\ frac{d}{d x_min} Per(E), \ frac{d}{d x_max} Per(E), \ frac{d}{d y_min} Per(E), \ frac{d}{d y_max} Per(E) ) 
+		
 		"""
-		Compute the "gradient" of the weighted area, for a given weight function
-
-		Parameters
-		----------
-		f : function
-			Function to be integrated. f must handle array inputs with shape (N, 2). It can be vector valued
-
-		Returns
-		-------
-		array, shape
-
-		Notes
-		-----
-		Vectorized computations are really nasty here, mainly because f can be vector valued.
-
-		"""
-		# rotation matrix used to compute outward normals
-		rot = np.array([[0, -1], [1, 0]]) if self.is_clockwise else np.array([[0, 1], [-1, 0]])
-
-		rolled_vertices1 = np.roll(self.boundary_vertices, 1, axis=0)
-		rolled_vertices2 = np.roll(self.boundary_vertices, -1, axis=0)
-
-		if weights is None: # das sollte besser nicht eintreten, da imtegrate_on_polygonal_curve aus der klasse GaussianPolynomial aus cheeger und nicht aus SampledGaussianFilter kommt. Müsste sonst nochmal anpassen
-			weights = fourier.integrate_on_polygonal_curve(self.boundary_vertices)
-
-		normals1 = np.dot(self.boundary_vertices - rolled_vertices1, rot.T)
-		normals1 /= np.linalg.norm(normals1, axis=-1)[:, None]
-		normals2 = np.dot(rolled_vertices2 - self.boundary_vertices, rot.T)
-		normals2 /= np.linalg.norm(normals2, axis=-1)[:, None]
-
-		if weights.ndim == 2:
-			gradient = weights[:, 0, None] * normals1 + weights[:, 1, None] * normals2
-		else:
-			gradient = weights[:, :, 0, None] * normals1[:, None, :] + weights[:, :, 1, None] * normals2[:, None, :]
-
+		gradient = np.array([-2, 2, -2, 2])
 		return gradient
 
-	def compute_mesh_faces_orientation(self):
-		faces = self.mesh_vertices[self.mesh_faces]
-		diff1 = faces[:, 1] - faces[:, 0]
-		diff2 = faces[:, 2] - faces[:, 1]
-		res = np.sign(np.cross(diff1, diff2)).astype('int')
 
+
+	
+
+	def compute_integral(self, cut_off, weights, grid_size):
+		"""
+		  \int_{x_min} ^{x_max} \int_{y_min} ^{y_max} \sum_{k,j = -\Phi}^{\Phi} w_{k,j} e^{2 \pi i (k j)*(x y)} dy dx 
+		  S.8 in Notizen für Formel
+
+		"""
+
+		weights[0,0] = 0 #sichert Nullintegral
+
+		res = 0
+		for k in range (- cut_off, cut_off +1 ):
+			for l in range (- cut_off, cut_off + 1):
+
+				if k == 0 and l == 0:
+					res += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
+				
+				elif k == 0: 
+					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0]*2*np.pi*1j *l)* (self.x_max * (np.exp(2*np.pi*1j*((l*self.y_max)/grid_size[1])) -  np.exp(2*np.pi*1j*((l*self.y_min)/grid_size[1])) )
+																													   + self.x_min * (np.exp(2*np.pi*1j*((l*self.y_min)/grid_size[1])) -  np.exp(2*np.pi*1j*((l*self.y_max)/grid_size[1])) ))
+
+				elif l == 0:
+					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0]*2*np.pi*1j *k)* (self.y_max * (np.exp(2*np.pi*1j*((k*self.x_max)/grid_size[0])) -  np.exp(2*np.pi*1j*((k*self.x_min)/grid_size[0])) )
+																													   + self.y_min * (np.exp(2*np.pi*1j*((k*self.x_min)/grid_size[0])) -  np.exp(2*np.pi*1j*((k*self.x_max)/grid_size[0])) ))
+
+				else:
+					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (-(2*np.pi)**2 * k * l) *(np.exp(2*np.pi*1j * (k *self.x_max / grid_size[0] + l* self.y_max / grid_size[1])) - np.exp( 2 * np.pi *1j * (k* self.x_max/grid_size[0] + l* self.y_min/grid_size[1])) 
+																												  - np.exp( 2 * np.pi *1j *(k* self.x_min/grid_size[0] + l* self.y_max/grid_size[1])) + np.exp(2 * np.pi *1j*(k* self.x_min/grid_size[0] + l* self.y_min/grid_size[1])))
+		return res
+
+
+	def compute_integral_gradient(self, cut_off, weights, grid_size):
+		"""
+		Ableitung von compute_integral, Beibehaltung der Fallunterscheidung
+		S.11-13 in Notizen für Formel
+		Speicherung des Gradienten in der Reihenfolge x_min, x_max, y_min, y_max
+
+		"""
+		weights[0,0] = 0
+		gradient = np.array([0, 0, 0, 0])
+
+		for k in range (- cut_off, cut_off +1 ):
+			for l in range (- cut_off, cut_off + 1):
+
+				if k == 0 and l == 0:
+					gradient[0] += 0
+					gradient[1] += 0
+					gradient[2] += 0
+					gradient[3] += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
+
+				elif k == 0: 
+					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] )  - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) )
+
+					gradient[1] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] )  - np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) )
+
+					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  (- np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) * self.x_max + np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) * self.x_min )
+
+					gradient[3] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  ( np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) * self.x_max - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) * self.x_min )
+
+				elif l == 0:
+					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  (- np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) * self.y_max + np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) * self.y_min )
+
+					gradient[1] +=  weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  ( np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) * self.y_max - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) * self.y_min )
+
+					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[1] * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] )  - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) )
+
+					gradient[3] +=  weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[1] * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] )  - np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) )
+				
+				else:
+					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi *l * grid_size[0]) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
+																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+
+					gradient[1] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi *l * grid_size[0]) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
+																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+
+					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi * k * grid_size[1]) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))) 
+																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+
+					gradient[3] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi * k * grid_size[1]) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
+																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))))  
+					
+		return gradient
+
+
+
+	def compute_objective(self, cut_off, weights, grid_size ):
+		res = self.compute_anisotropic_perimeter() /  np.abs(self.compute_integral(cut_off, weights, grid_size) )
 		return res
 	
+	def compute_objective_wrapper(self, x, cut_off, weights, grid_size):
+		
+		"""brauche ich, um es in scipy.optimize.minimize einbinden kann"""
+		
+		self.x_min = x[0]
+		self.x_max = x[1]
+		self.y_min = x[2]
+		self.y_max = x[3]
+		
+		
+		return self.compute_objective(cut_off, weights, grid_size)
 	
+	def compute_objective_gradient(self, cut_off, weights, grid_size ):
+
+		perimeter = self.compute_anisotropic_perimeter()
+		perimeter_gradient = self.compute_anisotropic_perimeter_gradient()
+		integral = self.compute_integral(cut_off, weights, grid_size)
+		integral_gradient = self.compute_integral_gradient(cut_off, weights, grid_size)
+		
+		gradient = np.sign(integral) * (perimeter_gradient * integral - integral_gradient * perimeter) / integral ** 2
+
+		return  gradient
 	
-	def create_mesh(self, boundary_vertices, max_tri_area):
+	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size):
+		""""
+		brauche ich, um es in scipy.optimize.minimize einbinden kann
 		"""
-		Create the inner mesh of the set
+		self.x_min = x[0]
+		self.x_max = x[1]
+		self.y_min = x[2]
+		self.y_max = x[3]
 
-		Parameters
-		----------
-		boundary_vertices : array, shape (N, 2)
-			Each row contains the two coordinates of a boundary vertex
-		max_tri_area : float
-			Maximum triangle area for the inner mesh
-
-		"""
-		mesh = triangulate(boundary_vertices, max_triangle_area=max_tri_area)
-
-		self.mesh_vertices = mesh['vertices']
-		self.mesh_faces = mesh['triangles']
-
-		# TODO: comment
-		orientations = self.compute_mesh_faces_orientation()
-		indices = np.where(orientations < 0)[0]
-		for i in range(len(indices)):
-			index = indices[i]
-			tmp_face = self.mesh_faces[index].copy()
-			self.mesh_faces[index, 1] = tmp_face[index, 2]
-			self.mesh_faces[index, 2] = tmp_face[index, 1]
-
-		assert np.alltrue(orientations > 0)
-
-		boundary_faces_indices = []
-
-		for i in range(len(self.mesh_faces)):
-			# find the faces which have at least one vertex among the boundary vertices (the indices of boundary
-			# vertices in self.vertices are 0,1,...,self.num_boundary_vertices-1)
-			if len(np.intersect1d(np.arange(self.num_boundary_vertices), self.mesh_faces[i])) > 0:
-				boundary_faces_indices.append(i)
-
-		self.mesh_boundary_faces_indices = np.array(boundary_faces_indices)
-
-
-
-
-
-
+		return self.compute_objective_gradient(cut_off, weights, grid_size)
 
 	
+def construct_rectangular_set(simple_set):
+	x_values = [v[0] for v in simple_set.boundary_vertices]
+	y_values = [v[1] for v in simple_set.boundary_vertices]                 
 
-	
+	x_min= np.clip(min(x_values), 0,1)
+	x_max= np.clip(max(x_values), 0,1)
+	y_min= np.clip(min(y_values), 0,1)
+	y_max= np.clip(max(y_values), 0,1)
+
+	rectangular_set = RectangularSet(x_min, x_max, y_min, y_max)
+
+	return rectangular_set
