@@ -2,29 +2,32 @@ import numpy as np
 
 import random
 import itertools
+import matplotlib.pyplot as plt
 #from  Cheeger.rectangular_set import RectangularSet
-from  Cheeger.rectangular_set_debugging import RectangularSet
+from  Cheeger.rectangular_set import RectangularSet
 #from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
 #from SlidingFrankWolfe.simple_function_debugging import ZeroWeightedIndicatorFunction, SimpleFunction
 from SlidingFrankWolfe.simple_function_debugging_mesh import ZeroWeightedIndicatorFunction, SimpleFunction
-#import matpy as mp
+import matpy as mp
 #import matplotlib.pyplot as plt
 
 
 
 
 class GroundTruth:
-    def __init__(self, imgsz=100, max_jumps=4, seed=None):
+    def __init__(self, imgsz, max_jumps, seed=None):
         self.imgsz = imgsz
         self.max_jumps = max_jumps
         self.seed = seed
         np.random.seed(seed)
 
 
-#get_jump_points_bin: Construct a list of jump points with minimal distance in delta_bin 
-
 
     def get_jump_points_bin(self, delta_bin, npoints = 1,maxtries=5e05):
+        """
+        get_jump_points_bin: Construct a list of jump points with minimal distance in delta_bin 
+
+        """
         i = 0
         pointlist = []    
         while i < maxtries * npoints and len(pointlist) < npoints:
@@ -48,24 +51,15 @@ class GroundTruth:
     
         return pointlist
 
-#get_jump_points: Construct jump points for several delta_bins
+
 
     def get_jump_points(self, deltas,npoints =1,maxtries=5e05):
+        """
+        get_jump_points: Construct jump points for several delta_bins
+
+        """
         w = (deltas[1] - deltas[0])/2
         delta_bins = [ [delta - w, delta + w] for delta in deltas]
-    
-    
-    #if  delta_bins[0][1] < 1.0/float(imgsz):
-     #   print('Delta bin: ' + str(delta_bins[0]))
-      #  raise Warning("Delta-bin impossible to match: Pixel distance < " + str(imgsz*delta_bins[0][0]))
-    #if  delta_bins[-1][0] >= 0.33:
-     #   print('Delta bin: ' + str(delta_bins[-1]))
-      #  raise Warning("Delta-bin impossible to match: Pixel distance > " + str(delta_bins[-1][-1]*imgsz))
-    #for delta_bin in delta_bins:
-     #   if np.ceil(delta_bin[0]*imgsz) == np.ceil(delta_bin[1]*imgsz):
-      #      print('Delta bin: ' + str(delta_bin))
-       #     raise Warning("Delta-bin impossible to match: Interval: " + str(delta_bin[0]*imgsz) + ' / ' +  str(delta_bin[1]*imgsz))
-    
         data = {}
         for i, delta_bin in enumerate(delta_bins):
             data[deltas[i]] = self.get_jump_points_bin(delta_bin, npoints=npoints, maxtries=maxtries)
@@ -73,10 +67,12 @@ class GroundTruth:
         
         return data
 
-#grad_per: Compute gradient -> for consistent gradient direction
 
     def grad_per(self, img):
+        """
+        grad_per: Compute gradient -> for consistent gradient direction
 
+        """
         grad = np.zeros(img.shape + (2,))
         # Dx
         grad[:-1,:,0] = img[1:,:] - img[:-1,:]
@@ -88,9 +84,10 @@ class GroundTruth:
     
         return grad
 
-#test_grad: test wheteher the gradient is valid
     def test_grad(self, vals, show=False, verbose=False):
-
+        """
+        test_grad: test wheteher the gradient is valid
+        """
         grad = self.grad_per(vals)
         gradx = grad[...,0]
         grady = grad[...,1]
@@ -98,9 +95,7 @@ class GroundTruth:
         gradx = np.sign(gradx)
         grady = np.sign(grady)
 
-    
         passed = True
-
         #Test gradient y
         gxpos = np.sign(np.maximum(gradx,0).sum(axis=1))
         gxneg = np.sign(np.minimum(gradx,0).sum(axis=1))
@@ -162,8 +157,12 @@ class GroundTruth:
         return passed,n_g_invalid
 
 
-#Ensure valid values in the constant pieces of the image
+
     def get_valid_values(self, M, N, img=False):
+        """
+        Ensure valid values in the constant pieces of the image
+
+        """
         grad_passed = False
         counter = 0
         eps = 1e-08
@@ -319,9 +318,13 @@ class GroundTruth:
         return self.color_image(data, points) , data 
 
 
-#Additional constraint that the integral of the ground truth vanishes (required in my application)
+
 
     def get_image_vanishing_integral(self, points, valid=True):
+        """
+        Additional constraint that the integral of the ground truth vanishes (required in my application)
+        
+        """
         img, data = self.get_image(points, valid=True)
         pixel_num= img.size
         pixel_sum = np.sum(img)
@@ -333,8 +336,6 @@ class GroundTruth:
     
         return img_van, data_van
 
-
-    #def convert_into_simple_function(self):
 
 # um den groundtruth als SimpleSet zu framen
     def create_rectangular_sets(self, jump_points):
@@ -434,6 +435,27 @@ def assign_values_to_rectangles(rectangles, data):
     return rectangle_values
 
 
+def construction_of_example_source(grid_size, deltas, max_jumps, plot=True):
+    original = GroundTruth()
+    original.max_jumps = max_jumps
+    original.imgsz = grid_size
+    jump_points = original.get_jump_points_bin(deltas)[0]
+
+    ground_truth, values = original.get_image_vanishing_integral(jump_points)
+
+    if plot:
+        plt.plot()
+        plt.imshow(ground_truth, cmap = 'bwr')
+        plt.colorbar()
+        plt.title("Ground Truth")
+        plt.show()
+
+    return ground_truth
+
+
+
+
+
 class EtaObservation:
     def __init__(self, cut_f, reg_par= 2 , variance= 0.1):
         self.cut_f = cut_f
@@ -461,67 +483,6 @@ class EtaObservation:
 
         return tmp
 
-
-    #image: ground_truth zur berechnung von f_noisy
-    def trunc_fourier_noise (self, image):
-        N,M = image.shape
-        fourier_transform = np.fft.fft2(image)/(np.sqrt(N * M)) # orthogonal
-    
-    
-        ncoeff = float((2*(self.cut_f-1) + 1)*(2*(self.cut_f-1) + 1))
-         
-        fourier_transform.real += np.random.normal(loc=0.0, scale=np.sqrt(2*self.variance/ncoeff), size= fourier_transform.shape)
-        fourier_transform.imag += np.random.normal(loc=0.0, scale=np.sqrt(2*self.variance/ncoeff), size= fourier_transform.shape)
-
-        # Truncated:
-        mask = np.zeros(fourier_transform.shape)
-    
-        for i in range(-self.cut_f + 1, self.cut_f):
-            for j in range(-self.cut_f + 1, self.cut_f):
-        
-                mask[i,j] = 1.0
-            
-        truncated_transform = fourier_transform * mask
-    
-        # Symmetrization
-        tmp = np.zeros(truncated_transform.shape, dtype=complex)
-   
-        for i in range(0,N):
-            for j in range(0,M):
-                tmp[i,j] = 0.5*(truncated_transform[i,j] + truncated_transform[-i,-j].conj()) # variance
-
-        return tmp
-
-    @staticmethod
-    def preadjoint_trunc_fourier ( freq ):
-        N,M = freq.shape
-        back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
-        return back_transf
-    
-    @staticmethod
-    def preadjoint_trunc_fourier_vanish_int ( freq ):
-        N,M = freq.shape
-        back_transf = np.fft.ifft2(freq)*np.sqrt(N*M)
-        back_transf = back_transf - 1/(N*M) * np.sum(back_transf)
-        return back_transf
-    
-
-    def f_noisy (self, ground_truth):
-        return self.trunc_fourier_noise (ground_truth)
-
-
-# ingredients of eta = -1/alpha (K^#(Ku-f))
-
-    def eta (self, image, ground_truth):
-        # image: aktuelles rekonstruiertes Bild einer Iteration
-        # f_delta 
-        return -1 / self.reg_par * ( self.preadjoint_trunc_fourier(  self.trunc_fourier(image) - self.f_noisy(ground_truth)) )
-
-
-    def eta_vanish_int (self, image, ground_truth):
-    # image: aktuelles rekonstruiertes Bild einer Iteration
-    # f_delta 
-        return -1 / self.reg_par * ( self.preadjoint_trunc_fourier_vanish_int( self.trunc_fourier(image) - self.f_noisy(ground_truth)) )
 
 
 
