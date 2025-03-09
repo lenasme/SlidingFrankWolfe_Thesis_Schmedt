@@ -4,7 +4,7 @@ import random
 import itertools
 import matplotlib.pyplot as plt
 #from  Cheeger.rectangular_set import RectangularSet
-from  Cheeger.rectangular_set import RectangularSet
+#from  Cheeger.rectangular_set import RectangularSet
 #from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
 #from SlidingFrankWolfe.simple_function_debugging import ZeroWeightedIndicatorFunction, SimpleFunction
 from SlidingFrankWolfe.simple_function_debugging_mesh import ZeroWeightedIndicatorFunction, SimpleFunction
@@ -338,7 +338,7 @@ class GroundTruth:
 
 
 # um den groundtruth als SimpleSet zu framen
-    def create_rectangular_sets(self, jump_points):
+    #def create_rectangular_sets(self, jump_points):
         """
         Erstellt RectangularSet-Objekte aus den Jump Points.
         :param jump_points: Liste von Sprungpunkten [[horizontal], [vertikal]].
@@ -365,7 +365,7 @@ class GroundTruth:
         return rectangular_sets
 
 
-    def to_simple_function(self, jump_points, values):
+    #def to_simple_function(self, jump_points, values):
         """
         Wandelt den Ground Truth in eine SimpleFunction um.
         :param delta_bin: Eingabewert für die Methode get_jump_points_bin.
