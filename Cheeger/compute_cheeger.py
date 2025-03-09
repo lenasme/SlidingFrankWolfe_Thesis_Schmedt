@@ -48,7 +48,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         print("minimaler Wert in fourier:", np.min(operator_applied_on_ground_truth))
 
         plt.plot()
-        plt.imshow(np.fft.ifft2(operator_applied_on_ground_truth).real, cmap = 'bwr')
+        plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
         plt.show()
 
 
