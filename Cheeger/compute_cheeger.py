@@ -5,8 +5,8 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 #from .simple_set import SimpleSet
 #from .optimizer_debugging import CheegerOptimizer
-from .tools import run_primal_dual, extract_contour, resample
-from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
+#from .tools import run_primal_dual, extract_contour, resample
+#from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 #from .rectangular_optimizer import objective
 from .rectangular_set import RectangularSet
 from Setup.ground_truth import GroundTruth, construction_of_example_source
