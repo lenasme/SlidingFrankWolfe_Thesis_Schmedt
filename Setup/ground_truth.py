@@ -478,7 +478,7 @@ def construction_of_example_source(grid_size, deltas, max_jumps, plot=True):
         plt.plot()
         plt.imshow(ground_truth, cmap = 'bwr')
         plt.colorbar()
-        plt.title("Ground Truth")
+        plt.title("Ground Truth (erzeugt in construction_of_example_source)")
         plt.show()
 
     return ground_truth
