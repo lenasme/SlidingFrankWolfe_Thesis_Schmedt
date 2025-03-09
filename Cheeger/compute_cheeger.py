@@ -34,6 +34,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         plt.subplot(1,3,1)
         plt.imshow(mask, cmap = 'bwr')
+        plt.colorbar()
         plt.subplot(1,3,2)
         plt.imshow(operator_applied_on_ground_truth.real, cmap= 'bwr')
         plt.title("Realteil komplette Fourier")
