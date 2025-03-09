@@ -4,10 +4,10 @@ import time
 
 from scipy.optimize import minimize
 
-from .tools import resample
-from .plot_utils import plot_rectangular_set
+#from .tools import resample
+#from .plot_utils import plot_rectangular_set
 
-from Setup.ground_truth import GroundTruth
+#from Setup.ground_truth import GroundTruth
 
 from .rectangular_set import RectangularSet
 
@@ -52,7 +52,7 @@ def run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
 
 
-class CheegerOptimizer:
+#class CheegerOptimizer:
 	def __init__(self, step_size, max_iter, eps_stop, num_points, point_density, max_tri_area, num_iter_resampling,
 				 alpha, beta):
 
@@ -70,7 +70,7 @@ class CheegerOptimizer:
 
 	
 
-	def run_rectangular(self, f, initial_set):
+	#def run_rectangular(self, f, initial_set):
 		#convergence = False
 		#obj_tab = []
 		#grad_norm_tab = []
@@ -122,7 +122,7 @@ class CheegerOptimizer:
 		return  opt_rect_set
 	
 
-	def run_rectangular(self, f, initial_set, verbose=True):
+	#def run_rectangular(self, f, initial_set, verbose=True):
 		convergence = False
 		obj_tab = []
 		grad_norm_tab = []
