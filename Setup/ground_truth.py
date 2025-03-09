@@ -112,11 +112,20 @@ class GroundTruth:
         if n_gx_invalid:
             if verbose:
                 print('Problem with gx')
-                res = mp.output({})
-                res.vals = vals
-                res.gradx = gradx
-                res.gx_test = gx_test
-                mp.psave('wrong_grad',res)
+                #res = mp.output({})
+                #res.vals = vals
+                #res.gradx = gradx
+                #res.gx_test = gx_test
+                #mp.psave('wrong_grad',res)
+
+                res = {}
+                res["vals"] = vals
+                res["gradx"] = gradx
+                res["gx_test"] = gx_test
+
+                import pickle
+                with open('wrong_grad.pkl', 'wb') as f:
+                    pickle.dump(res, f)
         
             passed = False
 
@@ -137,17 +146,39 @@ class GroundTruth:
             if verbose:
                 print('Problem with gy')
                 if passed:
-                    res = mp.output({})
-                    res.vals = vals
-                    res.grady = grady
-                    res.gy_test = gy_test
-                    mp.psave('wrong_grad',res)
+                    #res = mp.output({})
+                    #res.vals = vals
+                    #res.grady = grady
+                    #res.gy_test = gy_test
+                    #mp.psave('wrong_grad',res)
+
+                    res = {}
+                    res["vals"] = vals
+                    res["grady"] = grady 
+                    res["gy_test"] = gy_test
+
+                    with open('wrong_grad.pkl', 'wb') as f:
+                        pickle.dump(res, f)
 
             passed = False
 
         if show:
-            mp.imshow(gradx)
-            mp.imshow(grady)
+            #mp.imshow(gradx)
+            #mp.imshow(grady)
+
+            plt.figure(figsize=(10, 5))
+
+            plt.subplot(1, 2, 1)
+            plt.title("Gradient in x-Richtung")
+            plt.imshow(gradx, cmap='gray')
+            plt.colorbar()
+
+            plt.subplot(1, 2, 2)
+            plt.title("Gradient in y-Richtung")
+            plt.imshow(grady, cmap='gray')
+            plt.colorbar()
+
+            plt.show()
         
 
         if passed and verbose:
