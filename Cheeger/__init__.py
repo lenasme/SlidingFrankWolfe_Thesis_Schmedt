@@ -5,4 +5,4 @@
 #from .plot_utils import *
 #from .rectangular_set import *
 from .rectangular_set import *
-#from .optimizer_debugging import *
+from .optimizer_debugging import *
