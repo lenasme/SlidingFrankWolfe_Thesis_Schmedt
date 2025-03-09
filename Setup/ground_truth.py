@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #from SlidingFrankWolfe.simple_function_debugging import WeightedIndicatorFunction, SimpleFunction
 #from SlidingFrankWolfe.simple_function_debugging import ZeroWeightedIndicatorFunction, SimpleFunction
 #from SlidingFrankWolfe.simple_function_debugging_mesh import ZeroWeightedIndicatorFunction, SimpleFunction
-import matpy as mp
+#import matpy as mp
 #import matplotlib.pyplot as plt
 
 
