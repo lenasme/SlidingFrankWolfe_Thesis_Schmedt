@@ -1,4 +1,4 @@
-#from .compute_cheeger import compute_cheeger
+from .compute_cheeger import *
 #from .simple_set import *
 #from .integrable_function import IntegrableFunction
 #from .tools import winding, resample
