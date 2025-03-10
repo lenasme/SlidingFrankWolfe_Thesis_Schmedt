@@ -47,8 +47,8 @@ class RectangularSet:
 
 		fig.colorbar(im, ax=ax)
 
-		y_curve = np.append([self.x_min, self.x_max, self.x_max, self.x_min], self.x_min)
-		x_curve =  1-np.append([self.y_min, self.y_min,  self.y_max, self.y_max], self.y_min)
+		y_curve = 1-np.append([self.x_min, self.x_max, self.x_max, self.x_min], self.x_min)
+		x_curve =  np.append([self.y_min, self.y_min,  self.y_max, self.y_max], self.y_min)
 
 		ax.plot(x_curve, y_curve, color='black')
 
