@@ -213,7 +213,7 @@ class RectangularSet:
 		self.y_min = x[2]
 		self.y_max = x[3]
 
-		return self.compute_objective_gradient(cut_off, weights, grid_size)
+		return np.real(self.compute_objective_gradient(cut_off, weights, grid_size))
 
 	
 def construct_rectangular_set(boundary_vertices):
