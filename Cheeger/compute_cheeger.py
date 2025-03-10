@@ -90,6 +90,13 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
+    x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
+
+    modified_rectangle = RectangularSet(1-x_max, 1-x_min, y_min, y_max)
+
+    if plot == True:
+        modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+
     weights = truncated_operator_applied_on_ground_truth
     test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
     print("objective:",initial_rectangular_set.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
@@ -97,7 +104,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     print("x_max",initial_rectangular_set.x_max)
     print("y_min",initial_rectangular_set.y_min)
     print("y_max",initial_rectangular_set.y_max)
-    
+
     print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
     print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
     print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
