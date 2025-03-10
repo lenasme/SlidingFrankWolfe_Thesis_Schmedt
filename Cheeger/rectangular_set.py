@@ -55,7 +55,7 @@ class RectangularSet:
 		v_abs_max = np.max(np.abs(z_grid))
 		#print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
 
-		im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
+		im = ax.contourf(y_grid, x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
 		fig.colorbar(im, ax=ax)
 
