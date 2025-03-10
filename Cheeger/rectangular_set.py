@@ -99,9 +99,12 @@ class RectangularSet:
 		  S.8 in Notizen für Formel
 
 		"""
-		self.x_min = 1- self.x_max
-		self.x_max = 1- self.x_min
-		
+
+		x_min = self.x_min
+		x_max = self.x_max
+		self.x_min = 1- x_max
+		self.x_max = 1- x_min
+
 		weights[0,0] = 0 #sichert Nullintegral
 
 		res = 0
