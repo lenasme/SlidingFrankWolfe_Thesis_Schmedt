@@ -187,9 +187,9 @@ class RectangularSet:
 		return self.compute_objective_gradient(cut_off, weights, grid_size)
 
 	
-def construct_rectangular_set(simple_set):
-	x_values = [v[0] for v in simple_set.boundary_vertices]
-	y_values = [v[1] for v in simple_set.boundary_vertices]                 
+def construct_rectangular_set(boundary_vertices):
+	x_values = [v[0] for v in boundary_vertices]
+	y_values = [v[1] for v in boundary_vertices]                 
 
 	x_min= np.clip(min(x_values), 0,1)
 	x_max= np.clip(max(x_values), 0,1)
