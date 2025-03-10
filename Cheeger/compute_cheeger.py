@@ -32,27 +32,15 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
 
     if plot == True:
-        plt.subplot(1,3,1)
-        plt.imshow(mask, cmap = 'bwr')
-        plt.colorbar()
-        plt.subplot(1,3,2)
-        plt.imshow(operator_applied_on_ground_truth.real)
-        plt.title("Realteil komplette Fourier")
-        plt.subplot(1,3,3)
-        plt.imshow(truncated_operator_applied_on_ground_truth.real)
-        plt.colorbar()
-        plt.title("Realteil abgeschnittene Fourier")
         
-        plt.show()
 
         plt.plot()
-        plt.imshow(truncated_operator_applied_on_ground_truth.real)
+        plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
         plt.colorbar()
+        plt.title("Truncated Fourier Image")
         plt.show()
 
-        print("maximaler wert in fourier:", np.max(operator_applied_on_ground_truth))
-        print("minimaler Wert in fourier:", np.min(operator_applied_on_ground_truth))
-
+        
         plt.subplot(1,2,1)
         plt.imshow(np.fft.ifft2(operator_applied_on_ground_truth).real, cmap = 'bwr')
         plt.subplot(1,2,2)
