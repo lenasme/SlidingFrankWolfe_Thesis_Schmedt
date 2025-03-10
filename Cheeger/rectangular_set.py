@@ -143,35 +143,35 @@ class RectangularSet:
 					gradient[3] += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
 
 				elif k == 0: 
-					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] )  - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) )
+					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size )  - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) )
 
-					gradient[1] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] )  - np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) )
+					gradient[1] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size )  - np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size ) )
 
-					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  (- np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) * self.x_max + np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size[1] ) * self.x_min )
+					gradient[2] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  (- np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size ) * self.x_max + np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size ) * self.x_min )
 
-					gradient[3] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  ( np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) * self.x_max - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size[1] ) * self.x_min )
+					gradient[3] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  ( np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) * self.x_max - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) * self.x_min )
 
 				elif l == 0:
-					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  (- np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) * self.y_max + np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) * self.y_min )
+					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  (- np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) * self.y_max + np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) * self.y_min )
 
-					gradient[1] +=  weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0] *grid_size[1] ) *  ( np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) * self.y_max - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) * self.y_min )
+					gradient[1] +=  weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  ( np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size ) * self.y_max - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size ) * self.y_min )
 
-					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[1] * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] )  - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] ) )
+					gradient[2] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size)  - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size ) )
 
-					gradient[3] +=  weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[1] * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size[0] )  - np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size[0] ) )
+					gradient[3] +=  weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size)  - np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) )
 				
 				else:
-					gradient[0] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi *l * grid_size[0]) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
-																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi *l * grid_size) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_max)/(grid_size))) 
+																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_min)/(grid_size))))  
 
-					gradient[1] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi *l * grid_size[0]) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
-																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+					gradient[1] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi *l * grid_size) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size) + (l * self.y_max)/(grid_size))) 
+																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_max) / (grid_size) + (l * self.y_min)/(grid_size))))  
 
-					gradient[2] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi * k * grid_size[1]) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))) 
-																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_min)/(grid_size[1]))))  
+					gradient[2] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi * k * grid_size) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size) + (l * self.y_min)/(grid_size))) 
+																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_min)/(grid_size))))  
 
-					gradient[3] += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] * ( (1j) / ( - 2 * np.pi * k * grid_size[1]) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))) 
-																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size[0]) + (l * self.y_max)/(grid_size[1]))))  
+					gradient[3] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi * k * grid_size) ) * (  np.exp( 2 * np.pi * 1j * ((k * self.x_max) / (grid_size) + (l * self.y_max)/(grid_size))) 
+																																			   - np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_max)/(grid_size))))  
 					
 		return gradient
 
