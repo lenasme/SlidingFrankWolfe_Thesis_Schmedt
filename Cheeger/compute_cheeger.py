@@ -10,12 +10,14 @@ import matplotlib.pyplot as plt
 #from .rectangular_optimizer import objective
 from .rectangular_set import RectangularSet
 from Setup.ground_truth import GroundTruth, construction_of_example_source
+from .tools import run_primal_dual
+from .plot_utils import plot_primal_dual_results
 
 
 
 
 
-def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, plot=True):
+def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
     ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
 
     operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
@@ -71,9 +73,14 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     if plot == True:
         plt.plot()
-        plt.imshow(eta_bar, cmap= 'bwr')
+        plt.imshow(eta_bar.real, cmap= 'bwr')
         plt.colorbar()
         plt.show()
+
+    u = run_primal_dual(grid_size_coarse, eta_bar, max_iter=max_iter_primal_dual, convergence_tol=None, plot=True)
+
+    if plot == True:
+        plot_primal_dual_results(u[1:-1, 1:-1], eta_bar)
 
 
 
@@ -136,7 +143,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
    # u = run_primal_dual(grid_size_fm, eta_bar, max_iter=max_iter_fm, convergence_tol=convergence_tol_fm, plot=True)
 
     #if plot_results_fm:
-    #    plot_primal_dual_results(u[1:-1, 1:-1], eta_bar)
+    #   c
 
     #boundary_vertices = extract_contour(u)
 
