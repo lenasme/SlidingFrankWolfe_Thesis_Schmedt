@@ -22,7 +22,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     #ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
 
     ground_truth = np.zeros((grid_size, grid_size))
-    x_min, x_max = 30,70
+    x_min, x_max = 0,20
     y_min, y_max = 40,80
 
     ground_truth[x_min:x_max, y_min:y_max] = 1
