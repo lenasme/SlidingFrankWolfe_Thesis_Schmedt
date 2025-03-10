@@ -26,28 +26,16 @@ class RectangularSet:
 		self.y_min = new_coordinates[2]
 		self.y_max = new_coordinates[3]
 
-	
-	def plot_rectangle(self, eta):
-		plt.figure(figsize=(8, 8))
-	
-		plt.plot(np.array([self.x_min, self.x_max, self.x_max, self.x_min, self.x_min]), np.array([self.y_min, self.y_min, self.y_max, self.y_max, self.y_min]))
-		
-		plt.xlabel("X")
-		plt.ylabel("Y")
-		plt.title("Rectangle")
-		plt.axis("equal") 
-		plt.show()
-
 
 
 	def plot_rectangular_set(self, eta, grid_size):
 		fig, ax = plt.subplots(figsize=(7, 7))
 		
-		x = np.arange(0, 1.0, 1 / grid_size )
-		y = np.arange(0, 1.0, 1 / grid_size )
+		x = np.linspace(0, 1.0, grid_size )
+		y = np.linspace(0, 1.0, grid_size )
 		
 		x_grid, y_grid = np.meshgrid(x, y)
-		z_grid = eta
+		z_grid = np.plipup(eta)
 
 		#for i in range(x_grid.shape[0]):
 		#	for j in range(x_grid.shape[1]):
@@ -55,7 +43,7 @@ class RectangularSet:
 		v_abs_max = np.max(np.abs(z_grid))
 		#print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
 
-		im = ax.contourf(y_grid, x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
+		im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
 		fig.colorbar(im, ax=ax)
 
