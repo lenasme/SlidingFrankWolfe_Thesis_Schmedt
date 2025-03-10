@@ -55,12 +55,12 @@ class RectangularSet:
 		v_abs_max = np.max(np.abs(z_grid))
 		#print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
 
-		im = ax.contourf(y_grid, 1-x_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
+		im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
 		fig.colorbar(im, ax=ax)
 
 		x_curve = np.append([self.x_min, self.x_max, self.x_max, self.x_min], self.x_min)
-		y_curve = np.append([1-self.y_min, 1-self.y_min, 1- self.y_max, 1-self.y_max], 1-self.y_min)
+		y_curve = np.append([self.y_min, self.y_min,  self.y_max, self.y_max], self.y_min)
 
 		ax.plot(x_curve, y_curve, color='black')
 
