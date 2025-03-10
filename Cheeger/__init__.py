@@ -6,3 +6,4 @@ from .compute_cheeger import *
 #from .rectangular_set import *
 from .rectangular_set import *
 from .optimizer_debugging import *
+from .tools import *
