@@ -220,7 +220,7 @@ class RectangularSet:
 			print("Dtype:", gradient.dtype)
 			print("Fortran contiguous:", np.isfortran(gradient))
 
-		return gradient
+		return np.ascontiguousarray(gradient, dtype=np.float64)
 
 	
 def construct_rectangular_set(boundary_vertices):
