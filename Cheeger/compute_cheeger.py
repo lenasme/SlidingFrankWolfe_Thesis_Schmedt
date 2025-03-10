@@ -12,6 +12,7 @@ from .rectangular_set import RectangularSet, construct_rectangular_set
 from Setup.ground_truth import GroundTruth, construction_of_example_source
 from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
+from .optimizer_debugging import run_fine_optimization
 
 
 
@@ -88,6 +89,8 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     if plot == True:
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+
+    run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
 
 
