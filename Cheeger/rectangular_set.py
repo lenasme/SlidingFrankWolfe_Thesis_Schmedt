@@ -43,15 +43,15 @@ class RectangularSet:
 	def plot_rectangular_set(self, eta, grid_size):
 		fig, ax = plt.subplots(figsize=(7, 7))
 		
-		x = np.arange(0, 1.0, 0.01)
-		y = np.arange(0, 1.0, 0.01)
+		x = np.arange(0, 1.0, 1 / grid_size )
+		y = np.arange(0, 1.0, 1 / grid_size )
 		
 		x_grid, y_grid = np.meshgrid(x, y)
-		z_grid = np.zeros_like(x_grid)
+		z_grid = eta
 
-		for i in range(x_grid.shape[0]):
-			for j in range(x_grid.shape[1]):
-				z_grid[i, j] = eta(grid_size * np.array([x_grid[i, j], y_grid[i, j]]))
+		#for i in range(x_grid.shape[0]):
+		#	for j in range(x_grid.shape[1]):
+			#	z_grid[i, j] = eta(grid_size * np.array([x_grid[i, j], y_grid[i, j]]))
 		v_abs_max = np.max(np.abs(z_grid))
 		#print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
 
