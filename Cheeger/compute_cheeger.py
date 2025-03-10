@@ -8,16 +8,16 @@ import matplotlib.pyplot as plt
 #from .tools import run_primal_dual, extract_contour, resample
 #from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 #from .rectangular_optimizer import objective
-from .rectangular_set import RectangularSet
+from .rectangular_set import RectangularSet, construct_rectangular_set
 from Setup.ground_truth import GroundTruth, construction_of_example_source
-from .tools import run_primal_dual
+from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 
 
 
 
 
-def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=False):
+def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
     ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
 
     operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
@@ -81,6 +81,15 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     if plot == True:
         plot_primal_dual_results(u[1:-1, 1:-1], eta_bar)
+
+    boundary_vertices = extract_contour(u)
+
+    initial_rectangular_set = construct_rectangular_set(boundary_vertices)
+
+    if plot == True:
+        initial_rectangular_set.plot_rectangle()
+
+
 
 
 
