@@ -98,18 +98,31 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     weights = truncated_operator_applied_on_ground_truth
-    test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
-    print("objective:",initial_rectangular_set.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
-    print("x_min",initial_rectangular_set.x_min)
-    print("x_max",initial_rectangular_set.x_max)
-    print("y_min",initial_rectangular_set.y_min)
-    print("y_max",initial_rectangular_set.y_max)
+    #test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
+    #print("objective:",initial_rectangular_set.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
+    #print("x_min",initial_rectangular_set.x_min)
+    #print("x_max",initial_rectangular_set.x_max)
+    #print("y_min",initial_rectangular_set.y_min)
+    #print("y_max",initial_rectangular_set.y_max)
 
-    print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
-    print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
-    print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
+    #print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
+    #print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
+    #print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
-    optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+    #optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+
+    test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
+    print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
+    print("x_min",modified_rectangle.x_min)
+    print("x_max",modified_rectangle.x_max)
+    print("y_min",modified_rectangle.y_min)
+    print("y_max",modified_rectangle.y_max)
+
+    print("perimeter:", modified_rectangle.compute_anisotropic_perimeter())
+    print("integral:", modified_rectangle.compute_integral(cut_off, weights, grid_size))
+    print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
+
+    optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
 
     if plot == True:
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
