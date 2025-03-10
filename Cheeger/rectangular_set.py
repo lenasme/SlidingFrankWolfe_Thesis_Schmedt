@@ -81,16 +81,16 @@ class RectangularSet:
 					res += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
 				
 				elif k == 0: 
-					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0]*2*np.pi*1j *l)* (self.x_max * (np.exp(2*np.pi*1j*((l*self.y_max)/grid_size[1])) -  np.exp(2*np.pi*1j*((l*self.y_min)/grid_size[1])) )
-																													   + self.x_min * (np.exp(2*np.pi*1j*((l*self.y_min)/grid_size[1])) -  np.exp(2*np.pi*1j*((l*self.y_max)/grid_size[1])) ))
+					res += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size*2*np.pi*1j *l)* (self.x_max * (np.exp(2*np.pi*1j*((l*self.y_max)/grid_size)) -  np.exp(2*np.pi*1j*((l*self.y_min)/grid_size)) )
+																													   + self.x_min * (np.exp(2*np.pi*1j*((l*self.y_min)/grid_size)) -  np.exp(2*np.pi*1j*((l*self.y_max)/grid_size)) ))
 
 				elif l == 0:
-					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (grid_size[0]*2*np.pi*1j *k)* (self.y_max * (np.exp(2*np.pi*1j*((k*self.x_max)/grid_size[0])) -  np.exp(2*np.pi*1j*((k*self.x_min)/grid_size[0])) )
-																													   + self.y_min * (np.exp(2*np.pi*1j*((k*self.x_min)/grid_size[0])) -  np.exp(2*np.pi*1j*((k*self.x_max)/grid_size[0])) ))
+					res += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size*2*np.pi*1j *k)* (self.y_max * (np.exp(2*np.pi*1j*((k*self.x_max)/grid_size)) -  np.exp(2*np.pi*1j*((k*self.x_min)/grid_size)) )
+																													   + self.y_min * (np.exp(2*np.pi*1j*((k*self.x_min)/grid_size)) -  np.exp(2*np.pi*1j*((k*self.x_max)/grid_size)) ))
 
 				else:
-					res += weights[(k+grid_size[0]) % grid_size[0], (l+grid_size[1]) % grid_size[1]] / (-(2*np.pi)**2 * k * l) *(np.exp(2*np.pi*1j * (k *self.x_max / grid_size[0] + l* self.y_max / grid_size[1])) - np.exp( 2 * np.pi *1j * (k* self.x_max/grid_size[0] + l* self.y_min/grid_size[1])) 
-																												  - np.exp( 2 * np.pi *1j *(k* self.x_min/grid_size[0] + l* self.y_max/grid_size[1])) + np.exp(2 * np.pi *1j*(k* self.x_min/grid_size[0] + l* self.y_min/grid_size[1])))
+					res += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (-(2*np.pi)**2 * k * l) *(np.exp(2*np.pi*1j * (k *self.x_max / grid_size + l* self.y_max / grid_size)) - np.exp( 2 * np.pi *1j * (k* self.x_max/grid_size + l* self.y_min/grid_size)) 
+																												  - np.exp( 2 * np.pi *1j *(k* self.x_min/grid_size + l* self.y_max/grid_size)) + np.exp(2 * np.pi *1j*(k* self.x_min/grid_size + l* self.y_min/grid_size)))
 		return res
 
 
