@@ -56,7 +56,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plt.show()
 
     h = grid_size / grid_size_coarse
-    eta_bar = np.zeros(grid_size_coarse, grid_size_coarse)
+    eta_bar = np.zeros((grid_size_coarse, grid_size_coarse))
     for i in range(grid_size_coarse):
         for j in range(grid_size_coarse):
             x_min = 0 + i * h
@@ -65,7 +65,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
             y_max = (j+1) * h
             rectangle_coarse_grid = RectangularSet(x_min, x_max, y_min, y_max)
 
-            eta_bar[i,j] = rectangle_coarse_grid.compute_integral(cut_off, truncated_operator_applied_on_ground_truth, grid_size)
+            eta_bar[i,j] = rectangle_coarse_grid.compute_integral(cut_off, truncated_operator_applied_on_ground_truth, grid_size) / h**2
 
 
     if plot == True:
