@@ -93,7 +93,9 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     weights = truncated_operator_applied_on_ground_truth
     test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
     print("objective:",initial_rectangular_set.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
-    print(initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
+    print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
+    print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
+    print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
     optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
