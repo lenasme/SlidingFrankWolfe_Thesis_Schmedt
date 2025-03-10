@@ -204,7 +204,7 @@ class RectangularSet:
 
 		return  gradient
 	
-	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size):
+	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size, debugging=True):
 		""""
 		brauche ich, um es in scipy.optimize.minimize einbinden kann
 		"""
@@ -212,8 +212,15 @@ class RectangularSet:
 		self.x_max = x[1]
 		self.y_min = x[2]
 		self.y_max = x[3]
+		gradient = np.real(self.compute_objective_gradient(cut_off, weights, grid_size))
 
-		return np.real(self.compute_objective_gradient(cut_off, weights, grid_size))
+		if debugging == True:
+			print("Gradient:", gradient)
+			print("Shape:", gradient.shape)
+			print("Dtype:", gradient.dtype)
+			print("Fortran contiguous:", np.isfortran(gradient))
+
+		return gradient
 
 	
 def construct_rectangular_set(boundary_vertices):
