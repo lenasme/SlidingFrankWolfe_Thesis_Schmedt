@@ -90,7 +90,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
-    run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+    run_fine_optimization(initial_rectangular_set, cut_off, truncated_operator_applied_on_ground_truth, grid_size )
 
 
 
