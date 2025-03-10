@@ -35,7 +35,7 @@ class RectangularSet:
 		y = np.linspace(0, 1.0, grid_size )
 		
 		x_grid, y_grid = np.meshgrid(x, y)
-		z_grid = np.plipup(eta)
+		z_grid = np.flipup(eta)
 
 		#for i in range(x_grid.shape[0]):
 		#	for j in range(x_grid.shape[1]):
