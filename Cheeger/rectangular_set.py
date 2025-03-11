@@ -100,7 +100,7 @@ class RectangularSet:
 
 		"""
 
-		weights[0,0] = 0 #sichert Nullintegral
+		#weights[0,0] = 0 #sichert Nullintegral
 
 		res = 0
 		for k in range (- cut_off, cut_off +1 ):
