@@ -132,6 +132,11 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
         plt.show()
 
+        plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap='bwr')
+        plt.colorbar()
+        plt.title("Ground Truth")
+        plt.show()
+
         reconstructed_image = np.zeros((grid_size, grid_size), dtype=np.complex128)
         for x1 in range (grid_size):
             for x2 in range (grid_size):
