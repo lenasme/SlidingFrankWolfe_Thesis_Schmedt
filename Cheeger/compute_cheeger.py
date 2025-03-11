@@ -119,6 +119,19 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
 
     if plot == True:
+
+        plt.subplot(1, 2, 1)
+        plt.imshow(np.log(1 + np.abs(weights)), cmap='viridis')
+        plt.colorbar()
+        plt.title("Fourier-Koeffizienten (Magnitude)")
+
+        plt.subplot(1, 2, 2)
+        plt.imshow(np.angle(weights), cmap='twilight')
+        plt.colorbar()
+        plt.title("Fourier-Koeffizienten (Phase)")
+
+        plt.show()
+
         reconstructed_image = np.zeros((grid_size, grid_size), dtype=np.complex128)
         for x1 in range (grid_size):
             for x2 in range (grid_size):
