@@ -107,7 +107,7 @@ class RectangularSet:
 			for l in range (- cut_off, cut_off + 1):
 
 				if k == 0 and l == 0:
-					res += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
+					res += 1/grid_size**2 * (self.y_max - self.y_min)*(self.x_max - self.x_min) #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
 				
 				elif k == 0: 
 					res += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size*2*np.pi*1j *l)* (self.x_max * (np.exp(2*np.pi*1j*((l*self.y_max)/grid_size)) -  np.exp(2*np.pi*1j*((l*self.y_min)/grid_size)) )
