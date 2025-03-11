@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #from .tools import run_primal_dual, extract_contour, resample
 #from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 #from .rectangular_optimizer import objective
-from .rectangular_set import RectangularSet, construct_rectangular_set
+from .rectangular_set import RectangularSet, construct_rectangular_set, evaluate_inverse_fourier
 from Setup.ground_truth import GroundTruth, construction_of_example_source
 from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
@@ -116,6 +116,22 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     #print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
     #optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+
+
+    if plot == True:
+        reconstructed_image = np.zeros((grid_size, grid_size))
+        for x1 in range (0, grid_size):
+            for x2 in range (0, grid_size):
+                reconstructed_image[x1, x2] = evaluate_inverse_fourier( np.array([x1, x2]), cut_off, weights, grid_size )
+
+        plt.plot()
+        plt.imshow(reconstructed_image.real, cmap= 'bwr')
+        plt.colorbar()
+        plt.title("Reconstructed Image by hand")
+        plt.show()
+
+                
+
 
     test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
     print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
