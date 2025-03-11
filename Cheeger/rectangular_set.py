@@ -242,6 +242,6 @@ def evaluate_inverse_fourier(x, cut_off, weights, grid_size ):
 	for k in range (- cut_off, cut_off +1 ):
 		for l in range (- cut_off, cut_off + 1):
 
-			res += 1/ grid_size**2 * weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * np.exp( 2* np.pi * 1j * (k*x[0] / grid_size + l*x[1]) / grid_size)
+			res += 1/ grid_size**2 * weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * np.exp( 2* np.pi * 1j * (k*x[0] / grid_size + l*x[1] / grid_size))
 
 	return res
