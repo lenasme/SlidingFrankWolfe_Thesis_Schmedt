@@ -119,7 +119,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
 
     if plot == True:
-        reconstructed_image = np.zeros((grid_size, grid_size))
+        reconstructed_image = np.zeros((grid_size, grid_size), dtype=np.complex128)
         for x1 in range (grid_size):
             for x2 in range (grid_size):
                 reconstructed_image[x1, x2] = evaluate_inverse_fourier( np.array([x1, x2]), cut_off, weights, grid_size )
