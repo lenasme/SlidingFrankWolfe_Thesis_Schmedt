@@ -162,6 +162,9 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     print("perimeter:", modified_rectangle.compute_anisotropic_perimeter())
     print("integral:", modified_rectangle.compute_integral(cut_off, weights, grid_size))
     print(f"Numerisches Integral: {integral_numerisch}")
+    print(f"Wert an x_min,y_min: {evaluate_inverse_fourier(np.array([modified_rectangle.x_min, modified_rectangle.y_min]), cut_off, weights, grid_size)}")
+    print(f"Wert an x_max,y_max: {evaluate_inverse_fourier(np.array([modified_rectangle.x_max, modified_rectangle.y_max]), cut_off, weights, grid_size)}")
+    
     print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
     optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
