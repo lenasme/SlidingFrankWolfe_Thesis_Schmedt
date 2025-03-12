@@ -223,14 +223,14 @@ class RectangularSet:
 		return np.ascontiguousarray(gradient, dtype=np.float64)
 
 	
-def construct_rectangular_set(boundary_vertices):
+def construct_rectangular_set_from01(boundary_vertices, grid_size):
 	x_values = [v[0] for v in boundary_vertices]
 	y_values = [v[1] for v in boundary_vertices]                 
 
-	x_min= np.clip(min(x_values), 0,1)
-	x_max= np.clip(max(x_values), 0,1)
-	y_min= np.clip(min(y_values), 0,1)
-	y_max= np.clip(max(y_values), 0,1)
+	x_min= grid_size * np.clip(min(x_values), 0, grid_size)
+	x_max= grid_size * np.clip(max(x_values), 0,grid_size)
+	y_min= grid_size * np.clip(min(y_values), 0, grid_size)
+	y_max= grid_size * np.clip(max(y_values), 0, grid_size)
 
 	rectangular_set = RectangularSet(x_min, x_max, y_min, y_max)
 
