@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #from .tools import run_primal_dual, extract_contour, resample
 #from .plot_utils import plot_primal_dual_results, plot_simple_set, plot_rectangular_set
 #from .rectangular_optimizer import objective
-from .rectangular_set import RectangularSet, construct_rectangular_set, evaluate_inverse_fourier
+from .rectangular_set import RectangularSet, construct_rectangular_set_from01, evaluate_inverse_fourier
 from Setup.ground_truth import GroundTruth, construction_of_example_source
 from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
@@ -92,14 +92,16 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     boundary_vertices = extract_contour(u)
     print(f"boundary vertices primal dual: {boundary_vertices}")
 
-    initial_rectangular_set = construct_rectangular_set(boundary_vertices)
+    boundary_vertices = grid_size * boundary_vertices
+
+    initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices)
 
     if plot == True:
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
 
-    modified_rectangle = RectangularSet( grid_size * x_min , grid_size * x_max, grid_size * y_min, grid_size * y_max)
+    modified_rectangle = RectangularSet(  x_min ,  x_max, y_min,  y_max)
 
     if plot == True:
         modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
