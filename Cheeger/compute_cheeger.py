@@ -92,7 +92,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     boundary_vertices = extract_contour(u)
     print(f"boundary vertices primal dual: {boundary_vertices}")
 
-    boundary_vertices = grid_size * boundary_vertices
+    
 
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 
