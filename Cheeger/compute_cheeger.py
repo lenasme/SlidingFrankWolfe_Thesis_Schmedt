@@ -191,6 +191,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     # Beispiel-Aufruf:
     df = generate_fourier_evaluation_table(cut_off, weights, grid_size)
     print(df)
+    df.to_csv("fourier_values.csv", index=False)
 
     optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
 
