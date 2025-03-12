@@ -137,21 +137,22 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plt.title("Ground Truth")
         plt.show()
 
-        reconstructed_image = np.zeros((grid_size, grid_size), dtype=np.complex128)
-        for x1 in range (grid_size):
-            for x2 in range (grid_size):
-                reconstructed_image[x1, x2] = evaluate_inverse_fourier( np.array([x1, x2]), cut_off, weights, grid_size )
-
-        plt.plot()
-        plt.imshow(reconstructed_image.real, cmap= 'bwr')
-        plt.colorbar()
-        plt.title("Reconstructed Image by hand")
-        plt.show()
+        
 
                 
 
 
     test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
+    
+    x_vals = np.linspace(modified_rectangle.x_min, modified_rectangle.x_max, grid_size)
+    y_vals = np.linspace(modified_rectangle.y_min, modified_rectangle.y_max, grid_size)
+    X, Y = np.meshgrid(x_vals, y_vals)
+
+    integral_numerisch = np.sum(evaluate_inverse_fourier(np.array([X, Y]), cut_off, weights, grid_size)) * (x_vals[1] - x_vals[0]) * (y_vals[1] - y_vals[0])
+    
+    
+    
+    
     print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
     print("x_min",modified_rectangle.x_min)
     print("x_max",modified_rectangle.x_max)
@@ -160,6 +161,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     print("perimeter:", modified_rectangle.compute_anisotropic_perimeter())
     print("integral:", modified_rectangle.compute_integral(cut_off, weights, grid_size))
+    print(f"Numerisches Integral: {integral_numerisch}")
     print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
     optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
