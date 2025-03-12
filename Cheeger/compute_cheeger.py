@@ -94,7 +94,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     boundary_vertices = grid_size * boundary_vertices
 
-    initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices)
+    initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 
     if plot == True:
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
