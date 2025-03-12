@@ -90,6 +90,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plot_primal_dual_results(u[1:-1, 1:-1], eta_bar)
 
     boundary_vertices = extract_contour(u)
+    print(f"boundary vertices primal dual: {boundary_vertices}")
 
     initial_rectangular_set = construct_rectangular_set(boundary_vertices)
 
