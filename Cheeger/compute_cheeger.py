@@ -201,7 +201,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
-
+        print(f"Optimales Rechteck: {optimal_rectangle.coordinates}")
 
 
 
