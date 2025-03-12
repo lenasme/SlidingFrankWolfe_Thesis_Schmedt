@@ -169,6 +169,29 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     
     print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
+
+    import pandas as pd
+
+    def generate_fourier_evaluation_table(cut_off, weights, grid_size, num_points=20):
+        x_vals = np.linspace(0, grid_size, num_points)  # Gitterpunkte in x-Richtung
+        y_vals = np.linspace(0, grid_size, num_points)  # Gitterpunkte in y-Richtung
+
+        data = []  # Liste für die Ergebnisse
+
+        for i in range(num_points):
+            for j in range(num_points):
+                x, y = x_vals[i], y_vals[j]
+                val = evaluate_inverse_fourier([x, y], cut_off, weights, grid_size)
+                data.append([x, y, val.real])  # Speichere x, y und den Realteil
+
+        # Erstelle eine Pandas-Tabelle
+        df = pd.DataFrame(data, columns=["X", "Y", "Value"])
+        return df
+
+    # Beispiel-Aufruf:
+    df = generate_fourier_evaluation_table(cut_off, weights, grid_size)
+    print(df)
+
     optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
 
     if plot == True:
