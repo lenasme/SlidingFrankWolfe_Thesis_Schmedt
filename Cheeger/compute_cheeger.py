@@ -98,7 +98,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
 
-    modified_rectangle = RectangularSet( x_min ,x_max, y_min, y_max)
+    modified_rectangle = RectangularSet( grid_size * x_min , grid_size * x_max, grid_size * y_min, grid_size * y_max)
 
     if plot == True:
         modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
