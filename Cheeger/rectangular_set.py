@@ -31,8 +31,8 @@ class RectangularSet:
 	def plot_rectangular_set(self, eta, grid_size):
 		fig, ax = plt.subplots(figsize=(7, 7))
 		
-		x = np.linspace(0, 1.0, grid_size )
-		y = np.linspace(0, 1.0, grid_size )
+		x = np.linspace(0, grid_size, grid_size )
+		y = np.linspace(0, grid_size, grid_size )
 		
 		x_grid, y_grid = np.meshgrid(x, y)
 		z_grid = np.flipud(eta)
@@ -56,8 +56,8 @@ class RectangularSet:
 		ax.axis('on') #vorher off
 	
 
-		ax.set_xlim(0, 1)
-		ax.set_ylim(0, 1)
+		ax.set_xlim(0, grid_size)
+		ax.set_ylim(0, grid_size)
 	
 		plt.show()
 
