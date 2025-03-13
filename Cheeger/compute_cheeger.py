@@ -104,7 +104,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
         print(f"initiale Koordinaten: {initial_coordinates}")
         print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
-        print(f"Verschiebung: {optimal_rectangle.coordinates - initial_rectangular_set.coordinates}")
+        print(f"Verschiebung: {optimal_rectangle.coordinates - initial_coordinates}")
 
         fig, ax = plt.subplots()
         ax.set_xlim(0, grid_size)
