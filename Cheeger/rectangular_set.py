@@ -203,17 +203,12 @@ class RectangularSet:
 		integral = self.compute_integral(cut_off, weights, grid_size)
 		integral_gradient = self.compute_integral_gradient(cut_off, weights, grid_size)
 		
-		if np.abs(integral) < 1e-10:
-			raise ValueError("Integral ist zu klein oder null, Division durch Null vermieden.")
-
-
-		print(f"integral: {integral} mit den boundary vertices {self.coordinates}")
-
+		
 		gradient = np.sign(integral) * (perimeter_gradient * integral - integral_gradient * perimeter) / integral ** 2
 
 		return  gradient
 	
-	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size, debugging=True):
+	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size):
 		""""
 		brauche ich, um es in scipy.optimize.minimize einbinden kann
 		"""
@@ -223,11 +218,7 @@ class RectangularSet:
 		self.y_max = x[3]
 		gradient = np.real(self.compute_objective_gradient(cut_off, weights, grid_size))
 
-		if debugging == True:
-			print("Gradient:", gradient)
-			print("Shape:", gradient.shape)
-			print("Dtype:", gradient.dtype)
-			print("Fortran contiguous:", np.isfortran(gradient))
+		
 
 		return np.ascontiguousarray(gradient, dtype=np.float64)
 
