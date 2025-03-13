@@ -131,7 +131,7 @@ class RectangularSet:
 
 		"""
 		weights[0,0] = 0
-		gradient = np.array([0, 0, 0, 0])
+		gradient = np.zeros(4, dtype=np.complex128)	
 		
 		for k in range (- cut_off, cut_off +1 ):
 			for l in range (- cut_off, cut_off + 1):
