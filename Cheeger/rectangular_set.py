@@ -132,6 +132,8 @@ class RectangularSet:
 		"""
 		weights[0,0] = 0
 		gradient = np.array([0, 0, 0, 0])
+		if np.any(np.isnan(weights)):
+			raise ValueError("FEHLER: weights enthält NaN-Werte!")
 
 		for k in range (- cut_off, cut_off +1 ):
 			for l in range (- cut_off, cut_off + 1):
@@ -165,6 +167,8 @@ class RectangularSet:
 					gradient[3] +=  weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size)  - np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) )
 				
 				else:
+					if np.isnan(k) or np.isnan(l):
+						raise ValueError(f"NaN entdeckt: k={k}, l={l}")
 					if k == 0 or l == 0:
 						raise ValueError(f"FEHLER: Division durch Null bei k={k} und l={l}")
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi *l * grid_size) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_max)/(grid_size))) 
