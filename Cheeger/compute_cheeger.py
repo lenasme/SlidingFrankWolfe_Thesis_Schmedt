@@ -210,7 +210,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
             rect.set_height(y_maxs[frame] - y_mins[frame])
 
         ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
-        ani.save("animation.gif", writer="pillow")
+        ani.save("animation.mp4", writer="ffmpeg")
         plt.show()
 
 
