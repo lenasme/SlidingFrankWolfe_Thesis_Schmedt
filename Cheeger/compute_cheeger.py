@@ -192,26 +192,17 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         return df
 
     # Beispiel-Aufruf:
-    # = generate_fourier_evaluation_table(cut_off, weights, grid_size)
-    #print(df)
-    #df.to_csv("fourier_values.csv", index=False)
+    df = generate_fourier_evaluation_table(cut_off, weights, grid_size)
+    print(df)
+    df.to_csv("fourier_values.csv", index=False)
 
-    optimal_rectangle_grad, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
+    optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
 
     if plot == True:
-        optimal_rectangle_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+        optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
-        print(f"Optimales Rechteck: {optimal_rectangle_grad.coordinates}")
+        print(f"Optimales Rechteck: {optimal_rectangle.coordinates}")
 
-        plt.plot()
-        plt.plot(objective_tab)
-        plt.title("Objective")
-        plt.show()
-
-        plt.plot()
-        plt.plot(gradient_tab)
-        plt.title("Gradient")
-        plt.show()
 
 
 
