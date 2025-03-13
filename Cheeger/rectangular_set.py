@@ -216,6 +216,9 @@ class RectangularSet:
 		if np.abs(integral) < 1e-10:
 			raise ValueError("Integral ist zu klein oder null, Division durch Null vermieden.")
 
+
+		print(f"integral: {integral} mit den boundary vertices {self.coordinates}")
+
 		gradient = np.sign(integral) * (perimeter_gradient * integral - integral_gradient * perimeter) / integral ** 2
 
 		return  gradient
