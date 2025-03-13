@@ -466,7 +466,7 @@ def assign_values_to_rectangles(rectangles, data):
     return rectangle_values
 
 
-def construction_of_example_source(grid_size, deltas, max_jumps, plot=True):
+def construction_of_example_source(grid_size, deltas, max_jumps, plot=False):
     original = GroundTruth(grid_size, max_jumps)
     original.max_jumps = max_jumps
     original.imgsz = grid_size
