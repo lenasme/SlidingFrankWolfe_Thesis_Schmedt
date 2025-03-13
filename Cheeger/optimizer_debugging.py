@@ -4,10 +4,7 @@ import time
 
 from scipy.optimize import minimize
 
-#from .tools import resample
-#from .plot_utils import plot_rectangular_set
 
-#from Setup.ground_truth import GroundTruth
 
 from .rectangular_set import RectangularSet
 
@@ -37,34 +34,16 @@ def run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 		y_max_development.append(coordinates[3])
 
 
-	from scipy.optimize import check_grad
-
-	error = check_grad(
-    	lambda x: initial_rectangular_set.compute_objective_wrapper(x, cut_off, weights, grid_size), 
-    	lambda x: initial_rectangular_set.objective_gradient_wrapper(x, cut_off, weights, grid_size), 
-    	initial_rectangular_set.coordinates
-	)
-	print(f"Gradient-Fehler: {error}")
-	grad_norm = np.linalg.norm(initial_rectangular_set.objective_gradient_wrapper(initial_rectangular_set.coordinates, cut_off, weights, grid_size))
-	print(f"Gradienten-Norm: {grad_norm}")
-
-
-	start = time.time()
-
-	#result = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size) , bounds =[(0,grid_size),(0,grid_size), (0,grid_size), (0,grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
+	
 	result = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size), jac=initial_rectangular_set.objective_gradient_wrapper , bounds =[(0, grid_size),(0,grid_size), (0, grid_size), (0, grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
 	
-	end = time.time()
 
 	optimal_coordinates_grad = result.x
 	optimal_rectangle_grad = RectangularSet(optimal_coordinates_grad[0], optimal_coordinates_grad[1], optimal_coordinates_grad[2], optimal_coordinates_grad[3])
 
-	#optimal_coordinates_without_grad = result_without_grad.x
-	#optimal_rectangle_without_grad = RectangularSet(optimal_coordinates_without_grad[0], optimal_coordinates_without_grad[1], optimal_coordinates_without_grad[2], optimal_coordinates_without_grad[3])
 
 	return optimal_rectangle_grad,  objective_development, gradient_development, x_min_development, x_max_development, y_min_development, y_max_development
-	#return optimal_rectangle_grad, optimal_rectangle_without_grad, objective_development, gradient_development
-
+	
 
 
 #class CheegerOptimizer:
