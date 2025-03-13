@@ -19,11 +19,11 @@ from .optimizer_debugging import run_fine_optimization
 
 
 def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
-    #ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
+    ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
 
-    ground_truth = np.zeros((grid_size, grid_size))
-    x_min, x_max = 0,10
-    y_min, y_max = 20,60
+    #ground_truth = np.zeros((grid_size, grid_size))
+    #x_min, x_max = 0,10
+    #y_min, y_max = 20,60
 
     ground_truth[x_min:x_max, y_min:y_max] = 1
 
@@ -145,18 +145,18 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
                 
 
 
-    test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
+    #test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
     
-    x_vals = np.linspace(modified_rectangle.x_min, modified_rectangle.x_max, grid_size)
-    y_vals = np.linspace(modified_rectangle.y_min, modified_rectangle.y_max, grid_size)
-    X, Y = np.meshgrid(x_vals, y_vals)
+    #x_vals = np.linspace(modified_rectangle.x_min, modified_rectangle.x_max, grid_size)
+    #y_vals = np.linspace(modified_rectangle.y_min, modified_rectangle.y_max, grid_size)
+   # X, Y = np.meshgrid(x_vals, y_vals)
 
-    integral_numerisch = np.sum(evaluate_inverse_fourier(np.array([X, Y]), cut_off, weights, grid_size)) * (x_vals[1] - x_vals[0]) * (y_vals[1] - y_vals[0])
+    #integral_numerisch = np.sum(evaluate_inverse_fourier(np.array([X, Y]), cut_off, weights, grid_size)) * (x_vals[1] - x_vals[0]) * (y_vals[1] - y_vals[0])
     
     
     
     
-    print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
+    #print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
     print("x_min",modified_rectangle.x_min)
     print("x_max",modified_rectangle.x_max)
     print("y_min",modified_rectangle.y_min)
@@ -164,13 +164,13 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     print("perimeter:", modified_rectangle.compute_anisotropic_perimeter())
     print("integral:", modified_rectangle.compute_integral(cut_off, weights, grid_size))
-    print(f"Numerisches Integral: {integral_numerisch}")
+    #print(f"Numerisches Integral: {integral_numerisch}")
     print(f"Wert an x_min,y_min: {evaluate_inverse_fourier(np.array([modified_rectangle.x_min, modified_rectangle.y_min]), cut_off, weights, grid_size)}")
     print(f"Wert an x_max,y_max: {evaluate_inverse_fourier(np.array([modified_rectangle.x_max, modified_rectangle.y_max]), cut_off, weights, grid_size)}")
 
     print(f"Wert an Mitte des Rechtecks: {evaluate_inverse_fourier(np.array([(modified_rectangle.x_min + modified_rectangle.x_max)/2, (modified_rectangle.y_min + modified_rectangle.y_max)/2]), cut_off, weights, grid_size)}")
     print(f"Mitte des Rechtecks: {np.array([(modified_rectangle.x_min + modified_rectangle.x_max)/2, (modified_rectangle.y_min + modified_rectangle.y_max)/2])}")
-    print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
+    #print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
 
     import pandas as pd
