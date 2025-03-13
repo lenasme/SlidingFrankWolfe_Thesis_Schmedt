@@ -143,6 +143,8 @@ class RectangularSet:
 					gradient[3] += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
 
 				elif k == 0 and l != 0: 
+					if l == 0:
+						raise ValueError(f"FEHLER: Division durch Null bei l=0! k={k}")
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size )  - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) )
 
 					gradient[1] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size )  - np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size ) )
@@ -152,6 +154,8 @@ class RectangularSet:
 					gradient[3] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  ( np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) * self.x_max - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) * self.x_min )
 
 				elif l == 0 and k != 0:
+					if k == 0:
+						raise ValueError(f"FEHLER: Division durch Null bei k=0! l={l}")
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  (- np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) * self.y_max + np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) * self.y_min )
 
 					gradient[1] +=  weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size *grid_size ) *  ( np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size ) * self.y_max - np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size ) * self.y_min )
@@ -161,6 +165,8 @@ class RectangularSet:
 					gradient[3] +=  weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*k ) *(np.exp( 2*np.pi* 1j * ( k * self.x_max)/ grid_size)  - np.exp( 2*np.pi* 1j * ( k * self.x_min)/ grid_size ) )
 				
 				else:
+					if k == 0 or l == 0:
+						raise ValueError(f"FEHLER: Division durch Null bei k={k} und l={l}")
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi *l * grid_size) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_max)/(grid_size))) 
 																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_min)/(grid_size))))  
 
