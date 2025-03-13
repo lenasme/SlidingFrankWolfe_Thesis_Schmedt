@@ -23,11 +23,7 @@ print(animation.writers.list())
 def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
     ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
 
-    #ground_truth = np.zeros((grid_size, grid_size))
-    #x_min, x_max = 0,10
-    #y_min, y_max = 20,60
-
-    #ground_truth[x_min:x_max, y_min:y_max] = 1
+   
 
     operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
 
@@ -45,26 +41,23 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         
 
-        plt.plot()
-        plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
+        plt.subplot(1,3,1)
+        plt.imshow(ground_truth, cmap = 'bwr')
         plt.colorbar()
-        plt.title("Truncated Fourier Image")
+        plt.title("Ground Truth")
+        plt.show()
+
+        plt.subplot(1,3,2)
+        plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'viridis')
+        plt.colorbar()
+        plt.title("Truncated Fourier Frequency Image")
         plt.show()
 
         
-        plt.subplot(1,2,1)
-        plt.imshow(np.fft.ifft2(operator_applied_on_ground_truth).real, cmap = 'bwr')
-        plt.subplot(1,2,2)
+        plt.subplot(1,3,3)
         plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
         plt.colorbar()
-        plt.title("Komntrolle, ob transformation passt")       
-        plt.show()
-
-        plt.subplot(1,2,1)
-        plt.imshow(np.fft.ifft2(operator_applied_on_ground_truth).imag, cmap = 'bwr')
-        plt.subplot(1,2,2)
-        plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).imag, cmap = 'bwr')
-        plt.colorbar()
+        plt.title("Truncated Fouried Applied on Ground Truth")
         plt.show()
 
     h = grid_size / grid_size_coarse
@@ -95,7 +88,6 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     
 
     
-
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 
     if plot == True:
@@ -104,25 +96,9 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
 
-    #modified_rectangle = RectangularSet(  x_min ,  x_max, y_min,  y_max)
-
-    #if plot == True:
-        #modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
-
+    
     weights = truncated_operator_applied_on_ground_truth
-    #test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
-    #print("objective:",initial_rectangular_set.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
-    #print("x_min",initial_rectangular_set.x_min)
-    #print("x_max",initial_rectangular_set.x_max)
-    #print("y_min",initial_rectangular_set.y_min)
-    #print("y_max",initial_rectangular_set.y_max)
-
-    #print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
-    #print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
-    #print("gradient:", initial_rectangular_set.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
-
-    #optimal_rectangle, objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
-
+    
 
     if plot == True:
 
@@ -143,60 +119,14 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plt.title("Ground Truth")
         plt.show()
 
-        
-
-                
-
-
-   
     
-    
-  
-    print("x_min",initial_rectangular_set.x_min)
-    print("x_max",initial_rectangular_set.x_max)
-    print("y_min",initial_rectangular_set.y_min)
-    print("y_max",initial_rectangular_set.y_max)
 
-    print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
-    print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
-    #print(f"Numerisches Integral: {integral_numerisch}")
-    
-    #print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
-
-
-    import pandas as pd
-
-    def generate_fourier_evaluation_table(cut_off, weights, grid_size, num_points=20):
-        x_vals = np.linspace(0, grid_size, num_points)  # Gitterpunkte in x-Richtung
-        y_vals = np.linspace(0, grid_size, num_points)  # Gitterpunkte in y-Richtung
-
-        data = []  # Liste für die Ergebnisse
-
-        for i in range(num_points):
-            for j in range(num_points):
-                x, y = x_vals[i], y_vals[j]
-                val = evaluate_inverse_fourier([x, y], cut_off, weights, grid_size)
-                data.append([x, y, val.real])  # Speichere x, y und den Realteil
-
-        # Erstelle eine Pandas-Tabelle
-        df = pd.DataFrame(data, columns=["X", "Y", "Value"])
-        return df
-
-    # Beispiel-Aufruf:
-    #df = generate_fourier_evaluation_table(cut_off, weights, grid_size)
-    #print(df)
-    #df.to_csv("fourier_values.csv", index=False)
-
-    optimal_rectangle_grad,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+    optimal_rectangle,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
-        optimal_rectangle_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+        optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
-        print(f"Optimales Rechteck: {optimal_rectangle_grad.coordinates}")
-
-        #optimal_rectangle_without_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
-
-        #print(f"Optimales Rechteck ohne Gradienten: {optimal_rectangle_without_grad.coordinates}")
+        print(f"Optimales Rechteck: {optimal_rectangle.coordinates}")
 
         fig, ax = plt.subplots()
         ax.set_xlim(0, grid_size)
