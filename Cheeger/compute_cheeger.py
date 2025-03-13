@@ -3,6 +3,8 @@ import time
 
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import matplotlib.animation as animation
 #from .simple_set import SimpleSet
 #from .optimizer_debugging import CheegerOptimizer
 #from .tools import run_primal_dual, extract_contour, resample
@@ -146,18 +148,10 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
                 
 
 
-    #test_x = np.array(modified_rectangle.coordinates, dtype=np.float64, order='F')
-    
-    #x_vals = np.linspace(modified_rectangle.x_min, modified_rectangle.x_max, grid_size)
-    #y_vals = np.linspace(modified_rectangle.y_min, modified_rectangle.y_max, grid_size)
-   # X, Y = np.meshgrid(x_vals, y_vals)
-
-    #integral_numerisch = np.sum(evaluate_inverse_fourier(np.array([X, Y]), cut_off, weights, grid_size)) * (x_vals[1] - x_vals[0]) * (y_vals[1] - y_vals[0])
+   
     
     
-    
-    
-    #print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
+  
     print("x_min",initial_rectangular_set.x_min)
     print("x_max",initial_rectangular_set.x_max)
     print("y_min",initial_rectangular_set.y_min)
@@ -193,7 +187,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     #print(df)
     #df.to_csv("fourier_values.csv", index=False)
 
-    optimal_rectangle_grad,  objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
+    optimal_rectangle_grad,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
         optimal_rectangle_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
@@ -203,6 +197,22 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         #optimal_rectangle_without_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
         #print(f"Optimales Rechteck ohne Gradienten: {optimal_rectangle_without_grad.coordinates}")
+
+        fig, ax = plt.subplots()
+        ax.set_xlim(0, grid_size)
+        ax.set_ylim(0, grid_size)
+        rect = patches.Rectangle((0, 0), 1, 1, edgecolor='r', facecolor='none', linewidth=2)
+        ax.add_patch(rect)
+
+        def update(frame):
+            rect.set_xy((x_mins[frame], y_mins[frame]))
+            rect.set_width(x_maxs[frame] - x_mins[frame])
+            rect.set_height(y_maxs[frame] - y_mins[frame])
+
+        ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
+        plt.show()
+
+
 
         plt.plot(objective_tab)
         plt.title("Objective")
