@@ -213,6 +213,9 @@ class RectangularSet:
 		integral = self.compute_integral(cut_off, weights, grid_size)
 		integral_gradient = self.compute_integral_gradient(cut_off, weights, grid_size)
 		
+		if np.abs(integral) < 1e-10:
+			raise ValueError("Integral ist zu klein oder null, Division durch Null vermieden.")
+
 		gradient = np.sign(integral) * (perimeter_gradient * integral - integral_gradient * perimeter) / integral ** 2
 
 		return  gradient
