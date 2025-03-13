@@ -41,12 +41,12 @@ def run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
 	start = time.time()
 
-	#result_without_grad = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size) , bounds =[(0,grid_size),(0,grid_size), (0,grid_size), (0,grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
-	result_grad = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size), jac=initial_rectangular_set.objective_gradient_wrapper , bounds =[(0, grid_size),(0,grid_size), (0, grid_size), (0, grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
+	result_without_grad = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size) , bounds =[(0,grid_size),(0,grid_size), (0,grid_size), (0,grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
+	#result_grad = minimize(initial_rectangular_set.compute_objective_wrapper, initial_rectangular_set.coordinates, args=(cut_off, weights, grid_size), jac=initial_rectangular_set.objective_gradient_wrapper , bounds =[(0, grid_size),(0,grid_size), (0, grid_size), (0, grid_size)]  , options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback=callback)
 	
 	end = time.time()
 
-	optimal_coordinates_grad = result_grad.x
+	optimal_coordinates_grad = result_without_grad.x
 	optimal_rectangle_grad = RectangularSet(optimal_coordinates_grad[0], optimal_coordinates_grad[1], optimal_coordinates_grad[2], optimal_coordinates_grad[3])
 
 	#optimal_coordinates_without_grad = result_without_grad.x
