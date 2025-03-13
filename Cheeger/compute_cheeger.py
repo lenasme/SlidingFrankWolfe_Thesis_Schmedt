@@ -16,7 +16,7 @@ from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .optimizer_debugging import run_fine_optimization
 
-
+print(animation.writers.list())
 
 
 
