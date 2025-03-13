@@ -207,7 +207,13 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
         #print(f"Optimales Rechteck ohne Gradienten: {optimal_rectangle_without_grad.coordinates}")
 
+        plt.plot(objective_tab)
+        plt.title("Objective")
+        plt.show()
 
+        plt.plot(gradient_tab)
+        plt.title("Gradient")
+        plt.show()
 
 
 #def compute_cheeger(eta, grid_size_fm, max_iter_fm=10000, convergence_tol_fm=None, plot_results_fm=False,
