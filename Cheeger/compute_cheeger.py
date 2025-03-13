@@ -16,7 +16,7 @@ from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .optimizer_debugging import run_fine_optimization
 
-print(animation.writers.list())
+
 
 
 
@@ -41,20 +41,20 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         
 
-        plt.subplot(3,1,1)
+        plt.plot()
         plt.imshow(ground_truth, cmap = 'bwr')
         plt.colorbar()
         plt.title("Ground Truth")
         plt.show()
 
-        plt.subplot(3,1,2)
+        plt.plot()
         plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
         plt.colorbar()
         plt.title("Truncated Fourier Frequency Image")
         plt.show()
 
         
-        plt.subplot(3,1,3)
+        plt.plot()
         plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
         plt.colorbar()
         plt.title("Truncated Fouried Applied on Ground Truth")
@@ -70,14 +70,8 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
             y_max = (j+1) * h
             rectangle_coarse_grid = RectangularSet(x_min, x_max, y_min, y_max)
 
-            eta_bar[i,j] = rectangle_coarse_grid.compute_integral(cut_off, truncated_operator_applied_on_ground_truth, grid_size) / h**2
+            eta_bar[i,j] = (rectangle_coarse_grid.compute_integral(cut_off, truncated_operator_applied_on_ground_truth, grid_size) / h**2).real
 
-
-    if plot == True:
-        plt.plot()
-        plt.imshow(eta_bar.real, cmap= 'bwr')
-        plt.colorbar()
-        plt.show()
 
     u = run_primal_dual(grid_size_coarse, eta_bar, max_iter=max_iter_primal_dual, convergence_tol=None, plot=True)
 
@@ -91,7 +85,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 
     if plot == True:
-        print(f"boundary coordinates: {initial_rectangular_set.coordinates}")
+        
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
@@ -100,24 +94,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     weights = truncated_operator_applied_on_ground_truth
     
 
-    if plot == True:
-
-        plt.subplot(1, 2, 1)
-        plt.imshow(np.log(1 + np.abs(weights)), cmap='viridis')
-        plt.colorbar()
-        plt.title("Fourier-Koeffizienten (Magnitude)")
-
-        plt.subplot(1, 2, 2)
-        plt.imshow(np.angle(weights), cmap='twilight')
-        plt.colorbar()
-        plt.title("Fourier-Koeffizienten (Phase)")
-
-        plt.show()
-
-        plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap='bwr')
-        plt.colorbar()
-        plt.title("Ground Truth")
-        plt.show()
+   
 
     
 
@@ -125,8 +102,9 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     if plot == True:
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
-
+        print(f"boundary coordinates: {initial_rectangular_set.coordinates}")
         print(f"Optimales Rechteck: {optimal_rectangle.coordinates}")
+        print(f"Verschiebung: {optimal_rectangle.coordinates - initial_rectangular_set.coordinates}")
 
         fig, ax = plt.subplots()
         ax.set_xlim(0, grid_size)
