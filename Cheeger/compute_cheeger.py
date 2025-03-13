@@ -83,7 +83,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
-
+    initial_coordinates = initial_rectangular_set.coordinates
     if plot == True:
         
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
@@ -102,8 +102,8 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
     if plot == True:
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
-        print(f"boundary coordinates: {initial_rectangular_set.coordinates}")
-        print(f"Optimales Rechteck: {optimal_rectangle.coordinates}")
+        print(f"initiale Koordinaten: {initial_coordinates}")
+        print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
         print(f"Verschiebung: {optimal_rectangle.coordinates - initial_rectangular_set.coordinates}")
 
         fig, ax = plt.subplots()
