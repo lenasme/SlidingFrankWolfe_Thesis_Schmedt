@@ -62,7 +62,7 @@ def run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 	#optimal_coordinates_without_grad = result_without_grad.x
 	#optimal_rectangle_without_grad = RectangularSet(optimal_coordinates_without_grad[0], optimal_coordinates_without_grad[1], optimal_coordinates_without_grad[2], optimal_coordinates_without_grad[3])
 
-	return optimal_rectangle_grad,  objective_development, gradient_development
+	return optimal_rectangle_grad,  objective_development, gradient_development, x_min_development, x_max_development, y_min_development, y_max_development
 	#return optimal_rectangle_grad, optimal_rectangle_without_grad, objective_development, gradient_development
 
 
