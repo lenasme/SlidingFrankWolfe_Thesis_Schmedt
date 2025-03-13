@@ -41,20 +41,20 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     if plot == True:
         
 
-        plt.subplot(1,3,1)
+        plt.subplot(3,1,1)
         plt.imshow(ground_truth, cmap = 'bwr')
         plt.colorbar()
         plt.title("Ground Truth")
         plt.show()
 
-        plt.subplot(1,3,2)
-        plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'viridis')
+        plt.subplot(3,1,2)
+        plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
         plt.colorbar()
         plt.title("Truncated Fourier Frequency Image")
         plt.show()
 
         
-        plt.subplot(1,3,3)
+        plt.subplot(3,1,3)
         plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
         plt.colorbar()
         plt.title("Truncated Fouried Applied on Ground Truth")
