@@ -90,21 +90,22 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plot_primal_dual_results(u[1:-1, 1:-1], eta_bar)
 
     boundary_vertices = extract_contour(u)
-    print(f"boundary vertices primal dual: {boundary_vertices}")
+    
 
     
 
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 
     if plot == True:
+        print(f"boundary coordinates: {initial_rectangular_set.coordinates}")
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
 
-    modified_rectangle = RectangularSet(  x_min ,  x_max, y_min,  y_max)
+    #modified_rectangle = RectangularSet(  x_min ,  x_max, y_min,  y_max)
 
-    if plot == True:
-        modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+    #if plot == True:
+        #modified_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     weights = truncated_operator_applied_on_ground_truth
     #test_x = np.array(initial_rectangular_set.coordinates, dtype=np.float64, order='F')
@@ -157,19 +158,15 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     
     
     #print("objective:",modified_rectangle.compute_objective_wrapper(test_x, cut_off, weights, grid_size))
-    print("x_min",modified_rectangle.x_min)
-    print("x_max",modified_rectangle.x_max)
-    print("y_min",modified_rectangle.y_min)
-    print("y_max",modified_rectangle.y_max)
+    print("x_min",initial_rectangular_set.x_min)
+    print("x_max",initial_rectangular_set.x_max)
+    print("y_min",initial_rectangular_set.y_min)
+    print("y_max",initial_rectangular_set.y_max)
 
-    print("perimeter:", modified_rectangle.compute_anisotropic_perimeter())
-    print("integral:", modified_rectangle.compute_integral(cut_off, weights, grid_size))
+    print("perimeter:", initial_rectangular_set.compute_anisotropic_perimeter())
+    print("integral:", initial_rectangular_set.compute_integral(cut_off, weights, grid_size))
     #print(f"Numerisches Integral: {integral_numerisch}")
-    print(f"Wert an x_min,y_min: {evaluate_inverse_fourier(np.array([modified_rectangle.x_min, modified_rectangle.y_min]), cut_off, weights, grid_size)}")
-    print(f"Wert an x_max,y_max: {evaluate_inverse_fourier(np.array([modified_rectangle.x_max, modified_rectangle.y_max]), cut_off, weights, grid_size)}")
-
-    print(f"Wert an Mitte des Rechtecks: {evaluate_inverse_fourier(np.array([(modified_rectangle.x_min + modified_rectangle.x_max)/2, (modified_rectangle.y_min + modified_rectangle.y_max)/2]), cut_off, weights, grid_size)}")
-    print(f"Mitte des Rechtecks: {np.array([(modified_rectangle.x_min + modified_rectangle.x_max)/2, (modified_rectangle.y_min + modified_rectangle.y_max)/2])}")
+    
     #print("gradient:", modified_rectangle.objective_gradient_wrapper(test_x, cut_off, weights, grid_size))
 
 
@@ -196,7 +193,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     #print(df)
     #df.to_csv("fourier_values.csv", index=False)
 
-    optimal_rectangle_grad,  objective_tab, gradient_tab =  run_fine_optimization(modified_rectangle, cut_off, weights, grid_size )
+    optimal_rectangle_grad,  objective_tab, gradient_tab =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
         optimal_rectangle_grad.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
