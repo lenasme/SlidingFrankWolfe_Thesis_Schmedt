@@ -37,6 +37,14 @@ def run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 		y_max_development.append(coordinates[3])
 
 
+	from scipy.optimize import check_grad
+
+	error = check_grad(
+    	lambda x: initial_rectangular_set.compute_objective_wrapper(x, cut_off, weights, grid_size), 
+    	lambda x: initial_rectangular_set.objective_gradient_wrapper(x, cut_off, weights, grid_size), 
+    	initial_rectangular_set.coordinates
+	)
+	print(f"Gradient-Fehler: {error}")
 
 
 	start = time.time()
