@@ -171,6 +171,9 @@ class RectangularSet:
 						raise ValueError(f"NaN entdeckt: k={k}, l={l}")
 					if k == 0 or l == 0:
 						raise ValueError(f"FEHLER: Division durch Null bei k={k} und l={l}")
+					
+					print(f"k = {k}, l = {l}")
+					
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] * ( (1j) / ( - 2 * np.pi *l * grid_size) ) * ( - np.exp( 2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_max)/(grid_size))) 
 																																			   + np.exp(  2 * np.pi * 1j * ((k * self.x_min) / (grid_size) + (l * self.y_min)/(grid_size))))  
 
