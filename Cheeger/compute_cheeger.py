@@ -25,7 +25,7 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     #x_min, x_max = 0,10
     #y_min, y_max = 20,60
 
-    ground_truth[x_min:x_max, y_min:y_max] = 1
+    #ground_truth[x_min:x_max, y_min:y_max] = 1
 
     operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
 
