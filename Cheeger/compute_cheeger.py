@@ -156,7 +156,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     u = SimpleFunction(atoms, grid_size, cut_off)
 
     #Ku-f:
-    weights_in_eta = u.compute_truncated_frequency_image_sf(cut_off, show = True) - target_function_f
+    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, show = True) + target_function_f
 
     optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
