@@ -7,7 +7,7 @@ from celer import Lasso
 
 
 class IndicatorFunction:
-    def __init__(self, rectangular_set, grid_size, weight = 0.5):
+    def __init__(self, rectangular_set, grid_size, weight = 1):
         self.support = rectangular_set
         self.grid_size = grid_size
         self.weight = weight
