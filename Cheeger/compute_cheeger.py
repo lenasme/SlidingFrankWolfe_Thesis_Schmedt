@@ -138,4 +138,6 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
 
 def prepare_rectangle_for_weightsfitting(rectangular_set, grid_size, cut_off):
     new_indicator_function = IndicatorFunction(rectangular_set, grid_size)
-    image = new_indicator_function.construct_image_matrix(plot=True)
+    #image = new_indicator_function.construct_image_matrix(plot=True)
+
+    fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off)
