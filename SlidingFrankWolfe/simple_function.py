@@ -39,7 +39,24 @@ class IndicatorFunction:
         
         return image
 
+    def compute_truncated_frequency_image(self, cut_off, show = True):
+        image = self.construct_image_matrix(plot = False)
+        fourier_image = np.fft.fft2(image)
+        freqs_x= np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
+        freqs_y = np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
+        freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
 
+        mask = np.zeros((self.grid_size, self.grid_size))
+        mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+
+        truncated_fourier_image = fourier_image * mask
+
+        if show == True:
+            plt.imshow(truncated_fourier_image.real, cmap = 'bwr')
+            plt.colorbar()
+            plt.show()
+        
+        return truncated_fourier_image
 
 
 class SimpleFunction:
