@@ -156,7 +156,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     u = SimpleFunction(atoms, grid_size, cut_off)
 
     #Ku-f:
-    weights_in_eta = u.compute_truncated_frequency_image_sf(cut_off, show = False) - target_function_f
+    weights_in_eta = u.compute_truncated_frequency_image_sf(cut_off, show = True) - target_function_f
 
     optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
@@ -171,6 +171,16 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
 
     alpha = reg_param 
 
+
+    if u.num_atoms == 0:
+        print("Fehler: Es wurden keine Atome gefunden!")
+        return
+
+    print(f"Anzahl der Atome: {u.num_atoms}")
+    print(f"K_0.shape: {K_0.shape}, erwartet: ({u.num_atoms}, {grid_size}, {grid_size})")
+    print(f"perimeters.shape: {perimeters.shape}, erwartet: ({u.num_atoms},)")
+    print(f"target_function_f.shape: {target_function_f.shape}, erwartet: ({grid_size}, {grid_size})")
+
     a = cp.Variable(u.num_atoms)
 
     K0_sum = cp.sum(cp.multiply(a[:, None, None], K_0), axis=0)
@@ -179,8 +189,11 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     
     problem = cp.Problem(cp.Minimize(objective))
 
-    problem.solve()
+    print(f"Ist das Problem DCP-konform? {problem.is_dcp()} (Sollte True sein)")
 
-    a_opt = a.value
-
-    print("optimale a Werte:", a_opt)
+    try:
+        result = problem.solve(solver=cp.SCS, verbose=True)
+        a_opt = a.value
+        print("Optimale a Werte:", a_opt)
+    except Exception as e:
+        print("Fehler beim Lösen des Optimierungsproblems:", e)
