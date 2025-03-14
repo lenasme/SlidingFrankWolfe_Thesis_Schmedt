@@ -30,7 +30,7 @@ class IndicatorFunction:
         X, Y = np.meshgrid(x,y)
         grid = np.stack([X,Y], axis = -1)
 
-        image = np.array([[self(np.array([xi, yi])) for xi, yi in row] for row in grid])
+        image = np.array([[self(np.array([yi, xi])) for xi, yi in row] for row in grid])
         
         if plot == True:
             plt.imshow(image, cmap= 'bwr')
