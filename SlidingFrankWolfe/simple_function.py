@@ -34,6 +34,7 @@ class IndicatorFunction:
         
         if plot == True:
             plt.imshow(image, cmap= 'bwr')
+            plt.colorbar()
             plt.show()
         
         return image
