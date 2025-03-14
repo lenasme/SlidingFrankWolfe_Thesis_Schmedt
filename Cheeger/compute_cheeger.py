@@ -197,3 +197,15 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
         print("Optimale a Werte:", a_opt)
     except Exception as e:
         print("Fehler beim Lösen des Optimierungsproblems:", e)
+
+
+    for i in range(u.num_atoms):
+        u.atoms[i].weight = a_opt[i]
+
+    fourier_image = u.compute_truncated_frequency_image_sf(cut_off, show = True)
+
+    plt.plot()
+    plt.imshow(np.fft.ifft2(fourier_image).real, cmap = 'bwr')
+    plt.colorbar()
+    plt.title("Rekonstruktion")
+    plt.show()
