@@ -16,6 +16,8 @@ from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .optimizer_debugging import run_fine_optimization
 
+from SlidingFrankWolfe.simple_function import IndicatorFunction
+
 
 
 
@@ -131,4 +133,9 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plt.title("Gradient")
         plt.show()
 
+    return optimal_rectangle
 
+
+def prepare_rectangle_for_weightsfitting(rectangular_set, grid_size, cut_off):
+    new_indicator_function = IndicatorFunction(rectangular_set, grid_size)
+    image = new_indicator_function.construct_image_matrix(plot=True)
