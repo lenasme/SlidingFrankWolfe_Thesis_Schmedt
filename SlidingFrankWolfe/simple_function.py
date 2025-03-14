@@ -81,7 +81,7 @@ class SimpleFunction:
 
 
     def extend_support(self, rectangular_set):
-        new_atom = IndicatorFunction(rectangular_set)
+        new_atom = IndicatorFunction(rectangular_set, self.grid_size)
         self.atoms.append(new_atom)
 
     
