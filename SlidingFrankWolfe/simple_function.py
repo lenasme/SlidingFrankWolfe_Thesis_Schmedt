@@ -33,7 +33,7 @@ class IndicatorFunction:
         image = np.array([[self(np.array([xi, yi])) for xi, yi in row] for row in grid])
         
         if plot == True:
-            plt.imshow(image, origin = 'lower', cmap= 'bwr')
+            plt.imshow(image.T,  cmap= 'bwr')
             plt.colorbar()
             plt.show()
         
