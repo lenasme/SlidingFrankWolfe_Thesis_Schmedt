@@ -20,12 +20,8 @@ from SlidingFrankWolfe.simple_function import IndicatorFunction
 
 
 
-
-
-def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
+def calculate_target_function(grid_size, deltas, max_jumps, cut_off, noise_level = 0.01, plot = True):
     ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
-
-   
 
     operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
 
@@ -39,6 +35,11 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
     mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
 
     truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
+
+      
+    noise = noise_level * (np.random.randn(grid_size, grid_size) + 1j * np.random.randn(grid_size, grid_size))
+
+    target_function_f = truncated_operator_applied_on_ground_truth + noise
 
     if plot == True:
         
@@ -61,6 +62,52 @@ def compute_cheeger_set(grid_size, deltas, max_jumps, grid_size_coarse, cut_off,
         plt.colorbar()
         plt.title("Truncated Fouried Applied on Ground Truth")
         plt.show()
+
+
+    return truncated_operator_applied_on_ground_truth, ground_truth, target_function_f
+
+
+def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
+    #ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
+
+   
+
+    #operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
+
+    #freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
+    #freqs_y = np.fft.fftfreq(grid_size, d=1 / grid_size)
+    #freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
+    
+
+    
+    #mask = np.zeros((grid_size, grid_size))
+    #mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+
+    #truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
+
+    #if plot == True:
+        
+
+       # plt.plot()
+       # plt.imshow(ground_truth, cmap = 'bwr')
+       # plt.colorbar()
+       # plt.title("Ground Truth")
+       # plt.show()
+
+      #  plt.plot()
+      #  plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
+      #  plt.colorbar()
+      #  plt.title("Truncated Fourier Frequency Image")
+      #  plt.show()
+
+        
+       # plt.plot()
+       # plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
+       # plt.colorbar()
+       # plt.title("Truncated Fouried Applied on Ground Truth")
+       # plt.show()
+
+    #truncated_operator_applied_on_ground_truth, ground_truth, target_function_f = calculate_target_function(grid_size, deltas, max_jumps, cut_off, plot = True)
 
     h = grid_size / grid_size_coarse
     eta_bar = np.zeros((grid_size_coarse, grid_size_coarse))
