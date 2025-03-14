@@ -1,4 +1,5 @@
 import numpy as np
+import cvxpy as cp
 import time
 
 from scipy.optimize import minimize
@@ -16,7 +17,7 @@ from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .optimizer_debugging import run_fine_optimization
 
-from SlidingFrankWolfe.simple_function import IndicatorFunction
+from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction
 
 
 
@@ -68,47 +69,7 @@ def calculate_target_function(grid_size, deltas, max_jumps, cut_off, noise_level
 
 
 def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
-    #ground_truth = construction_of_example_source(grid_size, deltas, max_jumps)
-
    
-
-    #operator_applied_on_ground_truth = np.fft.fft2(ground_truth)
-
-    #freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
-    #freqs_y = np.fft.fftfreq(grid_size, d=1 / grid_size)
-    #freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
-    
-
-    
-    #mask = np.zeros((grid_size, grid_size))
-    #mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
-
-    #truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
-
-    #if plot == True:
-        
-
-       # plt.plot()
-       # plt.imshow(ground_truth, cmap = 'bwr')
-       # plt.colorbar()
-       # plt.title("Ground Truth")
-       # plt.show()
-
-      #  plt.plot()
-      #  plt.imshow(truncated_operator_applied_on_ground_truth.real, cmap= 'bwr')
-      #  plt.colorbar()
-      #  plt.title("Truncated Fourier Frequency Image")
-      #  plt.show()
-
-        
-       # plt.plot()
-       # plt.imshow(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, cmap = 'bwr')
-       # plt.colorbar()
-       # plt.title("Truncated Fouried Applied on Ground Truth")
-       # plt.show()
-
-    #truncated_operator_applied_on_ground_truth, ground_truth, target_function_f = calculate_target_function(grid_size, deltas, max_jumps, cut_off, plot = True)
-
     h = grid_size / grid_size_coarse
     eta_bar = np.zeros((grid_size_coarse, grid_size_coarse))
     for i in range(grid_size_coarse):
@@ -142,11 +103,6 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     
     weights = truncated_operator_applied_on_ground_truth
     
-
-   
-
-    
-
     optimal_rectangle,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
@@ -183,8 +139,48 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     return optimal_rectangle
 
 
-def prepare_rectangle_for_weightsfitting(rectangular_set, grid_size, cut_off):
+def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
     new_indicator_function = IndicatorFunction(rectangular_set, grid_size)
     #image = new_indicator_function.construct_image_matrix(plot=True)
 
     fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off)
+
+    return fourier_image
+
+
+
+
+def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
+    
+    atoms = []
+    u = SimpleFunction(atoms, grid_size, cut_off)
+
+    #Ku-f:
+    weights_in_eta = u.compute_truncated_frequency_image_sf(cut_off, show = False) - target_function_f
+
+    optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+
+    u.extend_support(optimal_rectangle)
+
+    #k(\1_E)
+    K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
+    perimeters = np.zeros(u.num_atoms)
+    for i in range(u.num_atoms):
+        K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off)
+        perimeters[i] = u.atoms[i].support.compute_anisotropic_perimeter()
+
+    alpha = reg_param 
+
+    a = cp.Variable(u.num_atoms)
+
+    K0_sum = cp.sum(cp.multiply(a[:, None, None], K_0), axis=0)
+
+    objective = (1/2) * cp.norm(K0_sum - target_function_f, "fro")**2 + alpha * cp.sum(cp.multiply(perimeters, cp.abs(a)))
+    
+    problem = cp.Problem(cp.Minimize(objective))
+
+    problem.solve()
+
+    a_opt = a.value
+
+    print("optimale a Werte:", a_opt)
