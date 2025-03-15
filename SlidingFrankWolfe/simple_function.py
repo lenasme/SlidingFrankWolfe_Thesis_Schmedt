@@ -33,14 +33,14 @@ class IndicatorFunction:
         image = np.array([[self(np.array([xi, yi])) for xi, yi in row] for row in grid])
         
         if plot == True:
-            plt.imshow(image.T,  cmap= 'bwr')
+            plt.imshow(image,  cmap= 'bwr')
             plt.colorbar()
             plt.show()
         
         return image
 
-    def compute_truncated_frequency_image(self, cut_off, show = True):
-        image = self.construct_image_matrix(plot = True)
+    def compute_truncated_frequency_image(self, cut_off, plot = True):
+        image = self.construct_image_matrix(plot = plot)
         fourier_image = np.fft.fft2(image)
         freqs_x= np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
         freqs_y = np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
@@ -51,7 +51,7 @@ class IndicatorFunction:
 
         truncated_fourier_image = fourier_image * mask
 
-        if show == True:
+        if plot == True:
             plt.imshow(truncated_fourier_image.real, cmap = 'bwr')
             plt.colorbar()
             plt.show()
