@@ -173,7 +173,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     perimeters = np.zeros(u.num_atoms)
     for i in range(u.num_atoms):
         print(f"Koordinate des Atoms {i}: {u.atoms[i].support.coordinates}")
-        K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off)
+        K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off).T
         perimeters[i] = u.atoms[i].support.compute_anisotropic_perimeter()
 
     alpha = reg_param 
