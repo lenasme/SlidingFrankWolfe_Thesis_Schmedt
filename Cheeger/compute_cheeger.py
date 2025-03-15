@@ -143,6 +143,12 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
     new_indicator_function = IndicatorFunction(rectangular_set, grid_size)
     #image = new_indicator_function.construct_image_matrix(plot=True)
 
+    plt.plot()
+    plt.imshow(new_indicator_function.construct_image_matrix(plot=True), cmap = 'bwr')
+    plt.colorbar()
+    plt.title("Indikatorfunktion")
+    plt.show()
+
     fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off)
 
     return fourier_image
@@ -171,6 +177,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
 
     alpha = reg_param 
 
+    print("Perimeter:", perimeters)
 
     if u.num_atoms == 0:
         print("Fehler: Es wurden keine Atome gefunden!")
