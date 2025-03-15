@@ -17,7 +17,7 @@ class IndicatorFunction:
 
     def __call__(self, x):
 
-        if self.support.x_min <= x[0] <= self.support.x_max and self.support.y_min <= x[1] <= self.support.y_max:
+        if self.support.x_min <= x[1] <= self.support.x_max and self.support.y_min <= x[0] <= self.support.y_max:
             return self.weight * (1 - self.mean_value)
         else:
             return self.weight * (0 - self.mean_value)
