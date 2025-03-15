@@ -144,7 +144,7 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
     #image = new_indicator_function.construct_image_matrix(plot=True)
 
     plt.plot()
-    plt.imshow(new_indicator_function.construct_image_matrix(plot=True), cmap = 'bwr')
+    plt.imshow(new_indicator_function.construct_image_matrix(plot=False), cmap = 'bwr')
     plt.colorbar()
     plt.title("Indikatorfunktion")
     plt.show()
@@ -162,7 +162,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     u = SimpleFunction(atoms, grid_size, cut_off)
 
     #Ku-f:
-    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, show = True) + target_function_f
+    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
 
     optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
@@ -172,7 +172,7 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
     perimeters = np.zeros(u.num_atoms)
     for i in range(u.num_atoms):
-        print(f"Koordinate des Atoms {i}: {u.atoms[i].support.coordinates}")
+        print(f"Koordinaten des Atoms {i}: {u.atoms[i].support.coordinates}")
         K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off)
         perimeters[i] = u.atoms[i].support.compute_anisotropic_perimeter()
 
