@@ -118,7 +118,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
         ax.add_patch(rect)
 
         def update(frame):
-            rect.set_xy((x_mins[frame], y_mins[frame]))
+            rect.set_xy((y_mins[frame], x_mins[frame]))
             rect.set_width(x_maxs[frame] - x_mins[frame])
             rect.set_height(y_maxs[frame] - y_mins[frame])
 
