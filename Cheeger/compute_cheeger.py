@@ -239,10 +239,6 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
     for i in range(u.num_atoms):
         u.atoms[i].weight = a_opt[i]
 
-    fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = True)
+    fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
-    plt.plot()
-    plt.imshow(np.fft.ifft2(fourier_image).real, cmap = 'bwr')
-    plt.colorbar()
-    plt.title("Rekonstruktion")
-    plt.show()
+    u.construct_image_matrix_sf( plot = True)
