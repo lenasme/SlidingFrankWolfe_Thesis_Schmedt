@@ -230,7 +230,7 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
     
     atoms = []
-    u = SimpleFunction(atoms, grid_size, cut_off, reg_param, target_function_f)
+    u = SimpleFunction(atoms, grid_size, cut_off)
 
 
     
