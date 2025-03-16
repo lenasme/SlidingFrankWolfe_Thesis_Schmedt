@@ -98,6 +98,7 @@ class SimpleFunction:
         if plot == True:
             plt.imshow(image,  cmap= 'bwr')
             plt.colorbar()
+            plt.title("Current Simple Function")
             plt.show()
         
         return image
@@ -118,6 +119,7 @@ class SimpleFunction:
         if plot == True:
             plt.imshow(truncated_fourier_image.real, cmap = 'bwr')
             plt.colorbar()
+            plt.title("Current Truncated Fourier Frequency Image")
             plt.show()
         
         return truncated_fourier_image
