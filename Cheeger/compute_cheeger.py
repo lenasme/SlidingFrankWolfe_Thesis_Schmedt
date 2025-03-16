@@ -95,7 +95,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
     initial_coordinates = initial_rectangular_set.coordinates
     if plot == True:
-        
+        print("Rectangle created by outer boundary vertices of Primal-Dual result")
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
@@ -106,6 +106,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     optimal_rectangle,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
+        print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result")
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
         print(f"initiale Koordinaten: {initial_coordinates}")
         print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
@@ -124,6 +125,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
 
         ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
         ani.save("animation.gif", writer="pillow")
+        plt.title("development of boundary Vertices")
         plt.show()
 
 
