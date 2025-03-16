@@ -95,7 +95,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
     initial_coordinates = initial_rectangular_set.coordinates
     if plot == True:
-        print("Rectangle created by outer boundary vertices of Primal-Dual result")
+        print("Rectangle created by outer boundary vertices of Primal-Dual result:")
         initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 
     x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
@@ -106,7 +106,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     optimal_rectangle,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
     if plot == True:
-        print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result")
+        print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result:")
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
         print(f"initiale Koordinaten: {initial_coordinates}")
         print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
@@ -119,7 +119,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
         ax.add_patch(rect)
 
         def update(frame):
-            rect.set_xy((1 - y_mins[frame], x_mins[frame]))
+            rect.set_xy((y_mins[frame], x_mins[frame]))
             rect.set_height(x_maxs[frame] - x_mins[frame])
             rect.set_width(y_maxs[frame] - y_mins[frame])
 
@@ -151,7 +151,7 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
     plt.title("Indikatorfunktion")
     plt.show()
 
-    fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off)
+    fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off, plot = False)
 
     return fourier_image
 
