@@ -182,22 +182,8 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
 
     return fourier_image
 
-
-
-
-def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
-    
-    atoms = []
-    u = SimpleFunction(atoms, grid_size, cut_off)
-
-    #Ku-f:
-    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
-
-    optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
-
-    u.extend_support(optimal_rectangle)
-
-    #k(\1_E)
+def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
+     #k(\1_E)
     K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
     perimeters = np.zeros(u.num_atoms)
     for i in range(u.num_atoms):
@@ -239,18 +225,83 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
     for i in range(u.num_atoms):
         u.atoms[i].weight = a_opt[i]
 
+
+
+def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
+    
+    atoms = []
+    u = SimpleFunction(atoms, grid_size, cut_off, reg_param, target_function_f)
+
+
+    
+
+
+    #Ku-f:
+    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
+
+    optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+
+    u.extend_support(optimal_rectangle)
+
+    fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+
+    #k(\1_E)
+  #  K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
+  #  perimeters = np.zeros(u.num_atoms)
+   # for i in range(u.num_atoms):
+    #    print(f"Koordinaten des Atoms {i}: {u.atoms[i].support.coordinates}")
+    #    K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off)
+   #     perimeters[i] = u.atoms[i].support.compute_anisotropic_perimeter()
+
+   # alpha = reg_param 
+
+   # print("Perimeter:", perimeters)
+
+   # if u.num_atoms == 0:
+  #      print("Fehler: Es wurden keine Atome gefunden!")
+   #     return
+
+   # print(f"Anzahl der Atome: {u.num_atoms}")
+  #  print(f"K_0.shape: {K_0.shape}, erwartet: ({u.num_atoms}, {grid_size}, {grid_size})")
+  #  print(f"perimeters.shape: {perimeters.shape}, erwartet: ({u.num_atoms},)")
+   # print(f"target_function_f.shape: {target_function_f.shape}, erwartet: ({grid_size}, {grid_size})")
+
+    #a = cp.Variable(u.num_atoms)
+
+   # K0_sum = cp.sum(cp.multiply(a[:, None, None], K_0), axis=0)
+
+   # objective = (1/2) * cp.norm(K0_sum - target_function_f, "fro")**2 + alpha * cp.sum(cp.multiply(perimeters, cp.abs(a)))
+    
+   # problem = cp.Problem(cp.Minimize(objective))
+
+    #print(f"Ist das Problem DCP-konform? {problem.is_dcp()} (Sollte True sein)")
+
+   # try:
+    #    result = problem.solve(solver=cp.SCS, verbose=True)
+    #    a_opt = a.value
+    #    print("Optimale a Werte:", a_opt)
+   # except Exception as e:
+    #    print("Fehler beim Lösen des Optimierungsproblems:", e)
+
+
+    #for i in range(u.num_atoms):
+    #    u.atoms[i].weight = a_opt[i]
+
     fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
-    fig, ax = plt.subplots(1, 2, figsize=(12, 6))  # 1 Zeile, 2 Spalten
 
-    # Linker Plot mit Funktionsaufruf
-    data = u.construct_image_matrix_sf(plot=False)  # Funktion soll die Matrix zurückgeben
-    im1 = ax[0].imshow(data, cmap="bwr")  
-    fig.colorbar(im1, ax=ax[0])
-    ax[0].set_title("Current Function")
+    if plot == True:
 
-    im2 = ax[1].imshow(ground_truth, cmap = 'bwr')
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))  # 1 Zeile, 2 Spalten
 
-    fig.colorbar(im2, ax = ax[1])
-    ax[1].set_title("Ground Truth")
-    plt.show()
+        # Linker Plot mit Funktionsaufruf
+        data = u.construct_image_matrix_sf(plot=False)  # Funktion soll die Matrix zurückgeben
+        im1 = ax[0].imshow(data, cmap="bwr")  
+        fig.colorbar(im1, ax=ax[0])
+        ax[0].set_title("Current Function")
+
+        im2 = ax[1].imshow(ground_truth, cmap = 'bwr')
+
+        fig.colorbar(im2, ax = ax[1])
+        ax[1].set_title("Ground Truth")
+        plt.show()
