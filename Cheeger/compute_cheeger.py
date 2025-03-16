@@ -112,11 +112,11 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
         print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
         print(f"Verschiebung: {optimal_rectangle.coordinates - initial_coordinates}")
 
-        fig, ax = plt.subplots()
-        ax.set_xlim(0, grid_size)
-        ax.set_ylim(0, grid_size)
-        rect = patches.Rectangle((0, 0), 1, 1, edgecolor='r', facecolor='none', linewidth=2)
-        ax.add_patch(rect)
+        #fig, ax = plt.subplots()
+        #ax.set_xlim(0, grid_size)
+        #ax.set_ylim(0, grid_size)
+        #rect = patches.Rectangle((0, 0), 1, 1, edgecolor='r', facecolor='none', linewidth=2)
+       # ax.add_patch(rect)
 
         def update(frame):
             rect.set_xy((y_mins[frame], grid_size - x_maxs[frame]))
