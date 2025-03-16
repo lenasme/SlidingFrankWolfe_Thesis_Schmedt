@@ -123,8 +123,33 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
             rect.set_height(x_maxs[frame] - x_mins[frame])
             rect.set_width(y_maxs[frame] - y_mins[frame])
 
+        fig, ax = plt.subplots(figsize=(7, 7))
+        x = np.linspace(0, grid_size, grid_size)
+        y = np.linspace(0, grid_size, grid_size)
+        x_grid, y_grid = np.meshgrid(x, y)
+        z_grid = np.flipud(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real)  # Hintergrundfunktion
+
+        v_abs_max = np.max(np.abs(z_grid))
+        im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
+        plt.colorbar(im, ax=ax)
+
+        ax.set_xlim(0, grid_size)
+        ax.set_ylim(0, grid_size)
+
+        rect = plt.Rectangle((y_mins[0], grid_size - x_maxs[0]), 
+                         y_maxs[0] - y_mins[0], 
+                         x_maxs[0] - x_mins[0], 
+                         edgecolor='black', facecolor='none', linewidth=2)
+        ax.add_patch(rect)
+
         ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
+
         ani.save("animation.gif", writer="pillow")
+        plt.show()
+
+
+       # ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
+        #ani.save("animation.gif", writer="pillow")
         plt.title("development of boundary Vertices")
         plt.show()
 
