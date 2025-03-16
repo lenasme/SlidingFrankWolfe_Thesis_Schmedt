@@ -185,7 +185,7 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
 
 
 
-def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
+def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
     
     atoms = []
     u = SimpleFunction(atoms, grid_size, cut_off)
@@ -241,4 +241,14 @@ def optimization ( target_function_f, grid_size, grid_size_coarse, cut_off, reg_
 
     fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
-    u.construct_image_matrix_sf( plot = True)
+    fig, ax = plt.subplots(1, 2, figsize=(12, 6))  # 1 Zeile, 2 Spalten
+
+    # Linker Plot mit Funktionsaufruf
+    plt.sca(ax[0])  # Setzt die aktive Achse
+    u.construct_image_matrix_sf(plot=True)  # Falls die Funktion direkt plottet
+
+    im = ax[1].imshow(ground_truth, cmap = 'bwr')
+
+    fig.colorbar(im, ax = ax[1])
+    ax[1].set_title("Ground Truth")
+    plt.show()
