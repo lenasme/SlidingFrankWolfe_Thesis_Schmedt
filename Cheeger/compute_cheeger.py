@@ -145,6 +145,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
         ani = animation.FuncAnimation(fig, update, frames=len(x_mins), interval=200)
 
         ani.save("animation.gif", writer="pillow")
+        plt.close(fig)  
         #plt.show()
 
 
