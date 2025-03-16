@@ -154,11 +154,12 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
         #plt.show()
 
 
-
+        plt.figure()
         plt.plot(objective_tab)
         plt.title("Objective")
         plt.show()
 
+        plt.figure()
         plt.plot(gradient_tab)
         plt.title("Gradient")
         plt.show()
