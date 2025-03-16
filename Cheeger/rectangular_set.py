@@ -58,6 +58,7 @@ class RectangularSet:
 
 		ax.set_xlim(0, grid_size)
 		ax.set_ylim(0, grid_size)
+		plt.title("Outer Boundaries of the Set computed via coarse Primal-Dual Algorithm")
 	
 		plt.show()
 
