@@ -244,11 +244,13 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
     fig, ax = plt.subplots(1, 2, figsize=(12, 6))  # 1 Zeile, 2 Spalten
 
     # Linker Plot mit Funktionsaufruf
-    plt.sca(ax[0])  # Setzt die aktive Achse
-    u.construct_image_matrix_sf(plot=True)  # Falls die Funktion direkt plottet
+    data = u.construct_image_matrix_sf(plot=False)  # Funktion soll die Matrix zurückgeben
+    im1 = ax[0].imshow(data, cmap="bwr")  
+    fig.colorbar(im1, ax=ax[0])
+    ax[0].set_title("Current Function")
 
-    im = ax[1].imshow(ground_truth, cmap = 'bwr')
+    im2 = ax[1].imshow(ground_truth, cmap = 'bwr')
 
-    fig.colorbar(im, ax = ax[1])
+    fig.colorbar(im2, ax = ax[1])
     ax[1].set_title("Ground Truth")
     plt.show()
