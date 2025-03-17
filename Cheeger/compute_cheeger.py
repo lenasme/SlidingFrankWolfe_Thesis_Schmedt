@@ -233,15 +233,24 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
     u = SimpleFunction(atoms, grid_size, cut_off)
 
     iteration = 0
-    max_iter = 10
+    max_iter = 30
 
-    while iteration < max_iter:    
+    while iteration < max_iter:   
+    
 
 
         weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
 
         optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
+        
+        if np.abs(optimal_rectangle.compute_integral (cut_off, 1/reg_param * weights_in_eta, grid_size)) <= optimal_rectangle.compute_anisotropic_perimeter()-1e-2:
+            print("Optimierung erfolgreich")
+            return u
+            
+        
+        
+        
         u.extend_support(optimal_rectangle)
 
         fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
