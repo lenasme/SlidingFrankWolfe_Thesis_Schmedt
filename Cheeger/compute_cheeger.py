@@ -105,6 +105,9 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
     
     optimal_rectangle,  objective_tab, gradient_tab , x_mins, x_maxs, y_mins, y_maxs =  run_fine_optimization(initial_rectangular_set, cut_off, weights, grid_size )
 
+    if objective_tab[-1] < 0:
+        return initial_rectangular_set
+
     if plot == True:
         print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result:")
         optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
