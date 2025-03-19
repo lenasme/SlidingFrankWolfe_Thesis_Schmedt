@@ -245,7 +245,7 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 
     initial_parameters = np.concatenate((a, x_mins, x_maxs, y_mins, y_maxs))
 
-    result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off), jac = gradient_wrapper_sliding, options={'maxiter':100})
+    result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off), jac = gradient_wrapper_sliding, method='L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6})
 
     if not result.success:
         print("Optimization did not converge:", result.message)
