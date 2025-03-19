@@ -166,7 +166,7 @@ def compute_objective_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function
 
     objective = 0.5 * error_term + regularization_term
 
-    return objective
+    return objective.real
 
 
 def compute_derivative_zero_mean_indicator( x_min, x_max, y_min, y_max, grid_size):
@@ -221,7 +221,7 @@ def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function
     perimeters = np.zeros(len(a))
     perimeter_gradients = np.zeros((len(a), 4))
 
-    final_gradient = np.zeros((len(a), 5 ))
+    final_gradient = np.zeros((len(a), 5 ), dtype = complex)
 
     for i in range(len(a)):
         indicator_function_values[i] = IndicatorFunction( RectangularSet(x_mins[i], x_maxs[i], y_mins[i], y_maxs[i]), grid_size).construct_image_matrix(plot = False)
@@ -286,7 +286,7 @@ def gradient_wrapper_sliding(params, target_function_f, reg_param, grid_size, cu
 
     grad = compute_gradient_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function_f, reg_param, grid_size, cut_off)
 
-    return grad.flatten()
+    return grad.flatten().real
 
     
 
