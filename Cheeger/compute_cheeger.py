@@ -379,12 +379,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
         fig.colorbar(im2, ax = ax[1])
         ax[1].set_title("Ground Truth")
 
-        diff = data - ground_truth
+        diff = - data + ground_truth
         vmax_diff = np.max(np.abs(diff))
         im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
         fig.colorbar(im3, ax = ax[2])
         ax[2].set_title("Difference")
 
         plt.tight_layout()
-        
+
         plt.show()
