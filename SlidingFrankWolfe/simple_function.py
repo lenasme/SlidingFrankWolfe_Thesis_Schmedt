@@ -144,7 +144,7 @@ def compute_objective_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function
     
     """
     indicator_function_values = np.zeros((len(a) , grid_size, grid_size))
-    K0 = np.zeros((len(a), grid_size, grid_size))   
+    K0 = np.zeros((len(a), grid_size, grid_size), dtype=complex)   
     perimeters = np.zeros(len(a))
 
     freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
