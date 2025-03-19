@@ -400,14 +400,14 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
         plt.show()
 
 
-    u = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
+    v = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
 
     if plot == True:
 
         fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
             # Linker Plot mit Funktionsaufruf
-        data = u.construct_image_matrix_sf(plot=False) 
+        data = v.construct_image_matrix_sf(plot=False) 
         vmin = min(np.min(data), np.min(ground_truth))
         vmax = max(np.max(data), np.max(ground_truth))
 
@@ -429,4 +429,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
         plt.tight_layout()
 
+
+        plt.show()
+
+        plt.plot()
+        data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
+        plt.imshow(data, cmap = 'bwr')
+        plt.colorbar()
+        plt.title("Differenz zwischen Funktionen")
         plt.show()
