@@ -17,7 +17,7 @@ from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .optimizer_debugging import run_fine_optimization
 
-from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction
+from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction, objective_wrapper_sliding, gradient_wrapper_sliding
 
 
 
@@ -229,6 +229,46 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
         u.atoms[i].weight = a_opt[i]
 
 
+def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
+    a = np.zeros(u.num_atoms)
+    x_mins = np.zeros(u.num_atoms)
+    x_maxs = np.zeros(u.num_atoms)
+    y_mins = np.zeros(u.num_atoms)
+    y_maxs = np.zeros(u.num_atoms)
+
+    for i in range(u.num_atoms):
+        a[i] = u.atoms[i].weight
+        x_mins[i] = u.atoms[i].support.coordinates[0]
+        x_maxs[i] = u.atoms[i].support.coordinates[1]
+        y_mins[i] = u.atoms[i].support.coordinates[2]
+        y_maxs[i] = u.atoms[i].support.coordinates[3]
+
+    initial_parameters = np.concatenate((a, x_mins, x_maxs, y_mins, y_maxs))
+
+    result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off), jac = gradient_wrapper_sliding, options={'maxiter':100})
+
+    if not result.success:
+        print("Optimization did not converge:", result.message)
+
+    new_parameters = result.x
+
+    new_weights = new_parameters[:u.num_atoms]
+    new_x_mins = new_parameters[u.num_atoms:2*u.num_atoms]
+    new_x_maxs = new_parameters[2*u.num_atoms:3*u.num_atoms]
+    new_y_mins = new_parameters[3*u.num_atoms:4*u.num_atoms]
+    new_y_maxs = new_parameters[4*u.num_atoms:5*u.num_atoms]
+
+    for i in range(u.num_atoms):
+        u.atoms[i].weight = new_weights[i]
+        u.atoms[i].support.coordinates = (new_x_mins[i], new_x_maxs[i], new_y_mins[i], new_y_maxs[i])
+
+    return u
+
+
+
+
+
+
 
 def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
     
@@ -284,3 +324,58 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
             plt.show()
 
         iteration += 1
+
+
+
+
+def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
+    
+    atoms = []
+    u = SimpleFunction(atoms, grid_size, cut_off)
+
+   
+
+     
+    
+
+
+    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
+
+    optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+
+        
+        #if np.abs(optimal_rectangle.compute_integral (cut_off, 1/reg_param * weights_in_eta, grid_size)) <= optimal_rectangle.compute_anisotropic_perimeter():
+         #   print("Optimierung erfolgreich")
+        #    return u
+            
+        
+        
+        
+    u.extend_support(optimal_rectangle)
+
+    fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+
+    
+
+        #fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
+
+
+    if plot == True:
+
+        fig, ax = plt.subplots(1, 2, figsize=(12, 6))  # 1 Zeile, 2 Spalten
+
+            # Linker Plot mit Funktionsaufruf
+        data = u.construct_image_matrix_sf(plot=False) 
+        vmin = min(np.min(data), np.min(ground_truth))
+        vmax = max(np.max(data), np.max(ground_truth))
+
+        im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
+                               vmax=vmax)  
+        fig.colorbar(im1, ax=ax[0])
+        ax[0].set_title("Current Function")
+
+        im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
+
+        fig.colorbar(im2, ax = ax[1])
+        ax[1].set_title("Ground Truth")
+        plt.show()
