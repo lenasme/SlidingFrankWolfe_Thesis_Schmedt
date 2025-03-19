@@ -213,15 +213,15 @@ def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function
     mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
 
     indicator_function_values = np.zeros((len(a) , grid_size, grid_size))
-    indicator_gradients = np.zeros(len(a), 4, grid_size, grid_size)
+    indicator_gradients = np.zeros((len(a), 4, grid_size, grid_size))
 
     K0_indicators = np.zeros((len(a), grid_size, grid_size), dtype=complex)   
     K0_gradient_indicators = np.zeros((len(a), 4, grid_size, grid_size), dtype=complex)
 
     perimeters = np.zeros(len(a))
-    perimeter_gradients = np.zeros(len(a), 4)
+    perimeter_gradients = np.zeros((len(a), 4))
 
-    final_gradient = np.zeros(len(a), 5 )
+    final_gradient = np.zeros((len(a), 5 ))
 
     for i in range(len(a)):
         indicator_function_values[i] = IndicatorFunction( RectangularSet(x_mins[i], x_maxs[i], y_mins[i], y_maxs[i]), grid_size).construct_image_matrix(plot = False)
