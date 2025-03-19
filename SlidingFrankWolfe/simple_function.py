@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 
 from celer import Lasso
 
+from Cheeger.rectangular_set import RectangularSet
+
 
 
 
@@ -126,168 +128,174 @@ class SimpleFunction:
 
 
 
+#Hilfsmittel, die in Gradienten gebraucht werden: Dirac-Delta Distribution, Heavisidefunktion
+
+def dirac_delta_approx(x, epsilon = 1e-6):
+    return (np.abs(x) < epsilon) / (2 * epsilon)
+
+def heaviside(x):
+    return np.heaviside(x, 1.0)
 
 
 
+def compute_objective_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function_f, reg_param, grid_size, cut_off):
+    """
+    J_\ alpha(a, E) = 1/2 \Vert \sum_i a_i K0(1_E_i) -f \Vert^2 + \ alpha \sum_i \ text{perimeter}(E_i) abs(a_i)
+    
+    """
+    indicator_function_values = np.zeros((len(a) , grid_size, grid_size))
+    K0 = np.zeros((len(a), grid_size, grid_size))   
+    perimeters = np.zeros(len(a))
+
+    freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freqs_y = np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
+    
+    mask = np.zeros((grid_size, grid_size))
+    mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+    
+    for i in range(len(a)):
+        indicator_function_values[i] = IndicatorFunction( RectangularSet(x_mins[i], x_maxs[i], y_mins[i], y_maxs[i]), grid_size).construct_image_matrix(plot = False)
+        K0[i] = np.fft.fft2(indicator_function_values[i]) * mask
+        perimeters[i] = 2 * (x_maxs[i] - x_mins[i]) + 2 * (y_maxs[i] - y_mins[i])
+
+    sum_K0_a = np.sum(a[:,None, None] * K0, axis = 0)
+    error_term = np.linalg.norm(sum_K0_a - target_function_f)**2
+
+    regularization_term = reg_param * np.sum(perimeters * np.abs(a))
+
+    objective = 0.5 * error_term + regularization_term
+
+    return objective
+
+
+def compute_derivative_zero_mean_indicator( x_min, x_max, y_min, y_max, grid_size):
+
+    grad_xmin = np.zeros((grid_size, grid_size))
+    grad_xmax = np.zeros((grid_size, grid_size))
+    grad_ymin = np.zeros((grid_size, grid_size))
+    grad_ymax = np.zeros((grid_size, grid_size))
+
+    for i in range(grid_size):
+        for j in range(grid_size):
+
+            xi = i
+            yi = j
+            
+            H_xmin = heaviside(xi - x_min)
+            H_xmax = heaviside(x_max - xi)
+            H_ymin = heaviside(yi - y_min)
+            H_ymax = heaviside(y_max - yi)
+
+            delta_xmin = dirac_delta_approx(xi - x_min)
+            delta_xmax = dirac_delta_approx(x_max - xi)
+            delta_ymin = dirac_delta_approx(yi - y_min)
+            delta_ymax = dirac_delta_approx(y_max - yi)
+
+            grad_xmin[i,j] = - delta_xmin * H_xmax * H_ymin * H_ymax + (y_max - y_min)/(grid_size**2)
+            grad_xmax[i,j] = delta_xmax * H_xmin * H_ymin * H_ymax - (y_max - y_min)/(grid_size**2)
+            grad_ymin[i,j] = - delta_ymin * H_xmin * H_xmax * H_ymax + (x_max - x_min)/(grid_size**2)
+            grad_ymax[i,j] = delta_ymax * H_xmin * H_xmax * H_ymin - (x_max - x_min)/(grid_size**2)
+
+    return grad_xmin, grad_xmax, grad_ymin, grad_ymax
+
+
+
+
+
+def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function_f, reg_param, grid_size, cut_off):
+
+    freqs_x= np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freqs_y = np.fft.fftfreq(grid_size, d=1 / grid_size)
+    freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
+    
+    mask = np.zeros((grid_size, grid_size))
+    mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+
+    indicator_function_values = np.zeros((len(a) , grid_size, grid_size))
+    indicator_gradients = np.zeros(len(a), 4, grid_size, grid_size)
+
+    K0_indicators = np.zeros((len(a), grid_size, grid_size), dtype=complex)   
+    K0_gradient_indicators = np.zeros((len(a), 4, grid_size, grid_size), dtype=complex)
+
+    perimeters = np.zeros(len(a))
+    perimeter_gradients = np.zeros(len(a), 4)
+
+    final_gradient = np.zeros(len(a), 5 )
+
+    for i in range(len(a)):
+        indicator_function_values[i] = IndicatorFunction( RectangularSet(x_mins[i], x_maxs[i], y_mins[i], y_maxs[i]), grid_size).construct_image_matrix(plot = False)
+        
+        K0_indicators[i] = np.fft.fft2(indicator_function_values[i]) * mask
+
+        
+        perimeters[i] = 2 * (x_maxs[i] - x_mins[i]) + 2 * (y_maxs[i] - y_mins[i])
+
+        perimeter_gradients[i, 0]= -2
+        perimeter_gradients[i, 1]= 2
+        perimeter_gradients[i, 2]= -2
+        perimeter_gradients[i, 3]= 2
+
+        indicator_gradient_i_x_min, indicator_gradient_i_x_max, indicator_gradient_i_y_min, indicator_gradient_i_y_max = compute_derivative_zero_mean_indicator( x_mins[i], x_maxs[i], y_mins[i], y_maxs[i], grid_size)
+
+        indicator_gradients[i,0]= indicator_gradient_i_x_min
+        indicator_gradients[i,1]= indicator_gradient_i_x_max
+        indicator_gradients[i,2]= indicator_gradient_i_y_min
+        indicator_gradients[i,3]= indicator_gradient_i_y_max
+
+        K0_gradient_indicators[i, 0] = np.fft.fft2(indicator_gradients[i,0]) * mask
+        K0_gradient_indicators[i, 1] = np.fft.fft2(indicator_gradients[i,1]) * mask
+        K0_gradient_indicators[i, 2] = np.fft.fft2(indicator_gradients[i,2]) * mask
+        K0_gradient_indicators[i, 3] = np.fft.fft2(indicator_gradients[i,3]) * mask
+
+
+    sum_K0_a = np.sum(a[:, None, None] * K0_indicators, axis = 0)
+    residual = sum_K0_a - target_function_f
+
+    for i in range(len(a)):
+        final_gradient[i, 1]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,0]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 0]
+        final_gradient[i, 2]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,1]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 1]
+        final_gradient[i, 3]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,2]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 2]
+        final_gradient[i, 4]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,3]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 3]
+
+        final_gradient[i,0] = np.sum( np.conj(residual) * K0_indicators[i]) +  reg_param * perimeters[i] * np.sign(a[i])
+
+    
+    return np.real(final_gradient)
+
+
+
+def objective_wrapper_sliding(params, target_function_f, reg_param, grid_size, cut_off):
+    N = len(params) // 5
+    a = params[:N]
+    x_mins = params[N:2*N]
+    x_maxs = params[2*N:3*N]
+    y_mins = params[3*N:4*N]
+    y_maxs = params[4*N:5*N]
+
+    return compute_objective_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function_f, reg_param, grid_size, cut_off)
+
+
+def gradient_wrapper_sliding(params, target_function_f, reg_param, grid_size, cut_off):
+    N = len(params) // 5
+    a = params[:N]
+    x_mins = params[N:2*N]
+    x_maxs = params[2*N:3*N]
+    y_mins = params[3*N:4*N]
+    y_maxs = params[4*N:5*N]
+
+    grad = compute_gradient_sliding(a, x_mins, x_maxs, y_mins, y_maxs, target_function_f, reg_param, grid_size, cut_off)
+
+    return grad.flatten()
+
+    
+
+        
 
     
 
 
 
-    #@property
-    #def num_atoms(self):
-    #    return len(self.atoms)
-
-   # @property
-   # def weights(self):
-   #     return np.array([atom.weight for atom in self.atoms])
-
-   # @property
-   # def supports(self):
-    #    return [atom.support for atom in self.atoms]
-
-
-   # @property
-   # def support_boundary_vertices(self):
-   #     return [atom.support.boundary_vertices for atom in self.atoms]
-
-
-    
-   # def transform_into_image(self, grid_size):
-        x = np.linspace(0, 1, grid_size)
-        y = np.linspace(0, 1, grid_size)
-
-        X, Y = np.meshgrid(x,y)
-        grid = np.stack([X,Y], axis = -1)
-
-        image = np.array([[self((xi, yi)) for xi, yi in row] for row in grid])
-        return image
-
-
-   # def compute_obs(self, fourier, version=0):
-        if self.num_atoms == 0:
-            return np.zeros(fourier.grid_size)
-
-        max_num_triangles = max(len(atom.support.mesh_faces) for atom in self.atoms)
-        meshes = np.zeros((self.num_atoms, max_num_triangles, 3, 2))
-        obs = np.zeros((self.num_atoms, max_num_triangles, fourier.grid_size))
-
-        for i in range(self.num_atoms):
-            support_i = self.atoms[i].support
-            meshes[i, :len(support_i.mesh_faces)] = support_i.mesh_vertices[support_i.mesh_faces]
-
-        fourier._triangle_aux(meshes, obs) 
-
-        
-
-        if version == 1:
-            res = [obs[i, :len(self.atoms[i].support.mesh_faces), :] for i in range(self.num_atoms)]
-        else:
-            res = np.zeros(fourier.grid_size)
-            for i in range(self.num_atoms):
-                res += self.atoms[i].weight * np.sum(obs[i], axis=0)
-
-        return res
-
-
-
-
-    #def extend_support(self, rectangular_set, weight = 0.5):
-     
-     #   new_atom = WeightedIndicatorFunction(weight, rectangular_set)
-        #if not isinstance(self.atoms, list):
-         #   self.atoms = []
-        #self.atoms.append(new_atom)
-
-    #def extend_support(self, rectangular_set):
-        ### zero
-        new_atom = ZeroWeightedIndicatorFunction(rectangular_set)
-        #new_atom = WeightedIndicatorFunction(rectangular_set)
-        #if not isinstance(self.atoms, list):
-         #   self.atoms = []
-        self.atoms.append(new_atom)
-
-
-   # def linear_fit_weights(self, gamma, M, f):
-        scaled_atoms = [
-            #ZeroWeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
-            WeightedIndicatorFunction(atom.support, atom.weight * (1- gamma))
-            for atom in self.atoms[:-1]]
-        new_weight = - self.atoms[-1].weight * (gamma * M * np.sign(self.atoms[-1].support.compute_weighted_area_rec(f))/ self.atoms[-1].support.compute_perimeter_rec())
-        print("self.atoms perimeter... größer als 4???", self.atoms[-1].support.compute_perimeter_rec())
-        print("self.atoms.rect_area in weight berechnung:", self.atoms[-1].support.compute_weighted_area_rec(f))
-        new_atom = ZeroWeightedIndicatorFunction(self.atoms[-1].support, new_weight)
-        print(new_weight)
-        
-        scaled_atoms.append(new_atom)
-        self.atoms = scaled_atoms
-        print("die gewichte:", self.weights)
-        #return SimpleFunction([scaled_atoms, new_atom])
-
-    #def fit_weights4(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        obs = self.compute_phi_E(cut_f)
-
-        
-        mat = obs
-        y= y.real
-
-        
-        print("mat shape:", mat.shape)
-        print("y shape:", y.shape)
-
-        tol = tol_factor * np.linalg.norm(y)**2 / y.size
-       # perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
-        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
-        print("Perimeter:", perimeters)
-        
-        lasso = Lasso(alpha=reg_param/(y.size ), fit_intercept=False, tol=tol, weights=perimeters)
-        #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
-        lasso.fit(mat, y.reshape(-1))
-
-        new_weights = lasso.coef_
-        print("current weights:", new_weights)
-        
-        self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
-                      for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
-        # TODO: clean zero weight condition
-
-    #def fit_weights(self, y, phi, reg_param, tol_factor=1e-4):
-    #def fit_weights(self, y, cut_f, grid_size, reg_param, tol_factor=1e-4):
-        obs = self.compute_obs(cut_f, grid_size, version=1)
-
-        #print(obs)
-        
-        #mat = np.array([np.sum(obs[i], axis=0) for i in range(self.num_atoms)])
-        mat = np.array([obs[i].reshape(-1) for i in range(self.num_atoms)])
-        #mat = mat.T
-        mat = mat.reshape((self.num_atoms, -1)).T
-        mat = mat.reshape((-1, mat.shape[-1]))
-        #mat = mat.reshape((grid_size**2, self.num_atoms)).T  # oder (N, 1)
-
-        mat = mat.real
-        y= y.real
-
-        
-        print("mat shape:", mat.shape)
-        print("y shape:", y.shape)
-
-        tol = tol_factor * np.linalg.norm(y)**2 / y.size
-       # perimeters = np.array([self.atoms[i].support.compute_perimeter() for i in range(self.num_atoms)])
-        perimeters = np.array([self.atoms[i].support.compute_perimeter_rec() for i in range(self.num_atoms)])
-        print("Perimeter:", perimeters)
-        
-        lasso = Lasso(alpha=reg_param/(y.size ), fit_intercept=False, tol=tol, weights=perimeters)
-        #lasso = Lasso(alpha=reg_param, fit_intercept=False, tol=tol, weights=perimeters)
-        lasso.fit(mat, y.reshape(-1))
-
-        new_weights = lasso.coef_
-        print("current weights:", new_weights)
-        ### zero
-        #self.atoms = [ZeroWeightedIndicatorFunction( self.atoms[i].support, new_weights[i])
-         #             for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
-        self.atoms = [WeightedIndicatorFunction( self.atoms[i].support,new_weights[i])
-                      for i in range(self.num_atoms) if np.abs(new_weights[i]) > 1e-2]
-        # TODO: clean zero weight condition
-
+  
  
     
