@@ -267,6 +267,14 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off),jac = gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
 #method='L-BFGS-B'
 #jac = gradient_wrapper_sliding
+
+	print("Result status:", result.message)
+	print("Number of iterations (nit):", result.nit)
+	print("Number of function evaluations (nfev):", result.nfev)
+	print("Number of gradient evaluations (njev):", result.njev)
+	print("Final objective value:", result.fun)
+
+
 	if not result.success:
 		print("Optimization did not converge:", result.message)
 
