@@ -226,7 +226,8 @@ def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function
     for i in range(len(a)):
         indicator_function_values[i] = IndicatorFunction( RectangularSet(x_mins[i], x_maxs[i], y_mins[i], y_maxs[i]), grid_size).construct_image_matrix(plot = False)
         
-        K0_indicators[i] = np.fft.fft2(indicator_function_values[i]) * mask
+        #K0_indicators[i] = np.fft.fft2(indicator_function_values[i]) * mask
+        K0_indicators[i] = np.fft.fft2(indicator_function_values[i]) * mask/(grid_size**2)
 
         
         perimeters[i] = 2 * (x_maxs[i] - x_mins[i]) + 2 * (y_maxs[i] - y_mins[i])
@@ -243,10 +244,16 @@ def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function
         indicator_gradients[i,2]= indicator_gradient_i_y_min
         indicator_gradients[i,3]= indicator_gradient_i_y_max
 
-        K0_gradient_indicators[i, 0] = np.fft.fft2(indicator_gradients[i,0]) * mask
-        K0_gradient_indicators[i, 1] = np.fft.fft2(indicator_gradients[i,1]) * mask
-        K0_gradient_indicators[i, 2] = np.fft.fft2(indicator_gradients[i,2]) * mask
-        K0_gradient_indicators[i, 3] = np.fft.fft2(indicator_gradients[i,3]) * mask
+        #K0_gradient_indicators[i, 0] = np.fft.fft2(indicator_gradients[i,0]) * mask
+        #K0_gradient_indicators[i, 1] = np.fft.fft2(indicator_gradients[i,1]) * mask
+        #K0_gradient_indicators[i, 2] = np.fft.fft2(indicator_gradients[i,2]) * mask
+        #K0_gradient_indicators[i, 3] = np.fft.fft2(indicator_gradients[i,3]) * mask
+
+        K0_gradient_indicators[i, 0] = np.fft.fft2(indicator_gradients[i,0]) * mask / (grid_size)**2
+        K0_gradient_indicators[i, 1] = np.fft.fft2(indicator_gradients[i,1]) * mask / (grid_size)**2
+        K0_gradient_indicators[i, 2] = np.fft.fft2(indicator_gradients[i,2]) * mask / (grid_size)**2
+        K0_gradient_indicators[i, 3] = np.fft.fft2(indicator_gradients[i,3]) * mask / (grid_size)**2
+
 
 
     sum_K0_a = np.sum(a[:, None, None] * K0_indicators, axis = 0)
