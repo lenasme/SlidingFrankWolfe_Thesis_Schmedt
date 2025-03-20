@@ -252,6 +252,9 @@ def compute_gradient_sliding( a, x_mins, x_maxs, y_mins, y_maxs, target_function
     sum_K0_a = np.sum(a[:, None, None] * K0_indicators, axis = 0)
     residual = sum_K0_a - target_function_f
 
+    print("Residual max abs (real):", np.max(np.abs(np.real(residual))))
+    print("Residual max abs (imag):", np.max(np.abs(np.imag(residual))))
+
     for i in range(len(a)):
         final_gradient[i, 1]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,0]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 0]
         final_gradient[i, 2]= a[i] * np.sum( np.conj(residual) * K0_gradient_indicators[i,1]) + reg_param * np.abs(a[i]) * perimeter_gradients[i, 1]
