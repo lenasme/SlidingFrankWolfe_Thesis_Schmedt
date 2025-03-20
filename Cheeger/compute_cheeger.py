@@ -282,7 +282,7 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 		u.atoms[i].weight = new_weights[i]
 		u.atoms[i].support.coordinates = (new_x_mins[i], new_x_maxs[i], new_y_mins[i], new_y_maxs[i])
 
-	return u
+	return u, objective_development, gradient_development
 
 
 
@@ -422,9 +422,22 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.show()
 
 
-		v = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
+		v, objective_development, gradient_development = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
 
 		if plot == True:
+
+
+
+			plt.figure()
+			plt.plot(objective_development)
+			plt.title("Objective")
+			plt.show()
+
+			plt.figure()
+			plt.plot(gradient_development)
+			plt.title("Gradient")
+			plt.show()
+
 
 			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
