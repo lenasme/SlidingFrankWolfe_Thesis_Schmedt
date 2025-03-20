@@ -264,7 +264,7 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 
 
 
-	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off), bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
+	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off),jac = gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
 #method='L-BFGS-B'
 #jac = gradient_wrapper_sliding
 	if not result.success:
