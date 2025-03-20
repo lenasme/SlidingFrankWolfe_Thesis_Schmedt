@@ -344,15 +344,18 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
     atoms = []
     u = SimpleFunction(atoms, grid_size, cut_off)
 
-   
+    iteration = 0
+    max_iter = 30
+
+    while iteration < max_iter:   
 
      
     
 
 
-    weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
+        weights_in_eta = - u.compute_truncated_frequency_image_sf(cut_off, plot = True) + target_function_f
 
-    optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+        optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
         
         #if np.abs(optimal_rectangle.compute_integral (cut_off, 1/reg_param * weights_in_eta, grid_size)) <= optimal_rectangle.compute_anisotropic_perimeter():
@@ -362,80 +365,83 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
         
         
         
-    u.extend_support(optimal_rectangle)
+        u.extend_support(optimal_rectangle)
 
-    fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+        fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 
     
 
         #fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
 
-    if plot == True:
+        if plot == True:
 
-        fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
-
-            # Linker Plot mit Funktionsaufruf
-        data = u.construct_image_matrix_sf(plot=False) 
-        vmin = min(np.min(data), np.min(ground_truth))
-        vmax = max(np.max(data), np.max(ground_truth))
-
-        im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
-                               vmax=vmax)  
-        fig.colorbar(im1, ax=ax[0])
-        ax[0].set_title("Current Function")
-
-        im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
-
-        fig.colorbar(im2, ax = ax[1])
-        ax[1].set_title("Ground Truth")
-
-        diff = - data + ground_truth
-        vmax_diff = np.max(np.abs(diff))
-        im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
-        fig.colorbar(im3, ax = ax[2])
-        ax[2].set_title("Difference")
-
-        plt.tight_layout()
-
-        plt.show()
-
-
-    v = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
-
-    if plot == True:
-
-        fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+            fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
             # Linker Plot mit Funktionsaufruf
-        data = v.construct_image_matrix_sf(plot=False) 
-        vmin = min(np.min(data), np.min(ground_truth))
-        vmax = max(np.max(data), np.max(ground_truth))
+            data = u.construct_image_matrix_sf(plot=False) 
+            vmin = min(np.min(data), np.min(ground_truth))
+            vmax = max(np.max(data), np.max(ground_truth))
 
-        im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
+            im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
                                vmax=vmax)  
-        fig.colorbar(im1, ax=ax[0])
-        ax[0].set_title("Current Function")
+            fig.colorbar(im1, ax=ax[0])
+            ax[0].set_title("Current Function")
 
-        im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
+            im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
 
-        fig.colorbar(im2, ax = ax[1])
-        ax[1].set_title("Ground Truth")
+            fig.colorbar(im2, ax = ax[1])
+            ax[1].set_title("Ground Truth")
 
-        diff = - data + ground_truth
-        vmax_diff = np.max(np.abs(diff))
-        im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
-        fig.colorbar(im3, ax = ax[2])
-        ax[2].set_title("Difference")
+            diff = - data + ground_truth
+            vmax_diff = np.max(np.abs(diff))
+            im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
+            fig.colorbar(im3, ax = ax[2])
+            ax[2].set_title("Difference")
 
-        plt.tight_layout()
+            plt.tight_layout()
+
+            plt.show()
 
 
-        plt.show()
+        v = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
 
-        plt.plot()
-        data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
-        plt.imshow(data, cmap = 'bwr')
-        plt.colorbar()
-        plt.title("Differenz zwischen Funktionen")
-        plt.show()
+        if plot == True:
+
+            fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+
+            # Linker Plot mit Funktionsaufruf
+            data = v.construct_image_matrix_sf(plot=False) 
+            vmin = min(np.min(data), np.min(ground_truth))
+            vmax = max(np.max(data), np.max(ground_truth))
+
+            im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
+                               vmax=vmax)  
+            fig.colorbar(im1, ax=ax[0])
+            ax[0].set_title("Current Function")
+
+            im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
+
+            fig.colorbar(im2, ax = ax[1])
+            ax[1].set_title("Ground Truth")
+
+            diff = - data + ground_truth
+            vmax_diff = np.max(np.abs(diff))
+            im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
+            fig.colorbar(im3, ax = ax[2])
+            ax[2].set_title("Difference")
+
+            plt.tight_layout()
+
+
+            plt.show()
+
+            plt.plot()
+            data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
+            plt.imshow(data, cmap = 'bwr')
+            plt.colorbar()
+            plt.title("Differenz zwischen Funktionen")
+            plt.show()
+        u = v
+
+        iteration += 1
