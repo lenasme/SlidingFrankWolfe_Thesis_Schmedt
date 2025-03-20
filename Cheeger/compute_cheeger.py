@@ -261,7 +261,10 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 		gradient_development.append(gradient_norm)
 		
 
+	from scipy.optimize import check_grad
 
+	err = check_grad(objective_wrapper_sliding, gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param, grid_size, cut_off)
+	print("Gradient check error:", err)	
 
 
 	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off),jac = gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
