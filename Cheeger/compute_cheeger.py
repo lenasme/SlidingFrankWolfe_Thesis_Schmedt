@@ -426,7 +426,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		if plot == True:
 
-
+			print("development objective", objective_development)
+			print("development gradient", gradient_development)
 
 			plt.figure()
 			plt.plot(objective_development)
