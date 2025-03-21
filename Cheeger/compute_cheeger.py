@@ -249,7 +249,16 @@ def sliding_step(u,  target_function_f, reg_param):
 	objective_development = []
 	gradient_development = []
 
+	u.compute_error_term(target_function_f)
 
+	correct_reconstruction = u.compute_truncated_frequency_image_sf(plot = False)
+
+	plt.plot()
+	plt.imshow(correct_reconstruction, cmap = 'bwr')
+	plt.title("Correct Reconstruction")
+	plt.show()
+	
+	print("berechnet")
 
 	def callback(params):
 		objective_value = u.objective_wrapper_sliding(params, target_function_f, reg_param)
@@ -262,10 +271,10 @@ def sliding_step(u,  target_function_f, reg_param):
 		
 
 	from scipy.optimize import check_grad
-	print(dir(u)) 
+	
 
 	err = check_grad(u.objective_wrapper_sliding, u.gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param)
-	print("Gradient check error:", err)	
+	#print("Gradient check error:", err)	
 
 
 	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
