@@ -263,6 +263,8 @@ def sliding_step(u,  target_function_f, reg_param):
 
 	from scipy.optimize import check_grad
 	print(isinstance(u, SimpleFunction)) 
+	print(u.objective_wrapper_sliding)
+	print(u.gradient_wrapper_sliding)
 
 	err = check_grad(u.objective_wrapper_sliding, u.gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param)
 	print("Gradient check error:", err)	
