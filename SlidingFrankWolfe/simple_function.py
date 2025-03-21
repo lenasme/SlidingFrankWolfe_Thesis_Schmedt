@@ -309,7 +309,7 @@ class SimpleFunction:
 
 
 
-	def objective_gradient_wrapper(self, x, target_function_f, reg_param):
+	def gradient_wrapper_sliding(self, x, target_function_f, reg_param):
 		""""
 		brauche ich, um es in scipy.optimize.minimize einbinden kann
 		"""
@@ -325,7 +325,7 @@ class SimpleFunction:
 		return gradient.flatten()
 	
 
-	def compute_objective_wrapper(self, x, target_function_f, reg_param):
+	def objective_wrapper_sliding(self, x, target_function_f, reg_param):
 		""""
 		brauche ich, um es in scipy.optimize.minimize einbinden kann
 		"""
