@@ -194,7 +194,7 @@ class SimpleFunction:
 		plt.colorbar()
 
 		plt.subplot(1,3,3)
-		plt.imshow(np.fft.ifft2(-image + target_function_f).real, cmap = 'bwr', vmin= -np.min(-image+target_function_f).real, vmax = -np.max(-image+target_function_f).real)
+		plt.imshow(np.fft.ifft2(-image + target_function_f).real, cmap = 'bwr', vmin= -np.max(-image+target_function_f).real, vmax = np.max(-image+target_function_f).real)
 		plt.colorbar()
 		plt.show()
 
