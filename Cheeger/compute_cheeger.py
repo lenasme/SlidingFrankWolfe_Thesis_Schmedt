@@ -254,7 +254,7 @@ def sliding_step(u,  target_function_f, reg_param):
 	correct_reconstruction = u.compute_truncated_frequency_image_sf(plot = False)
 
 	plt.plot()
-	plt.imshow(correct_reconstruction.real, cmap = 'bwr')
+	plt.imshow(np.fft.ifft2(correct_reconstruction).real, cmap = 'bwr')
 	plt.title("Correct Reconstruction")
 	plt.show()
 
