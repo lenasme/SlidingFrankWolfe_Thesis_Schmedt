@@ -109,7 +109,7 @@ class SimpleFunction:
 
 	
 	
-	def compute_truncated_frequency_image_sf(self, cut_off, plot = True):
+	def compute_truncated_frequency_image_sf(self, plot = True):
 		image = self.construct_image_matrix_sf(plot = plot)
 		fourier_image = np.fft.fft2(image)
 		freqs_x= np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
@@ -117,7 +117,7 @@ class SimpleFunction:
 		freq_x, freq_y = np.meshgrid(freqs_x, freqs_y, indexing="ij")
 
 		mask = np.zeros((self.grid_size, self.grid_size))
-		mask[(np.abs(freq_x) <= cut_off) & (np.abs(freq_y) <= cut_off)] = 1
+		mask[(np.abs(freq_x) <= self.cut_off) & (np.abs(freq_y) <= self.cut_off)] = 1
 
 		truncated_fourier_image = fourier_image * mask
 
