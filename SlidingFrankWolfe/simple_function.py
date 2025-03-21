@@ -165,6 +165,8 @@ class SimpleFunction:
 									  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) ) )
 
 			return sum
+		
+		
 
 
 	def compute_error_term(self, target_function_f):
@@ -172,11 +174,23 @@ class SimpleFunction:
 		"""
 		1/2 \sum__{k1, k2} | \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx - f(k1, k2)|^2
 		"""
-
+		image = np.zeros((self.grid_size, self.grid_size), dtype = complex)
 		res = 0
 		for k1 in range(- self.cut_off, self.cut_off +1):
 			for k2 in range(-self.cut_off, self.cut_off +1):
+
+				image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = self.compute_fourier_integral(k1, k2)	
+
+
+
 				res += np.abs(self.compute_fourier_integral(k1,k2) - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
+
+		plt.subplot(1,2,1)
+		plt.imshow(np.abs(image), cmap = 'bwr')
+
+		plt.subplot(1,2,2)
+		plt.imshow(np.fft.ifft2(image).real, cmap = 'bwr')
+		plt.show()
 
 		return 0.5 * res
 
