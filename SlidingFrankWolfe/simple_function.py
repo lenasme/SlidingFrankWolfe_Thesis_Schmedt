@@ -179,6 +179,8 @@ class SimpleFunction:
 		for k1 in range(- self.cut_off, self.cut_off +1):
 			for k2 in range(-self.cut_off, self.cut_off +1):
 
+				if k1==0 and k2==0:
+					continue
 				image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = self.compute_fourier_integral(k1, k2)	
 
 
@@ -214,7 +216,7 @@ class SimpleFunction:
 		error_term = self.compute_error_term(target_function_f)
 		regularization_term = 0
 		for atom in self.atoms:
-			regularization_term += 2*(atom.support.x_max - atom.support.x_min) * (atom.support.y_max - atom.support.y_min)* np.abs(atom.weight)
+			regularization_term += 2*((atom.support.x_max - atom.support.x_min) +(atom.support.y_max - atom.support.y_min))* np.abs(atom.weight)
 		regularization_term *= reg_param
 
 		return error_term + regularization_term
@@ -315,15 +317,15 @@ class SimpleFunction:
 		for i in range(len(self.atoms)):
 			atom = self.atoms[i]
 
-			gradient_regularization_term[i, 0] = reg_param * 2 * (atom.support.x_max - atom.support.x_min) * (atom.support.y_max - atom.support.y_min) * np.sign(atom.weight)
+			gradient_regularization_term[i, 0] = reg_param * 2 * ((atom.support.x_max - atom.support.x_min + atom.support.y_max - atom.support.y_min)) * np.sign(atom.weight)
 
-			gradient_regularization_term[i, 1] = - reg_param * 2* np.abs(atom.weight) * (atom.support.y_max - atom.support.y_min)
+			gradient_regularization_term[i, 1] = - reg_param * 2* np.abs(atom.weight) 
 
-			gradient_regularization_term[i, 2] = reg_param * 2* np.abs(atom.weight) * (atom.support.y_max - atom.support.y_min)
+			gradient_regularization_term[i, 2] = reg_param * 2* np.abs(atom.weight)
 
-			gradient_regularization_term[i, 3] = - reg_param * 2* np.abs(atom.weight) * (atom.support.x_max - atom.support.x_min)
+			gradient_regularization_term[i, 3] = - reg_param * 2* np.abs(atom.weight) 
 
-			gradient_regularization_term[i, 4] = reg_param * 2* np.abs(atom.weight) * (atom.support.x_max - atom.support.x_min)
+			gradient_regularization_term[i, 4] = reg_param * 2* np.abs(atom.weight) 
 
 
 		return gradient_error_term + gradient_regularization_term
