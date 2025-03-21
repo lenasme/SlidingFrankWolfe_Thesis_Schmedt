@@ -229,7 +229,7 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 		u.atoms[i].weight = a_opt[i]
 
 
-def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
+def sliding_step(u,  target_function_f, reg_param):
 	a = np.zeros(u.num_atoms)
 	x_mins = np.zeros(u.num_atoms)
 	x_maxs = np.zeros(u.num_atoms)
@@ -244,7 +244,7 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 		y_maxs[i] = u.atoms[i].support.coordinates[3]
 
 	initial_parameters = np.concatenate((a, x_mins, x_maxs, y_mins, y_maxs))
-	bounds =[(-1, 1)] * u.num_atoms + [(0, grid_size)] * u.num_atoms + [(0, grid_size)] * u.num_atoms + [(0, grid_size)] * u.num_atoms + [(0, grid_size)] * u.num_atoms
+	bounds =[(-1, 1)] * u.num_atoms + [(0, u.grid_size)] * u.num_atoms + [(0, u.grid_size)] * u.num_atoms + [(0, u.grid_size)] * u.num_atoms + [(0, u.grid_size)] * u.num_atoms
 
 	objective_development = []
 	gradient_development = []
@@ -252,8 +252,8 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 
 
 	def callback(params):
-		objective_value = objective_wrapper_sliding(params, target_function_f, reg_param, grid_size, cut_off)
-		gradient_value = gradient_wrapper_sliding(params, target_function_f, reg_param, grid_size, cut_off)
+		objective_value = u.objective_wrapper_sliding(params, target_function_f, reg_param)
+		gradient_value = u.gradient_wrapper_sliding(params, target_function_f, reg_param)
 
 		gradient_norm = np.sqrt(gradient_value[0]**2 + gradient_value[1]**2 + gradient_value[2]**2 + gradient_value[3]**2 + gradient_value[4]**2)
 
@@ -263,11 +263,11 @@ def sliding_step(u, grid_size, cut_off, reg_param, target_function_f):
 
 	from scipy.optimize import check_grad
 
-	err = check_grad(objective_wrapper_sliding, gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param, grid_size, cut_off)
+	err = check_grad(objective_wrapper_sliding, gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param)
 	print("Gradient check error:", err)	
 
 
-	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param, grid_size, cut_off),jac = gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
+	result = minimize( fun = objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
 #method='L-BFGS-B'
 #jac = gradient_wrapper_sliding
 
@@ -433,7 +433,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.show()
 
 
-		v, objective_development, gradient_development = sliding_step(u, grid_size, cut_off, reg_param, target_function_f)
+		v, objective_development, gradient_development = sliding_step(u, target_function_f, reg_param)
 
 		if plot == True:
 
