@@ -209,7 +209,7 @@ class SimpleFunction:
 
 		"""
 
-		gradient = np.zeros((len(self.atoms), 5))
+		gradient = np.zeros((len(self.atoms), 5), dtype = complex)
 
 		if k1 == 0 and k2 == 0:
 			
