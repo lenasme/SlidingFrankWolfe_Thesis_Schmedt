@@ -284,13 +284,13 @@ class SimpleFunction:
 				gradient[i, 0] = ((self.grid_size **2)/(- (2*np.pi)**2 * k1* k2)) * (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size + atom.support.y_max * k2 / self.grid_size )) - np.exp(- 2*np.pi * 1j * (atom.support.x_max * k1 / self.grid_size +  atom.support.y_min * k2 / self.grid_size)) 
 									  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) )
 
-				gradient[i, 1] = atom.weight * ( (self.grid_size * 1j)  / ( (- 2*np.pi * k2) *( np.exp( -2*np.pi *1j*(atom.support.x_min * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  ))
+				gradient[i, 1] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *( np.exp( -2*np.pi *1j*(atom.support.x_min * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
 
-				gradient[i, 2] = atom.weight * ( (self.grid_size * 1j)  / ( (- 2*np.pi * k2) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_max * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  ))
+				gradient[i, 2] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_max * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
 
-				gradient[i, 3] = atom.weight * ( (self.grid_size * 1j)  / ( (- 2*np.pi * k1) *( np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_min * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  ))
+				gradient[i, 3] = atom.weight * ( (self.grid_size * 1j)  / (- 2*np.pi * k1) *( np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_min * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
 
-				gradient[i, 4] = atom.weight * ( (self.grid_size * 1j)  / ( (- 2*np.pi * k1) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2 /self.grid_size)) )  ))
+				gradient[i, 4] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k1) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2 /self.grid_size)) )  )
 
 
 		return gradient
