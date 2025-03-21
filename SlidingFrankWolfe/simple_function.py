@@ -185,12 +185,15 @@ class SimpleFunction:
 
 				res += np.abs(self.compute_fourier_integral(k1,k2) - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
 
-		plt.subplot(1,2,1)
+		plt.subplot(1,3,1)
 		plt.imshow(np.abs(image), cmap = 'bwr')
 
-		plt.subplot(1,2,2)
+		plt.subplot(1,3,2)
 		plt.imshow(np.fft.ifft2(image).real, cmap = 'bwr')
 		plt.colorbar()
+
+		plt.subplot(1,3,3)
+		plt.imshow(np.fft.ifft2(image - target_function_f).real, cmap = 'bwr')
 		plt.show()
 
 		return 0.5 * res
