@@ -190,6 +190,7 @@ class SimpleFunction:
 
 		plt.subplot(1,2,2)
 		plt.imshow(np.fft.ifft2(image).real, cmap = 'bwr')
+		plt.colorbar()
 		plt.show()
 
 		return 0.5 * res
