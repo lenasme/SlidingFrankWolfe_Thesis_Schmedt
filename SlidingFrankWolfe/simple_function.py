@@ -188,6 +188,7 @@ class SimpleFunction:
 		plt.subplot(1,3,1)
 		plt.tight_layout()
 		plt.imshow(np.abs(image), cmap = 'bwr')
+		plt.colorbar()
 
 		plt.subplot(1,3,2)
 		plt.imshow(np.fft.ifft2(image).real, cmap = 'bwr')
