@@ -256,6 +256,7 @@ def sliding_step(u,  target_function_f, reg_param):
 	plt.plot()
 	plt.imshow(np.fft.ifft2(correct_reconstruction).real, cmap = 'bwr')
 	plt.title("Correct Reconstruction")
+	plt.colorbar()
 	plt.show()
 
 	print("berechnet")
