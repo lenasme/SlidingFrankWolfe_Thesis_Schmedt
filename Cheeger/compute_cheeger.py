@@ -268,7 +268,7 @@ def sliding_step(u,  target_function_f, reg_param):
 		print("gradient shape:", gradient_value.shape)
 		print("Params shape:", params.shape)
 
-		gradient_norm = np.linald.norm(gradient_value)
+		gradient_norm = np.linalg.norm(gradient_value)
 
 		objective_development.append(objective_value)
 		gradient_development.append(gradient_norm)
