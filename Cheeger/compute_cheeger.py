@@ -465,7 +465,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		v, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
 
-		for i in range(len(v.num_atoms)):
+		for i in range((v.num_atoms)):
 			print("koordniaten von v", v.atoms[i].coordonates )
 			print("koordinaten von u", u.atoms[i].coordinates)
 
