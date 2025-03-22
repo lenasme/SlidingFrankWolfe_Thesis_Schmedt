@@ -279,7 +279,7 @@ def sliding_step(u,  target_function_f, reg_param):
 
 	err = check_grad(u.objective_wrapper_sliding, u.gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param)
 	print("Gradient check error:", err)	
-	grad_num = approx_fprime(initial_parameters, u.objective_wrapper_sliding, epsilon=1e-8, *[target_function_f, reg_param])
+	grad_num = approx_fprime(initial_parameters, u.objective_wrapper_sliding, 1e-8, target_function_f, reg_param)
 	grad_ana = u.gradient_wrapper_sliding(initial_parameters, target_function_f, reg_param)
 	print("Numerischer Gradient:", grad_num)
 	print("Analytischer Gradient:", grad_ana)
