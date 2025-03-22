@@ -249,17 +249,17 @@ def sliding_step(u,  target_function_f, reg_param):
 	objective_development = []
 	gradient_development = []
 
-	u.compute_error_term(target_function_f)
+	#u.compute_error_term(target_function_f)
 
-	correct_reconstruction = u.compute_truncated_frequency_image_sf(plot = False)
+	#correct_reconstruction = u.compute_truncated_frequency_image_sf(plot = False)
 
-	plt.plot()
-	plt.imshow(np.fft.ifft2(correct_reconstruction).real, cmap = 'bwr')
-	plt.title("Correct Reconstruction")
-	plt.colorbar()
-	plt.show()
+	#plt.plot()
+	#plt.imshow(np.fft.ifft2(correct_reconstruction).real, cmap = 'bwr')
+	#plt.title("Correct Reconstruction")
+	#plt.colorbar()
+	#plt.show()
 
-	print("berechnet")
+	#print("berechnet")
 
 	def callback(params):
 		objective_value = u.objective_wrapper_sliding(params, target_function_f, reg_param)
