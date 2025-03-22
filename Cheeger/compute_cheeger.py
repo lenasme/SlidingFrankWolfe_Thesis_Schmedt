@@ -248,7 +248,10 @@ def sliding_step(u,  target_function_f, reg_param):
 
 	objective_development = []
 	gradient_development = []
-
+	x_min_values = []
+	x_max_values = []
+	y_min_values = []
+	y_max_values = []
 	#u.compute_error_term(target_function_f)
 
 	#correct_reconstruction = u.compute_truncated_frequency_image_sf(plot = False)
@@ -267,11 +270,19 @@ def sliding_step(u,  target_function_f, reg_param):
 
 		#print("gradient shape:", gradient_value.shape)
 		#print("Params shape:", params.shape)
+		x_min_value = u.atoms[0].support.x_min
+		x_max_value = u.atoms[0].support.x_max
+		y_min_value = u.atoms[0].support.y_min
+		y_max_value = u.atoms[0].support.y_max
 
 		gradient_norm = np.linalg.norm(gradient_value)
-
+	
 		objective_development.append(objective_value)
 		gradient_development.append(gradient_norm)
+		x_min_values.append(x_min_value)
+		x_max_values.append(x_max_value)
+		y_min_values.append(y_min_value)
+		y_max_values.append(y_max_value)
 		
 
 	from scipy.optimize import check_grad
@@ -312,7 +323,7 @@ def sliding_step(u,  target_function_f, reg_param):
 		u.atoms[i].weight = new_weights[i]
 		u.atoms[i].support.coordinates = (new_x_mins[i], new_x_maxs[i], new_y_mins[i], new_y_maxs[i])
 
-	return u, objective_development, gradient_development
+	return u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values
 
 
 
@@ -452,12 +463,21 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.show()
 
 
-		v, objective_development, gradient_development = sliding_step(u, target_function_f, reg_param)
+		v, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
+
+		for i in range(len(v.num_atoms)):
+			print("koordniaten von v", v.atoms[i].coordonates )
+			print("koordinaten von u", u.atoms[i].coordinates)
+
 
 		if plot == True:
 
 			print("development objective", objective_development)
 			print("development gradient", gradient_development)
+			print("development x_min", x_min_values)
+			print("development x_max", x_max_values)
+			print("development y_min", y_min_values)
+			print("development y_max", y_max_values)
 
 			plt.figure()
 			plt.plot(objective_development)
@@ -469,6 +489,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Gradient")
 			plt.show()
 
+			
 
 			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
