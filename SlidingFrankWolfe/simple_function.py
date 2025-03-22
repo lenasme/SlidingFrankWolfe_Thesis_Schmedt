@@ -244,7 +244,7 @@ class SimpleFunction:
 			gradient[:, 4] = 0
 
 			
-			return 0
+			return gradient
 		
 		elif k1 == 0:
 			for i in range(len(self.atoms)):
