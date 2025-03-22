@@ -2,7 +2,7 @@ import numpy as np
 import cvxpy as cp
 import time
 
-from scipy.optimize import minimize
+from scipy.optimize import minimize, approx_fprime
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.animation as animation
@@ -265,7 +265,10 @@ def sliding_step(u,  target_function_f, reg_param):
 		objective_value = u.objective_wrapper_sliding(params, target_function_f, reg_param)
 		gradient_value = u.gradient_wrapper_sliding(params, target_function_f, reg_param)
 
-		gradient_norm = np.sqrt(gradient_value[0]**2 + gradient_value[1]**2 + gradient_value[2]**2 + gradient_value[3]**2 + gradient_value[4]**2)
+		print("gradient shape:", gradient_value.shape)
+		print("Params shape:", params.shape)
+
+		gradient_norm = np.linald.norm(gradient_value)
 
 		objective_development.append(objective_value)
 		gradient_development.append(gradient_norm)
@@ -276,6 +279,11 @@ def sliding_step(u,  target_function_f, reg_param):
 
 	err = check_grad(u.objective_wrapper_sliding, u.gradient_wrapper_sliding, initial_parameters, target_function_f, reg_param)
 	print("Gradient check error:", err)	
+	grad_num = approx_fprime(initial_parameters, u.objective_wrapper_sliding, epsilon=1e-8, *[target_function_f, reg_param])
+	grad_ana = u.gradient_wrapper_sliding(initial_parameters, target_function_f, reg_param)
+	print("Numerischer Gradient:", grad_num)
+	print("Analytischer Gradient:", grad_ana)
+	print("Diff:", np.linalg.norm(grad_num - grad_ana))
 
 
 	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds,method = 'L-BFGS-B', options={'maxiter': 10000, 'disp': True, 'ftol': 1e-7, 'gtol': 1e-6}, callback = callback)
