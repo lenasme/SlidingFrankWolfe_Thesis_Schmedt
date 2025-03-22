@@ -2,6 +2,7 @@ import numpy as np
 import cvxpy as cp
 import time
 
+import copy
 from scipy.optimize import minimize, approx_fprime
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -463,10 +464,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.show()
 
 
-		v, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
+		v = copy.deepcopy(u)
+
+
+		u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
 
 		for i in range((v.num_atoms)):
-			print("koordniaten von v", v.atoms[i].support.coordinates )
+			
 			print("koordinaten von u", u.atoms[i].support.coordinates)
 
 
@@ -494,7 +498,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
 			# Linker Plot mit Funktionsaufruf
-			data = v.construct_image_matrix_sf(plot=False) 
+			data = u.construct_image_matrix_sf(plot=False) 
 			vmin = min(np.min(data), np.min(ground_truth))
 			vmax = max(np.max(data), np.max(ground_truth))
 
@@ -525,6 +529,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.colorbar()
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
-		u = v
+		
 
 		iteration += 1
