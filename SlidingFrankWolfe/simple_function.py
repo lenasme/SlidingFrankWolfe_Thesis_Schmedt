@@ -346,7 +346,7 @@ class SimpleFunction:
 
 		gradient = self.compute_gradient_sliding(target_function_f, reg_param)
 		
-		return gradient.flatten()
+		return gradient.T.flatten()
 	
 
 	def objective_wrapper_sliding(self, x, target_function_f, reg_param):
