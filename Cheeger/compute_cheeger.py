@@ -191,7 +191,7 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 	K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
 	perimeters = np.zeros(u.num_atoms)
 	for i in range(u.num_atoms):
-		print(f"Koordinaten des Atoms {i}: {u.atoms[i].support.coordinates}")
+		print(f"Gewicht und Koordinaten des Atoms {i}: {u.atoms[i].weight,u.atoms[i].support.coordinates}")
 		K_0[i] = fourier_image_rectangle(u.atoms[i].support, grid_size, cut_off)
 		perimeters[i] = u.atoms[i].support.compute_anisotropic_perimeter()
 
@@ -228,6 +228,9 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 
 	for i in range(u.num_atoms):
 		u.atoms[i].weight = a_opt[i]
+	
+	for i in range(u.num_atoms):
+		print(f"Gewicht und Koordinaten des Atoms {i} nach fit weights: {u.atoms[i].weight,u.atoms[i].support.coordinates}")
 
 
 def sliding_step(u,  target_function_f, reg_param):
