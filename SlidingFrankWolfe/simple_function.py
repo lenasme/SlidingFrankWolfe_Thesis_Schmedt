@@ -206,25 +206,25 @@ class SimpleFunction:
 			return sum_result
 
 
-	#def compute_error_term(self, target_function_f):
+	def compute_error_term(self, target_function_f):
 
-	#	"""
-	#	1/2 \sum__{k1, k2} | \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx - f(k1, k2)|^2
-	#	"""
-		#image = np.zeros((self.grid_size, self.grid_size), dtype = complex)
-		#res = 0
-		#for k1 in range(- self.cut_off, self.cut_off +1):
-		#	for k2 in range(-self.cut_off, self.cut_off +1):
+		"""
+		1/2 \sum__{k1, k2} | \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx - f(k1, k2)|^2
+		"""
+		image = np.zeros((self.grid_size, self.grid_size), dtype = complex)
+		res = 0
+		for k1 in range(- self.cut_off, self.cut_off +1):
+			for k2 in range(-self.cut_off, self.cut_off +1):
 
-		#		if k1==0 and k2==0:
-		#			continue
+				if k1==0 and k2==0:
+					continue
 
-		#		val = self.compute_fourier_integral(k1, k2)
-		#		image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = val
+				val = self.compute_fourier_integral(k1, k2)
+				image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = val
 
 
-#
-#				res += np.abs(val - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
+
+				res += np.abs(val - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
 
 		#plt.subplot(1,3,1)
 		#plt.tight_layout()
@@ -241,29 +241,9 @@ class SimpleFunction:
 		#plt.colorbar()
 		#plt.show()
 
-#		return 0.5 * res
+		return 0.5 * res
 
-	def compute_error_term(self, target_function_f, n_jobs=-1):
-		"""
-		Parallelisierte Version:
-		1/2 * sum_{k1, k2} |FourierIntegral(k1, k2) - f(k1, k2)|^2
-		"""
-
-		k_vals = np.arange(-self.cut_off, self.cut_off + 1)
-		k1_k2_pairs = [(k1, k2) for k1 in k_vals for k2 in k_vals if not (k1 == 0 and k2 == 0)]
-
-		def compute_single_term(k1, k2):
-			val = self.compute_fourier_integral(k1, k2)
-			target_val = target_function_f[(k1 + self.grid_size) % self.grid_size,
-									   (k2 + self.grid_size) % self.grid_size]
-			return np.abs(val - target_val) ** 2
-
-		# Parallelisiere die Berechnung über alle (k1, k2) Paare
-		results = Parallel(n_jobs=n_jobs, backend='loky')(
-			delayed(compute_single_term)(k1, k2) for k1, k2 in k1_k2_pairs
-		)
-
-		return 0.5 * np.sum(results)
+	
 
 
 	def compute_objective_sliding(self, target_function_f, reg_param):
@@ -285,77 +265,131 @@ class SimpleFunction:
 
 
 
-	def compute_derivative_fourier_integral(self, k1, k2):
+	#def compute_derivative_fourier_integral(self, k1, k2):
 
-		"""
-		compute the derivative of sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx
+		#"""
+		#compute the derivative of sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx
 
-		in the directions: a_i, x_min_i, x_max_i, y_min_i, y_max_i  for any i
+		#in the directions: a_i, x_min_i, x_max_i, y_min_i, y_max_i  for any i
 
-		"""
+		#"""
 
-		gradient = np.zeros((len(self.atoms), 5), dtype = complex)
+		#gradient = np.zeros((len(self.atoms), 5), dtype = complex)
 
-		if k1 == 0 and k2 == 0:
+		#if k1 == 0 and k2 == 0:
 			
-			gradient[:, 0] = 0
-			gradient[:, 1] = 0
-			gradient[:, 2] = 0
-			gradient[:, 3] = 0
-			gradient[:, 4] = 0
+			#gradient[:, 0] = 0
+			#gradient[:, 1] = 0
+			#gradient[:, 2] = 0
+			#gradient[:, 3] = 0
+			#gradient[:, 4] = 0
 
 			
 			
 		
-		elif k1 == 0:
-			for i in range(len(self.atoms)):
-				atom = self.atoms[i]
+		#elif k1 == 0:
+			#for i in range(len(self.atoms)):
+				#atom = self.atoms[i]
 
-				gradient[i, 0] = ((self.grid_size)/(2*np.pi*1j * k2)) * ((-np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_max
-									  + (np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_min)
+				#gradient[i, 0] = ((self.grid_size)/(2*np.pi*1j * k2)) * ((-np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_max
+				#					  + (np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_min)
 
-				gradient[i, 1] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k2)) * ( np.exp( -2 * np.pi * 1j *(atom.support.y_max * k2 / self.grid_size)) - np.exp(-2*np.pi*1j*(atom.support.y_min * k2 /self.grid_size))))
+				#gradient[i, 1] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k2)) * ( np.exp( -2 * np.pi * 1j *(atom.support.y_max * k2 / self.grid_size)) - np.exp(-2*np.pi*1j*(atom.support.y_min * k2 /self.grid_size))))
 
-				gradient[i, 2] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k2)) * ( - np.exp( -2 * np.pi * 1j *(atom.support.y_max * k2 / self.grid_size)) + np.exp(-2*np.pi*1j*(atom.support.y_min * k2 /self.grid_size))))
+				#gradient[i, 2] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k2)) * ( - np.exp( -2 * np.pi * 1j *(atom.support.y_max * k2 / self.grid_size)) + np.exp(-2*np.pi*1j*(atom.support.y_min * k2 /self.grid_size))))
 
-				gradient[i, 3] = atom.weight * (- np.exp(-2*np.pi*1j *( atom.support.y_min * k2 / self.grid_size)) * atom.support.x_max + np.exp(-2*np.pi*1j*(atom.support.y_min * k2 / self.grid_size))*atom.support.x_min)
+				#gradient[i, 3] = atom.weight * (- np.exp(-2*np.pi*1j *( atom.support.y_min * k2 / self.grid_size)) * atom.support.x_max + np.exp(-2*np.pi*1j*(atom.support.y_min * k2 / self.grid_size))*atom.support.x_min)
 
-				gradient[i, 4] = atom.weight *  ( np.exp(-2*np.pi*1j *( atom.support.y_max * k2 / self.grid_size)) * atom.support.x_max - np.exp(-2*np.pi*1j*(atom.support.y_max * k2 / self.grid_size))*atom.support.x_min)
+				#gradient[i, 4] = atom.weight *  ( np.exp(-2*np.pi*1j *( atom.support.y_max * k2 / self.grid_size)) * atom.support.x_max - np.exp(-2*np.pi*1j*(atom.support.y_max * k2 / self.grid_size))*atom.support.x_min)
 
+
+		#elif k2 == 0:
+			#for i in range(len(self.atoms)):
+				#atom = self.atoms[i]
+
+				#gradient[i, 0] = ((self.grid_size)/(2*np.pi*1j * k1)) * ((-np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_max
+				#					  + (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_min)
+
+				#gradient[i, 1] = atom.weight * (- np.exp(-2*np.pi*1j *( atom.support.x_min * k1 / self.grid_size)) * atom.support.y_max + np.exp(-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size))*atom.support.y_min)
+
+				#gradient[i, 2] = atom.weight * ( np.exp(-2*np.pi*1j *( atom.support.x_max * k1 / self.grid_size)) * atom.support.y_max - np.exp(-2*np.pi*1j*(atom.support.x_max * k1 / self.grid_size))*atom.support.y_min)
+
+				#gradient[i, 3] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k1)) * ( np.exp( -2 * np.pi * 1j *(atom.support.x_max * k1 / self.grid_size)) - np.exp(-2*np.pi*1j*(atom.support.x_min * k1 /self.grid_size))))
+
+				#gradient[i, 4] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k1)) * ( -np.exp( -2 * np.pi * 1j *(atom.support.x_max * k1 / self.grid_size)) + np.exp(-2*np.pi*1j*(atom.support.x_min * k1 /self.grid_size))))
+
+		#else:
+			#for i in range(len(self.atoms)):   
+				#atom = self.atoms[i]
+
+				#gradient[i, 0] = ((self.grid_size **2)/(- (2*np.pi)**2 * k1* k2)) * (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size + atom.support.y_max * k2 / self.grid_size )) - np.exp(- 2*np.pi * 1j * (atom.support.x_max * k1 / self.grid_size +  atom.support.y_min * k2 / self.grid_size)) 
+				#					  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) )
+
+				#gradient[i, 1] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *( np.exp( -2*np.pi *1j*(atom.support.x_min * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
+
+				#gradient[i, 2] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_max * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
+
+				#gradient[i, 3] = atom.weight * ( (self.grid_size * 1j)  / (- 2*np.pi * k1) *( np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_min * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
+
+				#gradient[i, 4] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k1) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2 /self.grid_size)) )  )
+
+
+		#return gradient
+	
+
+
+	def compute_derivative_fourier_integral(self, k1, k2):
+		N = len(self.atoms)
+		x_min = np.array([atom.support.x_min for atom in self.atoms])
+		x_max = np.array([atom.support.x_max for atom in self.atoms])
+		y_min = np.array([atom.support.y_min for atom in self.atoms])
+		y_max = np.array([atom.support.y_max for atom in self.atoms])
+		weights = np.array([atom.weight for atom in self.atoms])
+
+		gradient = np.zeros((N, 5), dtype=complex)
+
+		if k1 == 0 and k2 == 0:
+			return gradient
+
+		factor_x = -2 * np.pi * 1j * k1 / self.grid_size
+		factor_y = -2 * np.pi * 1j * k2 / self.grid_size
+
+		exp_x_min = np.exp(factor_x * x_min)
+		exp_x_max = np.exp(factor_x * x_max)
+		exp_y_min = np.exp(factor_y * y_min)
+		exp_y_max = np.exp(factor_y * y_max)
+
+		if k1 == 0:
+			prefactor = self.grid_size / (2 * np.pi * 1j * k2)
+			gradient[:, 0] = prefactor * ((-exp_y_max + exp_y_min) * x_max + (exp_y_max - exp_y_min) * x_min)
+			gradient[:, 1] = weights * prefactor * (exp_y_min - exp_y_max)
+			gradient[:, 2] = weights * prefactor * (exp_y_max - exp_y_min)
+			gradient[:, 3] = weights * (-exp_y_min * x_max + exp_y_min * x_min)
+			gradient[:, 4] = weights * (exp_y_max * x_max - exp_y_max * x_min)
 
 		elif k2 == 0:
-			for i in range(len(self.atoms)):
-				atom = self.atoms[i]
-
-				gradient[i, 0] = ((self.grid_size)/(2*np.pi*1j * k1)) * ((-np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_max
-									  + (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_min)
-
-				gradient[i, 1] = atom.weight * (- np.exp(-2*np.pi*1j *( atom.support.x_min * k1 / self.grid_size)) * atom.support.y_max + np.exp(-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size))*atom.support.y_min)
-
-				gradient[i, 2] = atom.weight * ( np.exp(-2*np.pi*1j *( atom.support.x_max * k1 / self.grid_size)) * atom.support.y_max - np.exp(-2*np.pi*1j*(atom.support.x_max * k1 / self.grid_size))*atom.support.y_min)
-
-				gradient[i, 3] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k1)) * ( np.exp( -2 * np.pi * 1j *(atom.support.x_max * k1 / self.grid_size)) - np.exp(-2*np.pi*1j*(atom.support.x_min * k1 /self.grid_size))))
-
-				gradient[i, 4] = atom.weight * ( (self.grid_size / (2* np.pi * 1j * k1)) * ( -np.exp( -2 * np.pi * 1j *(atom.support.x_max * k1 / self.grid_size)) + np.exp(-2*np.pi*1j*(atom.support.x_min * k1 /self.grid_size))))
+			prefactor = self.grid_size / (2 * np.pi * 1j * k1)
+			gradient[:, 0] = prefactor * ((-exp_x_max + exp_x_min) * y_max + (exp_x_max - exp_x_min) * y_min)
+			gradient[:, 1] = weights * (-exp_x_min * y_max + exp_x_min * y_min)
+			gradient[:, 2] = weights * (exp_x_max * y_max - exp_x_max * y_min)
+			gradient[:, 3] = weights * prefactor * (exp_x_min - exp_x_max)
+			gradient[:, 4] = weights * prefactor * (exp_x_max - exp_x_min)
 
 		else:
-			for i in range(len(self.atoms)):   
-				atom = self.atoms[i]
+			prefactor = self.grid_size ** 2 / (-(2 * np.pi) ** 2 * k1 * k2)
+			exp_x_min_y_min = np.exp(factor_x * x_min + factor_y * y_min)
+			exp_x_min_y_max = np.exp(factor_x * x_min + factor_y * y_max)
+			exp_x_max_y_min = np.exp(factor_x * x_max + factor_y * y_min)
+			exp_x_max_y_max = np.exp(factor_x * x_max + factor_y * y_max)
 
-				gradient[i, 0] = ((self.grid_size **2)/(- (2*np.pi)**2 * k1* k2)) * (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size + atom.support.y_max * k2 / self.grid_size )) - np.exp(- 2*np.pi * 1j * (atom.support.x_max * k1 / self.grid_size +  atom.support.y_min * k2 / self.grid_size)) 
-									  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) )
-
-				gradient[i, 1] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *( np.exp( -2*np.pi *1j*(atom.support.x_min * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
-
-				gradient[i, 2] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k2) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_max * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
-
-				gradient[i, 3] = atom.weight * ( (self.grid_size * 1j)  / (- 2*np.pi * k1) *( np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_min * k2 /self.grid_size)) - np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_min *k2 /self.grid_size)) )  )
-
-				gradient[i, 4] = atom.weight * ( (self.grid_size * 1j)  /  (- 2*np.pi * k1) *(- np.exp( -2*np.pi *1j*(atom.support.x_max * k1/self.grid_size + atom.support.y_max * k2 /self.grid_size)) + np.exp(-2*np.pi*1j *(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2 /self.grid_size)) )  )
-
+			gradient[:, 0] = prefactor * (exp_x_max_y_max - exp_x_max_y_min - exp_x_min_y_max + exp_x_min_y_min)
+			gradient[:, 1] = weights * self.grid_size * 1j / (-2 * np.pi * k2) * (exp_x_min_y_max - exp_x_min_y_min)
+			gradient[:, 2] = weights * self.grid_size * 1j / (-2 * np.pi * k2) * (-exp_x_max_y_max + exp_x_max_y_min)
+			gradient[:, 3] = weights * self.grid_size * 1j / (-2 * np.pi * k1) * (exp_x_max_y_min - exp_x_min_y_min)
+			gradient[:, 4] = weights * self.grid_size * 1j / (-2 * np.pi * k1) * (-exp_x_max_y_max + exp_x_min_y_max)
 
 		return gradient
-	
+
 
 	def compute_gradient_sliding(self, target_function_f, reg_param):
 
