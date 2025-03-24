@@ -181,11 +181,13 @@ class SimpleFunction:
 
 				if k1==0 and k2==0:
 					continue
-				image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = self.compute_fourier_integral(k1, k2)	
+
+				val = self.compute_fourier_integral(k1, k2)
+				image[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size] = val
 
 
 
-				res += np.abs(self.compute_fourier_integral(k1,k2) - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
+				res += np.abs(val - target_function_f[(k1+self.grid_size) % self.grid_size, (k2+self.grid_size) % self.grid_size])**2
 
 		#plt.subplot(1,3,1)
 		#plt.tight_layout()
