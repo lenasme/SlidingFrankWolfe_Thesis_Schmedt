@@ -139,34 +139,70 @@ class SimpleFunction:
 		compute \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx
 		"""
 
-		if k1 == 0 and k2 == 0:
-			return 0 
+		#if k1 == 0 and k2 == 0:
+		#	return 0 
 		
-		elif k1 == 0:
-			sum = 0
-			for atom in self.atoms:
-				sum += atom.weight * ( ((self.grid_size)/(2*np.pi*1j * k2)) * ((-np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_max
-									  + (np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_min))
+		#elif k1 == 0:
+		#	sum = 0
+		#	for atom in self.atoms:
+		#		sum += atom.weight * ( ((self.grid_size)/(2*np.pi*1j * k2)) * ((-np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_max
+							#		  + (np.exp (-2*np.pi*1j*(atom.support.y_max *k2/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.y_min * k2 / self.grid_size)) ) * atom.support.x_min))
 				
-			return sum
+		#	return sum
 		
-		elif k2 == 0:
-			sum = 0
-			for atom in self.atoms:
-				sum += atom.weight * ( ((self.grid_size)/(2*np.pi*1j * k1)) * ((-np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_max
-									  + (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_min))
+		#elif k2 == 0:
+		#	sum = 0
+		#	for atom in self.atoms:
+		#		sum += atom.weight * ( ((self.grid_size)/(2*np.pi*1j * k1)) * ((-np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_max
+					#				  + (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size  )) - np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size)) ) * atom.support.y_min))
 
-			return sum
+		#	return sum
+
+		#else:
+		#	sum = 0
+		#	for atom in self.atoms:
+		#		sum += atom.weight * ( ((self.grid_size **2)/(- (2*np.pi)**2 * k1* k2)) * (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size + atom.support.y_max * k2 / self.grid_size )) - np.exp(- 2*np.pi * 1j * (atom.support.x_max * k1 / self.grid_size +  atom.support.y_min * k2 / self.grid_size)) 
+		#							  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) ) )
+
+		#	return sum
+		
+		if k1 == 0 and k2 == 0:
+			return 0
+
+		# Extrahiere alle Atome als numpy Arrays
+		weights = np.array([atom.weight for atom in self.atoms], dtype=complex)
+		x_min = np.array([atom.support.x_min for atom in self.atoms], dtype=float)
+		x_max = np.array([atom.support.x_max for atom in self.atoms], dtype=float)
+		y_min = np.array([atom.support.y_min for atom in self.atoms], dtype=float)
+		y_max = np.array([atom.support.y_max for atom in self.atoms], dtype=float)
+
+		grid_size = self.grid_size
+		pi = np.pi
+		j = 1j  # imaginäre Einheit
+
+		if k1 == 0:
+			exp_ymax = np.exp(-2 * pi * j * y_max * k2 / grid_size)
+			exp_ymin = np.exp(-2 * pi * j * y_min * k2 / grid_size)
+			term = ((-exp_ymax + exp_ymin) * x_max + (exp_ymax - exp_ymin) * x_min)
+			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k2)) * term)
+			return sum_result
+
+		elif k2 == 0:
+			exp_xmax = np.exp(-2 * pi * j * x_max * k1 / grid_size)
+			exp_xmin = np.exp(-2 * pi * j * x_min * k1 / grid_size)
+			term = ((-exp_xmax + exp_xmin) * y_max + (exp_xmax - exp_xmin) * y_min)
+			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k1)) * term)
+			return sum_result
 
 		else:
-			sum = 0
-			for atom in self.atoms:
-				sum += atom.weight * ( ((self.grid_size **2)/(- (2*np.pi)**2 * k1* k2)) * (np.exp (-2*np.pi*1j*(atom.support.x_max *k1/ self.grid_size + atom.support.y_max * k2 / self.grid_size )) - np.exp(- 2*np.pi * 1j * (atom.support.x_max * k1 / self.grid_size +  atom.support.y_min * k2 / self.grid_size)) 
-									  - np.exp (-2*np.pi*1j*(atom.support.x_min * k1 / self.grid_size + atom.support.y_max *k2/ self.grid_size  )) + np.exp(- 2*np.pi * 1j * (atom.support.x_min * k1 / self.grid_size + atom.support.y_min * k2 / self.grid_size)) ) )
+			exp_xmax_ymax = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_max * k2 / grid_size))
+			exp_xmax_ymin = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_min * k2 / grid_size))
+			exp_xmin_ymax = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_max * k2 / grid_size))
+			exp_xmin_ymin = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_min * k2 / grid_size))
 
-			return sum
-		
-		
+			term = exp_xmax_ymax - exp_xmax_ymin - exp_xmin_ymax + exp_xmin_ymin
+			sum_result = np.sum(weights * (grid_size ** 2) / (-(2 * pi) ** 2 * k1 * k2) * term)
+			return sum_result
 
 
 	def compute_error_term(self, target_function_f):
