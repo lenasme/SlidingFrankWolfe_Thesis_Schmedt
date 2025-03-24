@@ -298,7 +298,7 @@ def sliding_step(u,  target_function_f, reg_param):
 	print("Diff:", np.linalg.norm(grad_num - grad_ana))
 
 
-	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds, method='L-BFGS-B', options={'gtol': 1e-6,'maxiter': 10000, 'disp': True }, callback = callback)
+	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds, method='L-BFGS-B', options={'gtol': 1e-3,'maxiter': 100, 'disp': True }, callback = callback)
 #method='L-BFGS-B'
 #jac = gradient_wrapper_sliding
 
