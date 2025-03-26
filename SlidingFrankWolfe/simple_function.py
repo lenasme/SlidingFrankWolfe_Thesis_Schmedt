@@ -370,45 +370,113 @@ class SimpleFunction:
 		return error_term + regularization_term
 
 
-	def compute_derivative_fourier_integral(self, k1, k2):
+	#def compute_derivative_fourier_integral(self, k1, k2):
 		gradient = np.zeros((len(self.atoms), 5), dtype=complex)
 
 		for i, atom in enumerate(self.atoms):
 			x_min, x_max = atom.support.x_min, atom.support.x_max
 			y_min, y_max = atom.support.y_min, atom.support.y_max
 			weight = atom.weight
+			grid_size = self.grid_size
 		
 			# Precompute values to avoid repeated calculations
-			y_max_exp = np.exp(-2 * np.pi * 1j * y_max * k2 / self.grid_size)
-			y_min_exp = np.exp(-2 * np.pi * 1j * y_min * k2 / self.grid_size)
-			x_max_exp = np.exp(-2 * np.pi * 1j * x_max * k1 / self.grid_size)
-			x_min_exp = np.exp(-2 * np.pi * 1j * x_min * k1 / self.grid_size)
+			y_max_exp = np.exp(-2 * np.pi * 1j * y_max * k2 / grid_size)
+			y_min_exp = np.exp(-2 * np.pi * 1j * y_min * k2 / grid_size)
+			x_max_exp = np.exp(-2 * np.pi * 1j * x_max * k1 / grid_size)
+			x_min_exp = np.exp(-2 * np.pi * 1j * x_min * k1 / grid_size)
 		
 			if k1 == 0 and k2 == 0:
 				continue
 			elif k1 == 0:  # Derivatives when k1 == 0
-				common_factor = self.grid_size / (2 * np.pi * 1j * k2)
+				common_factor = grid_size / (2 * np.pi * 1j * k2)
 				gradient[i, 0] = common_factor * (-(y_max_exp - y_min_exp) * x_max + (y_max_exp - y_min_exp) * x_min)
 				gradient[i, 1] = weight * common_factor * (y_max_exp - y_min_exp)
 				gradient[i, 2] = weight * common_factor * (-y_max_exp + y_min_exp)
 				gradient[i, 3] = weight * (-y_min_exp * x_max + y_min_exp * x_min)
 				gradient[i, 4] = weight * (y_max_exp * x_max - y_max_exp * x_min)
 			elif k2 == 0:  # Derivatives when k2 == 0
-				common_factor = self.grid_size / (2 * np.pi * 1j * k1)
+				common_factor = grid_size / (2 * np.pi * 1j * k1)
 				gradient[i, 0] = common_factor * (-(x_max_exp - x_min_exp) * y_max + (x_max_exp - x_min_exp) * y_min)
 				gradient[i, 1] = weight * (-x_min_exp * y_max + x_min_exp * y_min)
 				gradient[i, 2] = weight * (x_max_exp * y_max - x_max_exp * y_min)
 				gradient[i, 3] = weight * common_factor * (x_max_exp - x_min_exp)
 				gradient[i, 4] = weight * common_factor * (-x_max_exp + x_min_exp)
 			else:  # General case
-				factor_a = self.grid_size ** 2 / (-(2 * np.pi) ** 2 * k1 * k2)
-				factor_x = (self.grid_size * 1j)/(- 2 * np.pi *k2)
-				factor_y = (self.grid_size * 1j)/(- 2 * np.pi *k1)
+				factor_a = grid_size ** 2 / (-(2 * np.pi) ** 2 * k1 * k2)
+				factor_x = (grid_size * 1j)/(- 2 * np.pi *k2)
+				factor_y = (grid_size * 1j)/(- 2 * np.pi *k1)
 				gradient[i, 0] = factor_a * (x_max_exp * y_max_exp - x_max_exp * y_min_exp - x_min_exp * y_max_exp + x_min_exp * y_min_exp)
 				gradient[i, 1] = weight * factor_x * (x_min_exp * y_max_exp - x_min_exp * y_min_exp)
 				gradient[i, 2] = weight * factor_x  * (-x_max_exp * y_max_exp + x_max_exp * y_min_exp)
 				gradient[i, 3] = weight * factor_y  * (x_max_exp * y_min_exp - x_min_exp * y_min_exp)
 				gradient[i, 4] = weight * factor_y  * (-x_max_exp * y_max_exp + x_min_exp * y_max_exp)
+
+		return gradient
+	
+	def compute_derivative_fourier_integral(self, k1, k2):
+		weights = []
+		x_mins = []
+		x_maxs = []
+		y_mins = []
+		y_maxs = []
+
+		for atom in self.atoms:
+			weights.append(atom.weight)
+			x_mins.append(atom.support.x_min)
+			x_maxs.append(atom.support.x_max)
+			y_mins.append(atom.support.y_min)
+			y_maxs.append(atom.support.y_max)
+
+		weights = np.array(weights)
+		x_mins = np.array(x_mins)
+		x_maxs = np.array(x_maxs)
+		y_mins = np.array(y_mins)
+		y_maxs = np.array(y_maxs)
+
+		return self._compute_derivative_fourier_integral(k1, k2, weights, x_mins, x_maxs, y_mins, y_maxs, self.grid_size)
+
+
+
+
+	@jit
+	@staticmethod
+	def _compute_derivative_fourier_integral(k1, k2, weights, x_mins, x_maxs, y_mins, y_maxs, grid_size):
+		gradient = np.zeros((len(weights), 5), dtype=complex)
+
+		for i in range(len(weights)):
+			
+		
+			# Precompute values to avoid repeated calculations
+			y_max_exp = np.exp(-2 * np.pi * 1j * y_maxs[i] * k2 / grid_size)
+			y_min_exp = np.exp(-2 * np.pi * 1j * y_mins[i] * k2 / grid_size)
+			x_max_exp = np.exp(-2 * np.pi * 1j * x_maxs[i] * k1 / grid_size)
+			x_min_exp = np.exp(-2 * np.pi * 1j * x_mins[i] * k1 / grid_size)
+		
+			if k1 == 0 and k2 == 0:
+				continue
+			elif k1 == 0:  # Derivatives when k1 == 0
+				common_factor = grid_size / (2 * np.pi * 1j * k2)
+				gradient[i, 0] = common_factor * (-(y_max_exp - y_min_exp) * x_maxs[i] + (y_max_exp - y_min_exp) * x_mins[i])
+				gradient[i, 1] = weights[i] * common_factor * (y_max_exp - y_min_exp)
+				gradient[i, 2] = weights[i] * common_factor * (-y_max_exp + y_min_exp)
+				gradient[i, 3] = weights[i] * (-y_min_exp * x_maxs[i] + y_min_exp * x_mins[i])
+				gradient[i, 4] = weights[i] * (y_max_exp * x_maxs[i] - y_max_exp * x_mins[i])
+			elif k2 == 0:  # Derivatives when k2 == 0
+				common_factor = grid_size / (2 * np.pi * 1j * k1)
+				gradient[i, 0] = common_factor * (-(x_max_exp - x_min_exp) * y_maxs[i] + (x_max_exp - x_min_exp) * y_mins[i])
+				gradient[i, 1] = weights[i] * (-x_min_exp * y_maxs[i] + x_min_exp * y_mins[i])
+				gradient[i, 2] = weights[i] * (x_max_exp * y_maxs[i] - x_max_exp * y_mins[i])
+				gradient[i, 3] = weights[i] * common_factor * (x_max_exp - x_min_exp)
+				gradient[i, 4] = weights[i] * common_factor * (-x_max_exp + x_min_exp)
+			else:  # General case
+				factor_a = grid_size ** 2 / (-(2 * np.pi) ** 2 * k1 * k2)
+				factor_x = (grid_size * 1j)/(- 2 * np.pi *k2)
+				factor_y = (grid_size * 1j)/(- 2 * np.pi *k1)
+				gradient[i, 0] = factor_a * (x_max_exp * y_max_exp - x_max_exp * y_min_exp - x_min_exp * y_max_exp + x_min_exp * y_min_exp)
+				gradient[i, 1] = weights[i] * factor_x * (x_min_exp * y_max_exp - x_min_exp * y_min_exp)
+				gradient[i, 2] = weights[i] * factor_x  * (-x_max_exp * y_max_exp + x_max_exp * y_min_exp)
+				gradient[i, 3] = weights[i] * factor_y  * (x_max_exp * y_min_exp - x_min_exp * y_min_exp)
+				gradient[i, 4] = weights[i] * factor_y  * (-x_max_exp * y_max_exp + x_min_exp * y_max_exp)
 
 		return gradient
 
