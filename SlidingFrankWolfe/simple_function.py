@@ -245,20 +245,25 @@ class SimpleFunction:
 		
 
 	def compute_fourier_integral(self, k1, k2):
-		return self._compute_fourier_integral(k1, k2, self.grid_size, self.atoms)
+		weights = np.array([atom.weight for atom in self.atoms], dtype=complex)
+		x_min = np.array([atom.support.x_min for atom in self.atoms], dtype=float)
+		x_max = np.array([atom.support.x_max for atom in self.atoms], dtype=float)
+		y_min = np.array([atom.support.y_min for atom in self.atoms], dtype=float)
+		y_max = np.array([atom.support.y_max for atom in self.atoms], dtype=float)
+		return self._compute_fourier_integral(k1, k2, weights, x_min, x_max, y_min, y_max, self.grid_size)
 
 	@staticmethod
 	@jit(nopython = True)
-	def _compute_fourier_integral(k1, k2, grid_size, atoms):
+	def _compute_fourier_integral(k1, k2, weights, x_min, x_max, y_min, y_max, grid_size):
 		if k1 == 0 and k2 == 0:
 			return 0
 
 		# Extrahiere alle Atome als numpy Arrays
-		weights = np.array([atom.weight for atom in atoms], dtype=complex)
-		x_min = np.array([atom.support.x_min for atom in atoms], dtype=float)
-		x_max = np.array([atom.support.x_max for atom in atoms], dtype=float)
-		y_min = np.array([atom.support.y_min for atom in atoms], dtype=float)
-		y_max = np.array([atom.support.y_max for atom in atoms], dtype=float)
+		#weights = np.array([atom.weight for atom in atoms], dtype=complex)
+		#x_min = np.array([atom.support.x_min for atom in atoms], dtype=float)
+		#x_max = np.array([atom.support.x_max for atom in atoms], dtype=float)
+		#y_min = np.array([atom.support.y_min for atom in atoms], dtype=float)
+		#y_max = np.array([atom.support.y_max for atom in atoms], dtype=float)
 
 		
 		pi = np.pi
