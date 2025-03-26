@@ -265,7 +265,7 @@ class SimpleFunction:
 
 
 
-	def compute_derivative_fourier_integral(self, k1, k2):
+	#def compute_derivative_fourier_integral(self, k1, k2):
 
 		"""
 		compute the derivative of sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx
@@ -337,7 +337,7 @@ class SimpleFunction:
 		return gradient
 	
 
-	def compute_gradient_sliding(self, target_function_f, reg_param):
+	#def compute_gradient_sliding(self, target_function_f, reg_param):
 
 		"""
 		compute the gradient of 1/2 \sum__{k1, k2} | \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx - f(k1, k2)|^2
@@ -371,6 +371,64 @@ class SimpleFunction:
 
 		return gradient_error_term + gradient_regularization_term
 	
+
+	def compute_derivative_fourier_integral(self, k1, k2):
+		gradient = np.zeros((len(self.atoms), 5), dtype=complex)
+
+		for i, atom in enumerate(self.atoms):
+			x_min, x_max = atom.support.x_min, atom.support.x_max
+			y_min, y_max = atom.support.y_min, atom.support.y_max
+			weight = atom.weight
+		
+			# Precompute values to avoid repeated calculations
+			y_max_exp = np.exp(-2 * np.pi * 1j * y_max * k2 / self.grid_size)
+			y_min_exp = np.exp(-2 * np.pi * 1j * y_min * k2 / self.grid_size)
+			x_max_exp = np.exp(-2 * np.pi * 1j * x_max * k1 / self.grid_size)
+			x_min_exp = np.exp(-2 * np.pi * 1j * x_min * k1 / self.grid_size)
+		
+			if k1 == 0 and k2 == 0:
+				continue
+			elif k1 == 0:  # Derivatives when k1 == 0
+				common_factor = self.grid_size / (2 * np.pi * 1j * k2)
+				gradient[i, 0] = common_factor * (-(y_max_exp - y_min_exp) * x_max + (y_max_exp - y_min_exp) * x_min)
+				gradient[i, 1] = weight * common_factor * (y_max_exp - y_min_exp)
+				gradient[i, 2] = -weight * common_factor * (y_max_exp - y_min_exp)
+				gradient[i, 3] = weight * (-y_min_exp * x_max + y_min_exp * x_min)
+				gradient[i, 4] = weight * (y_max_exp * x_max - y_max_exp * x_min)
+			elif k2 == 0:  # Derivatives when k2 == 0
+				common_factor = self.grid_size / (2 * np.pi * 1j * k1)
+				gradient[i, 0] = common_factor * (-(x_max_exp - x_min_exp) * y_max + (x_max_exp - x_min_exp) * y_min)
+				gradient[i, 1] = weight * (-x_min_exp * y_max + x_min_exp * y_min)
+				gradient[i, 2] = weight * (x_max_exp * y_max - x_max_exp * y_min)
+				gradient[i, 3] = weight * common_factor * (x_max_exp - x_min_exp)
+				gradient[i, 4] = -weight * common_factor * (x_max_exp - x_min_exp)
+			else:  # General case
+				factor = self.grid_size ** 2 / (-(2 * np.pi) ** 2 * k1 * k2)
+				gradient[i, 0] = factor * (x_max_exp * y_max_exp - x_max_exp * y_min_exp - x_min_exp * y_max_exp + x_min_exp * y_min_exp)
+				gradient[i, 1] = weight * factor * 1j / (-2 * np.pi * k2) * (x_min_exp * y_max_exp - x_min_exp * y_min_exp)
+				gradient[i, 2] = weight * factor * 1j / (-2 * np.pi * k2) * (-x_max_exp * y_max_exp + x_max_exp * y_min_exp)
+				gradient[i, 3] = weight * factor * 1j / (-2 * np.pi * k1) * (x_max_exp * y_min_exp - x_min_exp * y_min_exp)
+				gradient[i, 4] = weight * factor * 1j / (-2 * np.pi * k1) * (-x_max_exp * y_max_exp + x_min_exp * y_max_exp)
+
+		return gradient
+
+	def compute_gradient_sliding(self, target_function_f, reg_param):
+		gradient_error_term = np.zeros((len(self.atoms), 5))
+	
+		grid_range = range(-self.cut_off, self.cut_off + 1)
+		for k1 in grid_range:
+			for k2 in grid_range:
+				if k1 == 0 and k2 == 0:
+					continue
+				gradient_integral = self.compute_derivative_fourier_integral(k1, k2)
+				error_term_conjugate = np.conj(self.compute_fourier_integral(k1, k2) - target_function_f[(k1 + self.grid_size) % self.grid_size, (k2 + self.grid_size) % self.grid_size])
+				gradient_error_term += np.real(error_term_conjugate * gradient_integral)
+
+		gradient_regularization_term = reg_param * 2 * np.array([[atom.support.x_max - atom.support.x_min + atom.support.y_max - atom.support.y_min,
+															  -np.abs(atom.weight), np.abs(atom.weight),
+															  -np.abs(atom.weight), np.abs(atom.weight)] 
+															 for atom in self.atoms])
+		return gradient_error_term + gradient_regularization_term.flatten()
 
 
 
