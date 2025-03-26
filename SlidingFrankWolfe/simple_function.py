@@ -442,7 +442,7 @@ class SimpleFunction:
 	@staticmethod
 	@jit(nopython = True)
 	def _compute_derivative_fourier_integral(k1, k2, weights, x_mins, x_maxs, y_mins, y_maxs, grid_size):
-		gradient = np.zeros((len(weights), 5), dtype=complex)
+		gradient = np.zeros((len(weights), 5), dtype=np.complex128)
 
 		for i in range(len(weights)):
 			
