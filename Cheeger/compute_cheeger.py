@@ -300,6 +300,7 @@ def sliding_step(u,  target_function_f, reg_param):
 	print("Numerischer Gradient:", grad_num)
 	print("Analytischer Gradient:", grad_ana)
 	print("Diff:", np.linalg.norm(grad_num - grad_ana))
+	print("Starting objective value:", u.compute_objective_sliding(target_function_f, reg_param))
 
 	start_time = time.time()
 
@@ -314,6 +315,7 @@ def sliding_step(u,  target_function_f, reg_param):
 	print("Number of iterations (nit):", result.nit)
 	print("Number of function evaluations (nfev):", result.nfev)
 	print("Number of gradient evaluations (njev):", result.njev)
+	
 	print("Final objective value:", result.fun)
 
 
