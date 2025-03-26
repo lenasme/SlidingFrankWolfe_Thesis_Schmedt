@@ -538,5 +538,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
 		
+		fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 
 		iteration += 1
