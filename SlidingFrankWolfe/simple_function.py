@@ -198,29 +198,48 @@ class SimpleFunction:
 		grid_size = self.grid_size
 		pi = np.pi
 		j = 1j  # imaginäre Einheit
+		factor = -2 * pi * j / grid_size
 
 		if k1 == 0:
-			exp_ymax = np.exp(-2 * pi * j * y_max * k2 / grid_size)
-			exp_ymin = np.exp(-2 * pi * j * y_min * k2 / grid_size)
-			term = ((-exp_ymax + exp_ymin) * x_max + (exp_ymax - exp_ymin) * x_min)
+			y_factor = factor * k2
+			exp_ymax = np.exp(y_factor * y_max)
+			#exp_ymax = np.exp(-2 * pi * j * y_max * k2 / grid_size)
+			exp_ymin = np.exp(y_factor * y_min)
+			#exp_ymin = np.exp(-2 * pi * j * y_min * k2 / grid_size)
+			term = (exp_ymin - exp_ymax)*(x_max - x_min)
+			#term = ((-exp_ymax + exp_ymin) * x_max + (exp_ymax - exp_ymin) * x_min)
 			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k2)) * term)
 			return sum_result
 
 		elif k2 == 0:
-			exp_xmax = np.exp(-2 * pi * j * x_max * k1 / grid_size)
-			exp_xmin = np.exp(-2 * pi * j * x_min * k1 / grid_size)
-			term = ((-exp_xmax + exp_xmin) * y_max + (exp_xmax - exp_xmin) * y_min)
+			x_factor = factor * k1
+			exp_xmax = np.exp(x_factor * x_max)
+			#exp_xmax = np.exp(-2 * pi * j * x_max * k1 / grid_size)
+			exp_xmin = np.exp(x_factor * x_min)
+			#exp_xmin = np.exp(-2 * pi * j * x_min * k1 / grid_size)
+			term = (exp_xmin - exp_xmax)*(y_max - y_min)
+			#term = ((-exp_xmax + exp_xmin) * y_max + (exp_xmax - exp_xmin) * y_min)
 			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k1)) * term)
 			return sum_result
 
 		else:
-			exp_xmax_ymax = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_max * k2 / grid_size))
-			exp_xmax_ymin = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_min * k2 / grid_size))
-			exp_xmin_ymax = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_max * k2 / grid_size))
-			exp_xmin_ymin = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_min * k2 / grid_size))
+			y_factor = factor * k2
+			x_factor = factor * k1
 
-			term = exp_xmax_ymax - exp_xmax_ymin - exp_xmin_ymax + exp_xmin_ymin
-			sum_result = np.sum(weights * (grid_size ** 2) / (-(2 * pi) ** 2 * k1 * k2) * term)
+			exp_xmax = np.exp(x_factor * x_max)
+			exp_xmin = np.exp(x_factor * x_min)
+			exp_ymax = np.exp(y_factor * y_max)
+			exp_ymin = np.exp(y_factor * y_min)
+
+			#exp_xmax_ymax = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_max * k2 / grid_size))
+			#exp_xmax_ymin = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_min * k2 / grid_size))
+			#exp_xmin_ymax = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_max * k2 / grid_size))
+			#exp_xmin_ymin = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_min * k2 / grid_size))
+
+			term = (exp_xmax - exp_xmin) * (exp_ymax - exp_ymin)
+			#term = exp_xmax_ymax - exp_xmax_ymin - exp_xmin_ymax + exp_xmin_ymin
+			sum_result = np.sum(weights * (grid_size ** 2) / ((2 * pi * j) ** 2 * k1 * k2) * term)
+			#sum_result = np.sum(weights * (grid_size ** 2) / (-(2 * pi) ** 2 * k1 * k2) * term)
 			return sum_result
 
 
