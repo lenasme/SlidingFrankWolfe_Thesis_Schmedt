@@ -513,8 +513,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		ps = pstats.Stats(pr, stream=s).sort_stats('cumtime')  # Alternativ 'tottime'
 		ps.print_stats(30)  # Zeige die Top 30 Zeitfresser
 		print(s.getvalue())
-		
-		for i in range((v.num_atoms)):
+
+		for i in range((u.num_atoms)):
 			
 			print("koordinaten von u", u.atoms[i].support.coordinates)
 
