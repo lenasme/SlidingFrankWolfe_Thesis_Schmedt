@@ -232,6 +232,7 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 	
 	for i in range(u.num_atoms):
 		print(f"Gewicht und Koordinaten des Atoms {i} nach fit weights: {u.atoms[i].weight,u.atoms[i].support.coordinates}")
+	print("Aktuelles Objective:", u.compute_objective_sliding(target_function_f, reg_param))
 	u.remove_small_atoms(threshold = 1e-2)
 
 def sliding_step(u,  target_function_f, reg_param):
