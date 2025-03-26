@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from celer import Lasso
 from joblib import Parallel, delayed
-from numba import njit
+from numba import njit, jit
 
 from Cheeger.rectangular_set import RectangularSet
 
@@ -152,8 +152,8 @@ class SimpleFunction:
 
 
 
-	@njit
-	def compute_fourier_integral(self, k1, k2):
+	
+	#def compute_fourier_integral(self, k1, k2):
 
 		"""
 		compute \sum_j a_j \int_{x_min_j}^{x_max_j} \int_{y_min_j}^{y_max_j} e^{-2 pi i (x*k1 / grid_size + y*k2/ grid_size)} dy dx
@@ -197,6 +197,70 @@ class SimpleFunction:
 		y_max = np.array([atom.support.y_max for atom in self.atoms], dtype=float)
 
 		grid_size = self.grid_size
+		pi = np.pi
+		j = 1j  # imaginäre Einheit
+		factor = -2 * pi * j / grid_size
+
+		if k1 == 0:
+			y_factor = factor * k2
+			exp_ymax = np.exp(y_factor * y_max)
+			#exp_ymax = np.exp(-2 * pi * j * y_max * k2 / grid_size)
+			exp_ymin = np.exp(y_factor * y_min)
+			#exp_ymin = np.exp(-2 * pi * j * y_min * k2 / grid_size)
+			term = (exp_ymin - exp_ymax)*(x_max - x_min)
+			#term = ((-exp_ymax + exp_ymin) * x_max + (exp_ymax - exp_ymin) * x_min)
+			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k2)) * term)
+			return sum_result
+
+		elif k2 == 0:
+			x_factor = factor * k1
+			exp_xmax = np.exp(x_factor * x_max)
+			#exp_xmax = np.exp(-2 * pi * j * x_max * k1 / grid_size)
+			exp_xmin = np.exp(x_factor * x_min)
+			#exp_xmin = np.exp(-2 * pi * j * x_min * k1 / grid_size)
+			term = (exp_xmin - exp_xmax)*(y_max - y_min)
+			#term = ((-exp_xmax + exp_xmin) * y_max + (exp_xmax - exp_xmin) * y_min)
+			sum_result = np.sum(weights * (grid_size / (2 * pi * j * k1)) * term)
+			return sum_result
+
+		else:
+			y_factor = factor * k2
+			x_factor = factor * k1
+
+			exp_xmax = np.exp(x_factor * x_max)
+			exp_xmin = np.exp(x_factor * x_min)
+			exp_ymax = np.exp(y_factor * y_max)
+			exp_ymin = np.exp(y_factor * y_min)
+
+			#exp_xmax_ymax = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_max * k2 / grid_size))
+			#exp_xmax_ymin = np.exp(-2 * pi * j * (x_max * k1 / grid_size + y_min * k2 / grid_size))
+			#exp_xmin_ymax = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_max * k2 / grid_size))
+			#exp_xmin_ymin = np.exp(-2 * pi * j * (x_min * k1 / grid_size + y_min * k2 / grid_size))
+
+			term = (exp_xmax - exp_xmin) * (exp_ymax - exp_ymin)
+			#term = exp_xmax_ymax - exp_xmax_ymin - exp_xmin_ymax + exp_xmin_ymin
+			sum_result = np.sum(weights * (grid_size ** 2) / ((2 * pi * j) ** 2 * k1 * k2) * term)
+			#sum_result = np.sum(weights * (grid_size ** 2) / (-(2 * pi) ** 2 * k1 * k2) * term)
+			return sum_result
+		
+
+	def compute_fourier_integral(self, k1, k2):
+		return self._compute_fourier_integral(k1, k2, self.grid_size, self.atoms)
+
+	@staticmethod
+	@jit(nopython = True)
+	def _compute_fourier_integral(k1, k2, grid_size, atoms):
+		if k1 == 0 and k2 == 0:
+			return 0
+
+		# Extrahiere alle Atome als numpy Arrays
+		weights = np.array([atom.weight for atom in atoms], dtype=complex)
+		x_min = np.array([atom.support.x_min for atom in atoms], dtype=float)
+		x_max = np.array([atom.support.x_max for atom in atoms], dtype=float)
+		y_min = np.array([atom.support.y_min for atom in atoms], dtype=float)
+		y_max = np.array([atom.support.y_max for atom in atoms], dtype=float)
+
+		
 		pi = np.pi
 		j = 1j  # imaginäre Einheit
 		factor = -2 * pi * j / grid_size
