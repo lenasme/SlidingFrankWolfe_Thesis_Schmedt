@@ -187,7 +187,7 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
 
 	return fourier_image
 
-def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
+#def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 	 #k(\1_E)
 	K_0 = np.zeros((u.num_atoms, grid_size, grid_size), dtype = complex)
 	perimeters = np.zeros(u.num_atoms)
@@ -234,6 +234,25 @@ def fit_weights(u, grid_size, cut_off, reg_param, target_function_f  ):
 		print(f"Gewicht und Koordinaten des Atoms {i} nach fit weights: {u.atoms[i].weight,u.atoms[i].support.coordinates}")
 	print("Aktuelles Objective:", u.compute_objective_sliding(target_function_f, reg_param))
 	u.remove_small_atoms(threshold = 1e-2)
+
+def fit_weights(u, target_function_f, reg_param):
+	def objective_scipy(a_vec):
+		# Update Gewichte temporär
+		for i in range(u.num_atoms):
+			u.atoms[i].weight = a_vec[i]
+		return u.compute_objective_sliding(target_function_f, reg_param)
+
+	a_init = np.array([atom.weight for atom in u.atoms])
+	res = minimize(objective_scipy, a_init, method='L-BFGS-B')
+
+	if res.success:
+		for i in range(u.num_atoms):
+			u.atoms[i].weight = res.x[i]
+
+	print("Aktuelles Objective:", u.compute_objective_sliding(target_function_f, reg_param))
+	u.remove_small_atoms(threshold = 1e-2)
+
+
 
 def sliding_step(u,  target_function_f, reg_param):
 	a = np.zeros(u.num_atoms)
@@ -439,8 +458,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		u.extend_support(optimal_rectangle)
 
-		fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
-
+		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+		fit_weights(u,  target_function_f, reg_param)
 	
 
 		#fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
@@ -542,6 +561,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
 		
-		fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
+		fit_weights(u, target_function_f, reg_param)
+
 
 		iteration += 1
