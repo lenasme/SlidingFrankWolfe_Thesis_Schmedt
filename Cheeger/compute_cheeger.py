@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.animation as animation
 import time
+import cProfile
+import pstats
+import io
+
 #from .simple_set import SimpleSet
 #from .optimizer_debugging import CheegerOptimizer
 #from .tools import run_primal_dual, extract_contour, resample
@@ -497,9 +501,19 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		v = copy.deepcopy(u)
 
+		pr = cProfile.Profile()
+		pr.enable()
 
 		u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
 
+		pr.disable()
+
+		# Ergebnisse sortiert nach Laufzeit
+		s = io.StringIO()
+		ps = pstats.Stats(pr, stream=s).sort_stats('cumtime')  # Alternativ 'tottime'
+		ps.print_stats(30)  # Zeige die Top 30 Zeitfresser
+		print(s.getvalue())
+		
 		for i in range((v.num_atoms)):
 			
 			print("koordinaten von u", u.atoms[i].support.coordinates)
