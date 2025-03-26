@@ -7,6 +7,7 @@ from scipy.optimize import minimize, approx_fprime
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.animation as animation
+import time
 #from .simple_set import SimpleSet
 #from .optimizer_debugging import CheegerOptimizer
 #from .tools import run_primal_dual, extract_contour, resample
@@ -300,10 +301,14 @@ def sliding_step(u,  target_function_f, reg_param):
 	print("Analytischer Gradient:", grad_ana)
 	print("Diff:", np.linalg.norm(grad_num - grad_ana))
 
+	start_time = time.time()
 
 	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds, method='L-BFGS-B', options={'gtol': 1e-3,'maxiter': 100, 'disp': True }, callback = callback)
 #method='L-BFGS-B'
 #jac = gradient_wrapper_sliding
+	end_time = time.time()
+
+	print(f'Ursprüngliche Laufzeit: {end_time -start_time :.6f} Sekunden')
 
 	print("Result status:", result.message)
 	print("Number of iterations (nit):", result.nit)
