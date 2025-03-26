@@ -87,6 +87,23 @@ class SimpleFunction:
 		new_atom = IndicatorFunction(rectangular_set, self.grid_size)
 		self.atoms.append(new_atom)
 
+
+	def remove_small_atoms(self, threshold = 1e-3):
+		remaining_atoms = []
+		removed_count = 0
+
+		for i in range(self.num_atoms):
+			if np.abs(self.atoms[i].weight) > threshold:
+				remaining_atoms.append(self.atoms[i])
+
+			else:
+				removed_count += 1
+		print (f"{removed_count} Atome mit Gewicht < {threshold} entfernt.")
+		self.atoms = remaining_atoms
+		#self.num_atoms = len(self.atoms)
+
+		
+
 	
 
 	def construct_image_matrix_sf(self, plot = True):
