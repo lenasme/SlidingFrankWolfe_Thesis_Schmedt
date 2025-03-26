@@ -570,6 +570,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
+			print("Integral der current function:", np.sum(u.construct_image_matrix_sf(plot = False)))
+
 			plt.plot()
 			data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
 			plt.imshow(data, cmap = 'bwr')
