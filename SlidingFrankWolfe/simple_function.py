@@ -393,7 +393,7 @@ class SimpleFunction:
 															  -np.abs(atom.weight), np.abs(atom.weight),
 															  -np.abs(atom.weight), np.abs(atom.weight)] 
 															 for atom in self.atoms])
-		return gradient_error_term + gradient_regularization_term.flatten()
+		return gradient_error_term + gradient_regularization_term
 	
 
 	#def compute_gradient_sliding(self, target_function_f, reg_param):
