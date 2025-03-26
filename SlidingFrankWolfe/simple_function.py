@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 from celer import Lasso
 from joblib import Parallel, delayed
+from numba import njit
 
 from Cheeger.rectangular_set import RectangularSet
 
@@ -151,7 +152,7 @@ class SimpleFunction:
 
 
 
-
+	@njit
 	def compute_fourier_integral(self, k1, k2):
 
 		"""
