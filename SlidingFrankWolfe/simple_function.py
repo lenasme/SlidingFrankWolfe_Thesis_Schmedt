@@ -91,6 +91,7 @@ class SimpleFunction:
 	def remove_small_atoms(self, threshold = 1e-3):
 		remaining_atoms = []
 		removed_count = 0
+		
 
 		for i in range(self.num_atoms):
 			if np.abs(self.atoms[i].weight) > threshold:
@@ -100,7 +101,7 @@ class SimpleFunction:
 				removed_count += 1
 		print (f"{removed_count} Atome mit Gewicht < {threshold} entfernt.")
 		self.atoms = remaining_atoms
-		#self.num_atoms = len(self.atoms)
+		#self = SimpleFunction(remaining_atoms, )
 
 		
 
