@@ -442,7 +442,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
 	objective_whole_iteration = []
-	objective_development = []
+	objective_overall_development = []
 	iteration = 0
 	max_iter = 12
 
@@ -486,7 +486,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 
-		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		integral = 0
 		for atom in u.atoms:
@@ -619,17 +619,17 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
 
-		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 		
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u, target_function_f, reg_param)
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
-		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		plt.figure()
-		plt.plot(objective_development)
-		plt.title("Objective development")
+		plt.plot(objective_overall_development)
+		plt.title("Objective overall development")
 		plt.show()
 
 
