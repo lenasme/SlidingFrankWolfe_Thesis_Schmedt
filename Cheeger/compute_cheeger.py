@@ -46,7 +46,7 @@ def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None,
 	truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
 
 	rng = np.random.default_rng(seed)
-	noise = noise_level * (rng.standard_normal(grid_size, grid_size) + 1j * rng.standard_normal(grid_size, grid_size))
+	noise = noise_level * (rng.standard_normal((grid_size, grid_size)) + 1j * rng.standard_normal((grid_size, grid_size)))
 
 	target_function_f = truncated_operator_applied_on_ground_truth + noise
 
