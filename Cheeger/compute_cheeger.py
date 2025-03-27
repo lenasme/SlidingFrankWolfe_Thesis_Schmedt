@@ -482,8 +482,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
-	
-		print("Integral nach fix weights:", np.sum(u.construct_image_matrix_sf(plot=False)))
+
+		integral = 0
+		for atom in u.atoms:
+			integral += (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
+
+		print("Integral nach fix weights:", integral)
 
 		#fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
