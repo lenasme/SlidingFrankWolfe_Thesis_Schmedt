@@ -360,7 +360,7 @@ def sliding_step(u,  target_function_f, reg_param):
 		u.atoms[i].weight = new_weights[i]
 		u.atoms[i].support.coordinates = (new_x_mins[i], new_x_maxs[i], new_y_mins[i], new_y_maxs[i])
 
-	u.remove_small_atoms(threshold = 1e-2)
+	u.remove_small_atoms(threshold = 1e-3)
 	return u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values
 
 
