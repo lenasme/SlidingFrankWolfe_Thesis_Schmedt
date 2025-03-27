@@ -464,20 +464,20 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		u.extend_support(optimal_rectangle)
 		
-		for atom in u.atoms:
-			integral = atom.weight * (atom.area * atom.inner_value + (grid_size **2 - atom.area)* atom.outer_value)
-			print("Integral nach extend support der einzelnen atome:", integral )
+		#for atom in u.atoms:
+		#	integral = atom.weight * (atom.area * atom.inner_value + (grid_size **2 - atom.area)* atom.outer_value)
+		#	print("Integral nach extend support der einzelnen atome:", integral )
 		
-		for atom in u.atoms:
-			print("weight des atoms:", atom.weight)
-			print("xmin",atom.support.x_min)
-			print("xmax",atom.support.x_max)
-			print("ymin",atom.support.y_min)
-			print("ymax",atom.support.y_max)
-			print("Area Des Atoms", atom.area)
-			print("Mean value", atom.mean_value)
-			print("inner value:", atom.weight * (1 - atom.mean_value))
-			print("outer value:", atom.weight * (0 - atom.mean_value))
+		#for atom in u.atoms:
+		#	print("weight des atoms:", atom.weight)
+		#	print("xmin",atom.support.x_min)
+		#	print("xmax",atom.support.x_max)
+		#	print("ymin",atom.support.y_min)
+		#	print("ymax",atom.support.y_max)
+		#	print("Area Des Atoms", atom.area)
+		#	print("Mean value", atom.mean_value)
+		#	print("inner value:", atom.weight * (1 - atom.mean_value))
+		#	print("outer value:", atom.weight * (0 - atom.mean_value))
 
 
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
