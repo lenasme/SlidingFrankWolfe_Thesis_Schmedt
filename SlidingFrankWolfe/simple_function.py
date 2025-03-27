@@ -18,13 +18,16 @@ class IndicatorFunction:
 		self.area = (rectangular_set.x_max - rectangular_set.x_min) * (rectangular_set.y_max - rectangular_set.y_min)
 		self.mean_value = self.area / (self.grid_size ** 2)
 
+		self.inner_value = self.weight * (1 - self.mean_value)
+		self.outer_value = self.weight * (0 - self.mean_value)
+
 
 	def __call__(self, x):
 
 		if self.support.x_min <= x[1] <= self.support.x_max and self.support.y_min <= x[0] <= self.support.y_max:
-			return self.weight * (1 - self.mean_value)
+			return self.inner_value
 		else:
-			return self.weight * (0 - self.mean_value)
+			return self.outer_value
 		
 
 	def construct_image_matrix(self, plot = True):
