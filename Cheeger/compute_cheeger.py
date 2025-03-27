@@ -467,12 +467,17 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		print("Integral nach extend support:", np.sum(u.construct_image_matrix_sf(plot=False)))
 		
 		for atom in u.atoms:
+			print("weight des atoms:", atom.weight)
+			print("xmin",atom.support.x_min)
+			print("xmax",atom.support.x_max)
+			print("ymin",atom.support.y_min)
+			print("ymax",atom.support.y_max)
 			print("Area Des Atoms", atom.area)
 			print("Mean value", atom.mean_value)
 			print("inner value:", atom.weight * (1 - atom.mean_value))
 			print("outer value:", atom.weight * (0 - atom.mean_value))
 
-			
+
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 	
