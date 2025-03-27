@@ -521,8 +521,14 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
+		integral = 0
 		for atom in u.atoms:
-			print("Integral eines Atoms:", np.sum(atom.construct_image_matrix(plot= False)))
+			
+			res = (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
+			print("Integral eines Atoms:", res)
+			integral+= res
+
+		print("Gesamtintegral:", integral)
 		
 		v = copy.deepcopy(u)
 
@@ -593,7 +599,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
-			print("Integral der current function:", np.sum(u.construct_image_matrix_sf(plot = False)))
+
+			integral = 0
+			for atom in u.atoms:
+				integral += (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
+			
+
+			print("Integral der current function:", integral)
 
 			plt.plot()
 			data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
