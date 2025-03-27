@@ -441,10 +441,14 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
+	objective_whole_iteration = []
+	objective_development = []
 	iteration = 0
-	max_iter = 30
-
-	while iteration < max_iter:   
+	max_iter = 12
+	convergence = False
+	objective_whole_iteration.append(u.compute_objective_sliding)
+	objective_development.append(u.compute_objective_sliding)
+	while not convergence and iteration < max_iter:   
 
 	 
 		
@@ -483,6 +487,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 
+		objective_development.append(u.compute_objective_sliding)
+
 		integral = 0
 		for atom in u.atoms:
 			integral += (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
@@ -504,12 +510,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
 							   vmax=vmax)  
 			fig.colorbar(im1, ax=ax[0])
-			ax[0].set_title(f"Current Function, Integral: {np.sum(data):.4f}")
+			ax[0].set_title("Current Function")
 
 			im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
 
 			fig.colorbar(im2, ax = ax[1])
-			ax[1].set_title(f"Ground Truth, Integral: {np.sum(ground_truth):.4f}")
+			ax[1].set_title("Ground Truth")
 
 			diff = - data + ground_truth
 			vmax_diff = np.max(np.abs(diff))
@@ -613,9 +619,26 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.colorbar()
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
+
+		objective_development.append(u.compute_objective_sliding)
 		
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u, target_function_f, reg_param)
 
+		objective_whole_iteration.append(u.compute_objective_sliding)
+		objective_development.append(u.compute_objective_sliding)
+
+		plt.figure()
+		plt.plot(objective_development)
+		plt.title("Objective development")
+		plt.show()
+
+
+		plt.figure()
+		plt.plot(objective_whole_iteration)
+		plt.title("Objective development each iteration")
+		plt.show()
+
+		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
 
 		iteration += 1
