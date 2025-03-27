@@ -447,7 +447,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	while iteration < max_iter:   
 
 	 
-	
+		
 
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
@@ -465,7 +465,14 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		u.extend_support(optimal_rectangle)
 
 		print("Integral nach extend support:", np.sum(u.construct_image_matrix_sf(plot=False)))
+		
+		for atom in u.atoms:
+			print("Area Des Atoms", atom.area)
+			print("Mean value", atom.mean_value)
+			print("inner value:", atom.weight * (1 - atom.mean_value))
+			print("outer value:", atom.weight * (0 - atom.mean_value))
 
+			
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 	
