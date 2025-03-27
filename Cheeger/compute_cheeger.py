@@ -404,7 +404,7 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 		if plot == True:
 
-			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  
 
 			# Linker Plot mit Funktionsaufruf
 			data = u.construct_image_matrix_sf(plot=False) 
@@ -465,7 +465,8 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
-	
+		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
+
 
 		if plot == True:
 
