@@ -483,12 +483,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
 							   vmax=vmax)  
 			fig.colorbar(im1, ax=ax[0])
-			ax[0].set_title("Current Function, Integral:", np.sum(data))
+			ax[0].set_title(f"Current Function, Integral: {np.sum(data):.4f}")
 
 			im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
 
 			fig.colorbar(im2, ax = ax[1])
-			ax[1].set_title("Ground Truth, Integral:", np.sum(ground_truth))
+			ax[1].set_title(f"Ground Truth, Integral: {np.sum(ground_truth):.4f}")
 
 			diff = - data + ground_truth
 			vmax_diff = np.max(np.abs(diff))
