@@ -463,6 +463,11 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		
 		fit_weights(u,  target_function_f, reg_param)
 
+		weights = []
+		for atom in u.atoms:
+			weights.append(atom.weight)
+		print("Gewichte der atome:", weights)
+
 		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
