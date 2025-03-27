@@ -249,7 +249,8 @@ def fit_weights(u, target_function_f, reg_param):
 		return u.compute_objective_sliding(target_function_f, reg_param)
 
 	a_init = np.array([atom.weight for atom in u.atoms])
-	res = minimize(objective_scipy, a_init, method='L-BFGS-B')
+	bounds =[(-1, 1)] * u.num_atoms
+	res = minimize(objective_scipy, a_init, bounds = bounds, method='L-BFGS-B')
 
 	if res.success:
 		for i in range(u.num_atoms):
