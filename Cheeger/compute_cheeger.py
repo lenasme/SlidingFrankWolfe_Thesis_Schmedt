@@ -483,12 +483,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			im1 = ax[0].imshow(data, cmap="bwr", vmin=vmin,
 							   vmax=vmax)  
 			fig.colorbar(im1, ax=ax[0])
-			ax[0].set_title("Current Function")
+			ax[0].set_title("Current Function, Integral:", np.sum(data))
 
 			im2 = ax[1].imshow(ground_truth, cmap = 'bwr', vmin=vmin, vmax=vmax)
 
 			fig.colorbar(im2, ax = ax[1])
-			ax[1].set_title("Ground Truth")
+			ax[1].set_title("Ground Truth, Integral:", np.sum(ground_truth))
 
 			diff = - data + ground_truth
 			vmax_diff = np.max(np.abs(diff))
@@ -500,9 +500,9 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
-		print("Integral der current function:", np.sum(u.construct_image_matrix_sf(plot = False)))
-		print("DC Komponente:", u.compute_fourier_integral(0,0))
-
+		for atom in u.atoms:
+			print("Integral eines Atoms:", np.sum(atom.construct_image_matrix(plot= False)))
+		
 		v = copy.deepcopy(u)
 
 		pr = cProfile.Profile()
