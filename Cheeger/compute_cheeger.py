@@ -464,12 +464,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		u.extend_support(optimal_rectangle)
 
-		print("Integral nach extend support:", np.sum(u.compute_image_matrix(plot=False)))
+		print("Integral nach extend support:", np.sum(u.construct_image_matrix_sf(plot=False)))
 
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 	
-		print("Integral nach fix weights:", np.sum(u.compute_image_matrix(plot=False)))
+		print("Integral nach fix weights:", np.sum(u.construct_image_matrix_sf(plot=False)))
 
 		#fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
 
