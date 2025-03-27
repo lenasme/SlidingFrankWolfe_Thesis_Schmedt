@@ -256,7 +256,7 @@ def fit_weights(u, target_function_f, reg_param):
 			u.atoms[i].weight = res.x[i]
 
 	print("Aktuelles Objective:", u.compute_objective_sliding(target_function_f, reg_param))
-	u.remove_small_atoms(threshold = 1e-2)
+	u.remove_small_atoms(threshold = 1e-3)
 
 
 
