@@ -449,7 +449,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	convergence = False
 
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
-	objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+	objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 	while not convergence and iteration < max_iter:   
 
