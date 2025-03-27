@@ -465,7 +465,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		u.extend_support(optimal_rectangle)
 		
 		for atom in u.atoms:
-			integral = atom.weight * (atom.area * atom.inner_value + (grid_size **2 - atom.area)* atom.outer_area)
+			integral = atom.weight * (atom.area * atom.inner_value + (grid_size **2 - atom.area)* atom.outer_value)
 			print("Integral nach extend support der einzelnen atome:", integral )
 		
 		for atom in u.atoms:
