@@ -472,7 +472,7 @@ def assign_values_to_rectangles(rectangles, data):
 
 
 def construction_of_example_source(grid_size, deltas, max_jumps, seed, plot=False):
-    original = GroundTruth(grid_size, max_jumps, seed = seed)
+    original = GroundTruth(grid_size, max_jumps, seed )
     original.max_jumps = max_jumps
     original.imgsz = grid_size
     jump_points = original.get_jump_points_bin(deltas)[0]
