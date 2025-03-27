@@ -211,7 +211,8 @@ class GroundTruth:
                 (M,N) = img.shape
 
             points = list(itertools.product(range(M), range(N)))
-            random.shuffle(points)
+            #random.shuffle(points)
+            self.rng.shuffle(points)
         
             eps = 1e-09 # small tolerance to avoid exact equality
             dims = (M,N) # point dimensions
@@ -226,7 +227,8 @@ class GroundTruth:
                 mx = 1.0
                 mn = 0.0
             
-                random.shuffle(stencil) # randomly select order of stencil points
+                #random.shuffle(stencil) # randomly select order of stencil points
+                self.rng.shuffle(stencil)
                 for dx in stencil: #loop over stencil points
                     idx = ((point[0]+dx[0])%M,(point[1]+dx[1])%N) #index of neighboring pixel
 
@@ -273,7 +275,8 @@ class GroundTruth:
        
                 #Set value
                 if not np.any(img):
-                    vals[point] = np.random.uniform(mn,mx)
+                    #vals[point] = np.random.uniform(mn,mx)
+                    vals[point] = self.rng.uniform(mn,mx)
                 
                 else:
                     vals[point] = np.clip(img[point],mn,mx)
