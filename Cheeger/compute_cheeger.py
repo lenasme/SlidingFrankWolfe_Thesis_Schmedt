@@ -445,14 +445,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	objective_development = []
 	iteration = 0
 	max_iter = 12
+
 	convergence = False
-	objective_whole_iteration.append(u.compute_objective_sliding)
-	objective_development.append(u.compute_objective_sliding)
+
+	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
+	objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+
 	while not convergence and iteration < max_iter:   
-
-	 
-		
-
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
@@ -487,7 +486,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 
-		objective_development.append(u.compute_objective_sliding)
+		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		integral = 0
 		for atom in u.atoms:
@@ -620,13 +619,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
 
-		objective_development.append(u.compute_objective_sliding)
+		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 		
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u, target_function_f, reg_param)
 
-		objective_whole_iteration.append(u.compute_objective_sliding)
-		objective_development.append(u.compute_objective_sliding)
+		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
+		objective_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		plt.figure()
 		plt.plot(objective_development)
