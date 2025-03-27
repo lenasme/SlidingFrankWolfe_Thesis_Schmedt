@@ -19,7 +19,8 @@ class GroundTruth:
         self.imgsz = imgsz
         self.max_jumps = max_jumps
         self.seed = seed
-        np.random.seed(seed)
+        #np.random.seed(seed)
+        self.rng = np.random.default_rng(seed)
 
 
 
@@ -31,14 +32,18 @@ class GroundTruth:
         i = 0
         pointlist = []    
         while i < maxtries * npoints and len(pointlist) < npoints:
-            M = np.random.randint(2 , self.max_jumps + 1)
+            #M = np.random.randint(2 , self.max_jumps + 1)
+            M = self.rng.integers(2 , self.max_jumps + 1)
             # select random points. note: equal points will be rejected below
-            points_x = np.sort(np.random.randint(0 , self.imgsz,size=(M)))
+            #points_x = np.sort(np.random.randint(0 , self.imgsz,size=(M)))
+            points_x = np.sort(self.rng.integers(0 , self.imgsz,size=(M)))
             difs = np.concatenate( [points_x[1:] - points_x[0:-1], np.array([(self.imgsz - points_x[-1]) + points_x[0] ])],axis=0)
 
             if delta_bin[0] <= difs.min()/float(self.imgsz) < delta_bin[1]:
-                N = np.random.randint(2 , self.max_jumps + 1)
-                points_y = np.sort(np.random.randint(0 , self.imgsz, size=(N)))
+                #N = np.random.randint(2 , self.max_jumps + 1)
+                N = self.rng.integers(2 , self.max_jumps + 1)
+                #points_y = np.sort(np.random.randint(0 , self.imgsz, size=(N)))
+                points_y = np.sort(self.rng.integers(0 , self.imgsz, size=(N)))
                 difs = np.concatenate( [points_y[1:] - points_y[0:-1], np.array([self.imgsz - points_y[-1] + points_y[0] ])],axis=0)
 
                 if delta_bin[0] <= difs.min()/float(self.imgsz) < delta_bin[1]:
