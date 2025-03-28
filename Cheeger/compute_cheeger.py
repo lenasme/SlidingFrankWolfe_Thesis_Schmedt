@@ -27,7 +27,7 @@ from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction 
 
 
 
-def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None, noise_level = 0.01, plot = True):
+def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None, noise_level = 4, plot = True):
 	
 	
 	ground_truth = construction_of_example_source(grid_size, deltas, max_jumps, seed = seed)
@@ -442,14 +442,14 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
 	objective_whole_iteration = []
-	objective_overall_development = []
+	
 	iteration = 0
 	max_iter = 30
 
 	convergence = False
 
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
-	objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+	
 
 	while not convergence and iteration < max_iter:   
 
@@ -460,7 +460,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		
 		u.extend_support(optimal_rectangle)
 
-		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		
 		
 		fit_weights(u,  target_function_f, reg_param)
 
@@ -469,7 +469,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			weights.append(atom.weight)
 		print("Gewichte der atome:", weights)
 
-		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 
@@ -502,12 +502,6 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.tight_layout()
 
 			plt.show()
-
-		
-		plt.figure()
-		plt.plot(objective_overall_development)
-		plt.title("Objective overall development")
-		plt.show()
 
 
 		plt.figure()
