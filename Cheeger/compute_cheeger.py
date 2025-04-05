@@ -27,7 +27,7 @@ from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction 
 
 
 
-def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None, noise_level = 4, plot = True):
+def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None, noise_level = 1e-2, plot = True):
 	
 	
 	ground_truth = construction_of_example_source(grid_size, deltas, max_jumps, seed = seed)
