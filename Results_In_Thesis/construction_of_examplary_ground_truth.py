@@ -5,7 +5,7 @@ from Cheeger.compute_cheeger import calculate_target_function
 
 
 seed1 = 13
-seed2 = 50
+seed2 = 100
 
 grid_size= 100
 deltas = [0.08-0.005, 0.09+0.005]
@@ -29,5 +29,7 @@ def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps
     fig.colorbar(im2, ax=axes[1])
 
     plt.tight_layout()
-    plt.savefig("ground_truths_two_versions.png", dpi=300)  # Hier speichern
+    #plt.savefig("ground_truths_two_versions.png", dpi=300)  # Hier speichern
+    plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_examples.png", dpi=300)
+    
     plt.show()
