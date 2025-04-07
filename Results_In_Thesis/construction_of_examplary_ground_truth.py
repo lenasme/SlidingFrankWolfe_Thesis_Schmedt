@@ -22,10 +22,12 @@ def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps
 
     im1 = axes[0].imshow(ground_truth1, cmap='bwr')
     #axes[0].set_title(f"Ground Truth Seed {seed1}")
+    axes[0].axis('off')
     fig.colorbar(im1, ax=axes[0])
 
     im2 = axes[1].imshow(ground_truth2, cmap='bwr')
     #axes[1].set_title(f"Ground Truth Seed {seed2}")
+    axes[1].axis('off')
     fig.colorbar(im2, ax=axes[1])
 
     plt.tight_layout()
