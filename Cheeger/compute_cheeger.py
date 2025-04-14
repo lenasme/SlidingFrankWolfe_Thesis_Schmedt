@@ -242,6 +242,7 @@ def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
 	u.remove_small_atoms(threshold = 1e-2)
 
 def fit_weights(u, target_function_f, reg_param):
+	print("Vorheriges Objective:", u.compute_objective_sliding(target_function_f, reg_param))
 	def objective_scipy(a_vec):
 		# Update Gewichte temporär
 		for i in range(u.num_atoms):
