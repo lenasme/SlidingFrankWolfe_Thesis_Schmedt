@@ -455,13 +455,14 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	objective_whole_iteration = []
 	
 	iteration = 0
-	max_iter = 30
+	max_iter = 20
 
 	convergence = False
 
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 	
 
+	#while not convergence and iteration < max_iter:   
 	while not convergence and iteration < max_iter:   
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
@@ -556,6 +557,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
 	
+	save_iterations = [6, 20]
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
@@ -705,6 +707,28 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u, target_function_f, reg_param)
+
+		if iteration in save_iterations:
+			data = u.construct_image_matrix_sf(plot=False)
+			diff = -data + ground_truth
+
+			# Rekonstruiertes Bild speichern
+			plt.figure()
+			plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
+			plt.axis('off')
+			plt.tight_layout()
+			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.close()
+
+			# Differenzbild speichern
+			plt.figure()
+			plt.imshow(diff, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			plt.axis('off')
+			plt.tight_layout()
+			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.close()
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
