@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from Cheeger.compute_cheeger import calculate_target_function
+from Setup.ground_truth import GroundTruth
 
 
 seed1 = 13
@@ -11,6 +12,32 @@ grid_size= 100
 deltas = [0.08-0.005, 0.09+0.005]
 max_jumps = 3 
 cut_off = 10
+
+def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
+	original = GroundTruth(grid_size, max_jumps, seed)
+
+	# Einen Satz Jump-Points aus einer Delta-Bin erzeugen
+	jump_points = original.get_jump_points_bin(deltas)[0]  # [points_x, points_y]
+
+	# Visualisierung
+	fig, ax = plt.subplots(figsize=(5, 5))
+	ax.set_xlim(0, grid_size)
+	ax.set_ylim(0, grid_size)
+	ax.set_aspect('equal')
+	ax.invert_yaxis()  # (0,0) oben links
+
+	# Vertikale Linien (Jumps in x)
+	for x in jump_points[0]:
+		ax.axvline(x, color='red', linestyle='--', linewidth=1)
+
+	# Horizontale Linien (Jumps in y)
+	for y in jump_points[1]:
+		ax.axhline(y, color='blue', linestyle='--', linewidth=1)
+
+	# Titel, Layout und Anzeige
+	ax.set_title(f'Jump Points (seed={seed}, delta-range={deltas})')
+	plt.tight_layout()
+	plt.show()
 
 
 def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps, cut_off):
