@@ -445,8 +445,8 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 
 
-def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
-	save_iterations = [6, 20]
+def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
+	save_iterations = [3, 20]
 	
 
 	atoms = []
@@ -516,6 +516,9 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.show()
 		
 		if iteration in save_iterations:
+			vmin = min(np.min(ground_truth), -1)   # oder andere sinnvolle Schranke
+			vmax = max(np.max(ground_truth), 1)
+			vmax_diff = np.max(np.abs(ground_truth))
 			data = u.construct_image_matrix_sf(plot=False)
 			diff = -data + ground_truth
 
@@ -525,7 +528,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_reconstruction_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
 
 			# Differenzbild speichern
@@ -534,7 +537,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
 
 
@@ -555,9 +558,9 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 
 
-def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
+def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
 	
-	save_iterations = [6, 20]
+	save_iterations = [3, 20]
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
@@ -709,7 +712,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		fit_weights(u, target_function_f, reg_param)
 
 		if iteration in save_iterations:
-			vmin = min(np.min(ground_truth), -1)   # oder andere sinnvolle Schranke
+			vmin = min(np.min(ground_truth), -1)  
 			vmax = max(np.max(ground_truth), 1)
 			vmax_diff = np.max(np.abs(ground_truth))
 			data = u.construct_image_matrix_sf(plot=False)
@@ -721,7 +724,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
 
 			# Differenzbild speichern
@@ -730,7 +733,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
