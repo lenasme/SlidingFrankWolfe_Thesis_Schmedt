@@ -447,8 +447,7 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
 	save_iterations = [6, 20]
-	saved_images = {}
-	saved_differences = {}
+	
 
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
@@ -525,7 +524,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
 			plt.close()
 
 			# Differenzbild speichern
@@ -534,7 +533,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.axis('off')
 			plt.tight_layout()
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
 			plt.close()
 
 
