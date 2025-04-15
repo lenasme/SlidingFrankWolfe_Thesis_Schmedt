@@ -709,6 +709,9 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		fit_weights(u, target_function_f, reg_param)
 
 		if iteration in save_iterations:
+			vmin = min(np.min(ground_truth), -1)   # oder andere sinnvolle Schranke
+			vmax = max(np.max(ground_truth), 1)
+			vmax_diff = np.max(np.abs(ground_truth))
 			data = u.construct_image_matrix_sf(plot=False)
 			diff = -data + ground_truth
 
