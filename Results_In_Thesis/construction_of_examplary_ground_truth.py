@@ -27,12 +27,12 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 	#ax.invert_yaxis()  # (0,0) oben links
 
 	# Vertikale Linien (Jumps in x)
-	for x in jump_points[0]:
-		ax.axvline(x, color='red', linestyle='--', linewidth=1)
+	for y in jump_points[0]:
+		ax.axhline(y, color='red', linestyle='--', linewidth=1)
 
 	# Horizontale Linien (Jumps in y)
-	for y in jump_points[1]:
-		ax.axhline(y, color='blue', linestyle='--', linewidth=1)
+	for x in jump_points[1]:
+		ax.axvline(y, color='blue', linestyle='--', linewidth=1)
 
 	# Titel, Layout und Anzeige
 	ax.set_title(f'Jump Points (seed={seed}, delta-range={deltas})')
