@@ -24,7 +24,7 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 	ax.set_xlim(0, grid_size)
 	ax.set_ylim(0, grid_size)
 	ax.set_aspect('equal')
-	#ax.invert_yaxis()  # (0,0) oben links
+	ax.invert_yaxis()  # (0,0) oben links
 
 	# Vertikale Linien (Jumps in x)
 	for y in jump_points[0]:
