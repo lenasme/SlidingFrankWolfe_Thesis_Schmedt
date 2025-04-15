@@ -40,3 +40,17 @@ def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps
 	plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_examples.png", dpi=300)
 	
 	plt.show()
+
+def construct_single_ground_truth(seed, grid_size, deltas, max_jumps, cut_off):
+	_, ground_truth, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed=seed1, plot=False)
+
+	vmin = min(np.min(ground_truth), -1)  
+	vmax = max(np.max(ground_truth), 1)
+
+	plt.figure()
+	plt.imshow(ground_truth, cmap='bwr', vmin=vmin, vmax=vmax)
+	plt.axis('off')
+	plt.tight_layout()
+	#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_seed{seed}.png", dpi=300)
+	plt.close()
