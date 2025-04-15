@@ -446,7 +446,10 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
-	
+	save_iterations = [8, 25]
+	saved_images = {}
+	saved_differences = {}
+
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
@@ -511,6 +514,9 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.tight_layout()
 
 			plt.show()
+			if iteration in save_iterations:
+				saved_images[iteration] = data.copy()
+				saved_differences[iteration] = diff.copy()
 
 
 		plt.figure()
@@ -538,7 +544,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	objective_whole_iteration = []
 	objective_overall_development = []
 	iteration = 0
-	max_iter = 12
+	max_iter = 25
 
 	convergence = False
 
@@ -561,34 +567,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		u.extend_support(optimal_rectangle)
 		
-		#for atom in u.atoms:
-		#	integral = atom.weight * (atom.area * atom.inner_value + (grid_size **2 - atom.area)* atom.outer_value)
-		#	print("Integral nach extend support der einzelnen atome:", integral )
 		
-		#for atom in u.atoms:
-		#	print("weight des atoms:", atom.weight)
-		#	print("xmin",atom.support.x_min)
-		#	print("xmax",atom.support.x_max)
-		#	print("ymin",atom.support.y_min)
-		#	print("ymax",atom.support.y_max)
-		#	print("Area Des Atoms", atom.area)
-		#	print("Mean value", atom.mean_value)
-		#	print("inner value:", atom.weight * (1 - atom.mean_value))
-		#	print("outer value:", atom.weight * (0 - atom.mean_value))
-
-
-		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u,  target_function_f, reg_param)
 
 		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
-		integral = 0
-		for atom in u.atoms:
-			integral += (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
-
-		print("Integral nach fix weights:", integral)
-
-		#fourier_image = u.compute_truncated_frequency_image_sf(cut_off, plot = False)
+		
 
 
 		if plot == True:
@@ -620,14 +604,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
-		integral = 0
-		for atom in u.atoms:
-			
-			res = (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
-			print("Integral eines Atoms:", res)
-			integral+= res
-
-		print("Gesamtintegral:", integral)
+		
 		
 		v = copy.deepcopy(u)
 
@@ -650,13 +627,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 
 		if plot == True:
-
-			print("development objective", objective_development)
-			print("development gradient", gradient_development)
-			print("development x_min", x_min_values)
-			print("development x_max", x_max_values)
-			print("development y_min", y_min_values)
-			print("development y_max", y_max_values)
 
 			plt.figure()
 			plt.plot(objective_development)
@@ -733,5 +703,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		plt.show()
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
+
 
 		iteration += 1
