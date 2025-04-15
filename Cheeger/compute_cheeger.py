@@ -446,7 +446,7 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, max_iter_primal_dual = 10000, plot=True):
-	save_iterations = [8, 25]
+	save_iterations = [6, 20]
 	saved_images = {}
 	saved_differences = {}
 
@@ -514,9 +514,28 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			plt.tight_layout()
 
 			plt.show()
-			if iteration in save_iterations:
-				saved_images[iteration] = data.copy()
-				saved_differences[iteration] = diff.copy()
+		
+		if iteration in save_iterations:
+			data = u.construct_image_matrix_sf(plot=False)
+			diff = -data + ground_truth
+
+			# Rekonstruiertes Bild speichern
+			plt.figure()
+			plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
+			plt.axis('off')
+			plt.tight_layout()
+			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.close()
+
+			# Differenzbild speichern
+			plt.figure()
+			plt.imshow(diff, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			plt.axis('off')
+			plt.tight_layout()
+			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.close()
 
 
 		plt.figure()
