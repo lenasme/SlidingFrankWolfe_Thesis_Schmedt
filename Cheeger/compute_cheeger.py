@@ -574,7 +574,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 	objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
-	while not convergence and iteration < max_iter:   
+	#while not convergence and iteration < max_iter:   
+	while iteration < max_iter:   
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
