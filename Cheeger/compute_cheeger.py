@@ -446,7 +446,7 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
-	save_iterations = [3, 20]
+	save_iterations = [ 20]
 	
 
 	atoms = []
@@ -455,7 +455,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	objective_whole_iteration = []
 	
 	iteration = 0
-	max_iter = 20
+	max_iter = 21
 
 	convergence = False
 
@@ -560,7 +560,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
 	
-	save_iterations = [3, 20]
+	save_iterations = [ 20]
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
