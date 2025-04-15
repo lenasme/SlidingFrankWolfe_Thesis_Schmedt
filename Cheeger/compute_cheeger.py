@@ -463,7 +463,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	
 
 	#while not convergence and iteration < max_iter:   
-	while not convergence and iteration < max_iter:   
+	while  iteration < max_iter:   
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
