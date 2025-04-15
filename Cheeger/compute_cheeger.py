@@ -542,7 +542,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		plt.title("Objective development each iteration")
 		plt.show()
 
-		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
+		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 1 )
 
 		iteration += 1
 
