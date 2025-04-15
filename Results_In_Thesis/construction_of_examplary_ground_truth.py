@@ -28,15 +28,17 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 
 	# Vertikale Linien (Jumps in x)
 	for y in jump_points[0]:
-		ax.axhline(y, color='red', linestyle='--', linewidth=1)
+		ax.axhline(y, color='black', linestyle='-', linewidth=1)
 
 	# Horizontale Linien (Jumps in y)
 	for x in jump_points[1]:
-		ax.axvline(x, color='blue', linestyle='--', linewidth=1)
+		ax.axvline(x, color='black', linestyle='-', linewidth=1)
 
 	# Titel, Layout und Anzeige
-	ax.set_title(f'Jump Points (seed={seed}, delta-range={deltas})')
+	ax.axis('off')
+	
 	plt.tight_layout()
+	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_seed{seed}.png", dpi=300)
 	plt.show()
 
 
