@@ -28,7 +28,7 @@ from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction 
 
 
 
-def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None, noise_level = 1e-2, plot = True):
+def calculate_target_function(grid_size, deltas, max_jumps, cut_off, variance, seed= None,  plot = True):
 	
 	
 	ground_truth = construction_of_example_source(grid_size, deltas, max_jumps, seed = seed)
@@ -47,7 +47,11 @@ def calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed= None,
 	truncated_operator_applied_on_ground_truth = operator_applied_on_ground_truth * mask
 
 	rng = np.random.default_rng(seed)
-	noise = noise_level * (rng.standard_normal((grid_size, grid_size)) + 1j * rng.standard_normal((grid_size, grid_size)))
+	noise =  (rng.standard_normal((grid_size, grid_size)) + 1j * rng.standard_normal((grid_size, grid_size)))
+	current_norm = np.linalg.norm(noise)
+	target_norm = np.sqrt(2 * variance)
+	noise *= target_norm / current_norm
+
 
 	target_function_f = truncated_operator_applied_on_ground_truth + noise
 
