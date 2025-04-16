@@ -5,13 +5,7 @@ from Cheeger.compute_cheeger import calculate_target_function
 from Setup.ground_truth import GroundTruth
 
 
-seed1 = 13
-seed2 = 100
 
-grid_size= 100
-deltas = [0.08-0.005, 0.09+0.005]
-max_jumps = 3 
-cut_off = 10
 
 def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 	original = GroundTruth(grid_size, max_jumps, seed)
