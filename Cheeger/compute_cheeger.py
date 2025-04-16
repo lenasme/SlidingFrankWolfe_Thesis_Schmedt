@@ -448,6 +448,7 @@ def optimization ( ground_truth, target_function_f, grid_size, grid_size_coarse,
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
 	save_iterations = [ 20]
+	l1_errors = []
 	
 
 	atoms = []
@@ -549,7 +550,23 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 1 )
 
+		data = u.construct_image_matrix_sf(plot=False)
+		
+		l1_error = np.sum(np.abs(-data + ground_truth))
+		l1_errors.append(l1_error)
+
+
 		iteration += 1
+
+	plt.figure()
+	plt.plot(l1_errors)
+	plt.title("L1 Error per Iteration")
+	plt.xlabel("Iteration")
+	plt.ylabel("L1 Error")
+	plt.show()
+
+	with open(f"fw_l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+		pickle.dump(l1_errors, f)
 
 
 
@@ -765,5 +782,5 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	plt.ylabel("L1 Error")
 	plt.show()
 
-	with open(f"l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+	with open(f"sfw_l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors, f)
