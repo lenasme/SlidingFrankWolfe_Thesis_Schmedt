@@ -752,8 +752,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
 
-		u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
-		fit_weights(u, target_function_f, reg_param)
+		#u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
+		#fit_weights(u, target_function_f, reg_param)
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
