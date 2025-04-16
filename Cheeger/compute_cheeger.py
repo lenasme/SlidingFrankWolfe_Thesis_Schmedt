@@ -694,8 +694,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
-			l1_error = np.sum(np.abs(-data + ground_truth))
-			l1_errors.append(l1_error)
+			
 			
 
 			plt.plot()
@@ -748,6 +747,11 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		plt.plot(objective_whole_iteration)
 		plt.title("Objective development each iteration")
 		plt.show()
+
+		data = u.construct_image_matrix_sf(plot=False)
+		
+		l1_error = np.sum(np.abs(-data + ground_truth))
+		l1_errors.append(l1_error)
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
 
