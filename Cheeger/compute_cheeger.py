@@ -254,14 +254,13 @@ def fit_weights(u, target_function_f, reg_param):
 		# Update Gewichte temporär
 		for i in range(u.num_atoms):
 			u.atoms[i].weight = a_vec[i]
-		full_gradient = u.compute_gradient_sliding(target_function_f, reg_param)
-		print("shape of gradient a in fit weights", full_gradient[:, 0].shape) 
+		full_gradient = u.compute_gradient_sliding(target_function_f, reg_param) 
 		return full_gradient[:,0]
 
 	a_init = np.array([atom.weight for atom in u.atoms])
 	bounds =[(-1, 1)] * u.num_atoms
-	#res = minimize(objective_scipy, a_init, jac=gradient_scipy, bounds = bounds, method='L-BFGS-B')
-	res = minimize(objective_scipy, a_init, bounds = bounds, method='L-BFGS-B')
+	res = minimize(objective_scipy, a_init, jac=gradient_scipy, bounds = bounds, method='L-BFGS-B')
+	
 
 	if res.success:
 		for i in range(u.num_atoms):
