@@ -553,7 +553,8 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		data = u.construct_image_matrix_sf(plot=False)
 		
 		l1_error = np.sum(np.abs(-data + ground_truth))
-		l1_errors.append(l1_error)
+		l1_error_normalized = l1_error / (grid_size * grid_size)
+		l1_errors.append(l1_error_normalized)
 
 
 		iteration += 1
@@ -768,7 +769,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		data = u.construct_image_matrix_sf(plot=False)
 		
 		l1_error = np.sum(np.abs(-data + ground_truth))
-		l1_errors.append(l1_error)
+		l1_error_normalized = l1_error / (grid_size * grid_size)
+		l1_errors.append(l1_error_normalized)
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
 
