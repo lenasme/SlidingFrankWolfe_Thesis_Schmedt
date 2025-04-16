@@ -1,6 +1,7 @@
 import numpy as np
 import cvxpy as cp
 import time
+import pickle
 
 import copy
 from scipy.optimize import minimize, approx_fprime
@@ -561,13 +562,14 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
 	
 	save_iterations = [ 20]
+	l1_errors = []
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
 	objective_whole_iteration = []
 	objective_overall_development = []
 	iteration = 0
-	max_iter = 25
+	max_iter = 21
 
 	convergence = False
 
@@ -692,13 +694,9 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			plt.show()
 
-
-			integral = 0
-			for atom in u.atoms:
-				integral += (atom.area * (atom.weight * (1- atom.mean_value)) +(grid_size**2 - atom.area)*(atom.weight * (0- atom.mean_value)) )
+			l1_error = np.sum(np.abs(-data + ground_truth))
+			l1_errors.append(l1_error)
 			
-
-			print("Integral der current function:", integral)
 
 			plt.plot()
 			data = v.construct_image_matrix_sf(plot=False)  - u.construct_image_matrix_sf(plot=False) 
@@ -755,3 +753,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 
 		iteration += 1
+
+	plt.figure()
+	plt.plot(l1_errors)
+	plt.title("L1 Error per Iteration")
+	plt.xlabel("Iteration")
+	plt.ylabel("L1 Error")
+	plt.show()
+
+	with open(f"l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+		pickle.dump(l1_errors, f)
