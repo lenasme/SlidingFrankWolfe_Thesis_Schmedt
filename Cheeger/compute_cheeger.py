@@ -260,7 +260,8 @@ def fit_weights(u, target_function_f, reg_param):
 
 	a_init = np.array([atom.weight for atom in u.atoms])
 	bounds =[(-1, 1)] * u.num_atoms
-	res = minimize(objective_scipy, a_init, jac=gradient_scipy, bounds = bounds, method='L-BFGS-B')
+	#res = minimize(objective_scipy, a_init, jac=gradient_scipy, bounds = bounds, method='L-BFGS-B')
+	res = minimize(objective_scipy, a_init, bounds = bounds, method='L-BFGS-B')
 
 	if res.success:
 		for i in range(u.num_atoms):
