@@ -64,8 +64,8 @@ def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps
 	
 	plt.show()
 
-def construct_single_ground_truth(seed, grid_size, deltas, max_jumps, cut_off):
-	_, ground_truth, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed=seed, plot=False)
+def construct_single_ground_truth(seed, grid_size, deltas, max_jumps, cut_off, variance):
+	_, ground_truth, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, variance, seed=seed, plot=False)
 
 	vmin = min(np.min(ground_truth), -1)  
 	vmax = max(np.max(ground_truth), 1)
