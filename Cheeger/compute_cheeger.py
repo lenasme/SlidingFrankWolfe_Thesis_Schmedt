@@ -585,6 +585,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	
 	save_iterations = [ 20]
 	l1_errors = []
+	l1_errors_mean0 = []
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
@@ -776,8 +777,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		data = u.construct_image_matrix_sf(plot=False)
 		
 		l1_error = np.sum(np.abs(-data + ground_truth))
+		offset = np.mean(- data + ground_truth)
+		u_corrected = data + offset
+		l1_error_corrected = np.sum(np.abs(-u_corrected + ground_truth)) /(grid_size * grid_size)
 		l1_error_normalized = l1_error / (grid_size * grid_size)
+
 		l1_errors.append(l1_error_normalized)
+		l1_errors_mean0.append(l1_error_corrected)
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
 
@@ -793,3 +799,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 	with open(f"sfw_l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors, f)
+
+	plt.figure()
+	plt.plot(l1_errors_mean0)
+	plt.title("L1 Error per Iteration corrected")
+	plt.xlabel("Iteration")
+	plt.ylabel("L1 Error corrected")
+	plt.show()
+
+	with open(f"sfw_l1_errors_corrected__cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+		pickle.dump(l1_errors_mean0, f)
