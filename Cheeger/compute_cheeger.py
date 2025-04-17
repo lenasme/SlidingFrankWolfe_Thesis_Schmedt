@@ -476,8 +476,8 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 	
 
-	#while not convergence and iteration < max_iter:   
-	while  iteration < max_iter:   
+	while not convergence and iteration < max_iter:   
+	#while  iteration < max_iter:   
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
@@ -583,7 +583,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		plt.title("Objective development each iteration")
 		plt.show()
 
-		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 1 )
+		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 15 )
 
 		data = u.construct_image_matrix_sf(plot=False)
 		
@@ -647,8 +647,8 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
 	objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
-	#while not convergence and iteration < max_iter:   
-	while iteration < max_iter:   
+	while not convergence and iteration < max_iter:   
+	#while iteration < max_iter:   
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
@@ -861,7 +861,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		l1_errors.append(l1_error_normalized)
 		l1_errors_mean0.append(l1_error_corrected)
 
-		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
+		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 15 )
 
 
 		iteration += 1
