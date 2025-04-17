@@ -689,7 +689,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			
 
-			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+			fig, ax = plt.subplots(1, 4, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
 			# Linker Plot mit Funktionsaufruf
 			data = u.construct_image_matrix_sf(plot=False) 
@@ -711,6 +711,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			im3 = ax[2].imshow(diff, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
 			fig.colorbar(im3, ax = ax[2])
 			ax[2].set_title("Difference")
+
+			offset = np.mean(- data + ground_truth)
+			u_corrected = data + offset
+			error_corrected = -u_corrected + ground_truth
+			im4 = ax[3].imshow(error_corrected, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			fig.colorbar(im4, ax = ax[2])
+			ax[3].set_title("Difference")
 
 			plt.tight_layout()
 
