@@ -36,9 +36,9 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 	plt.show()
 
 
-def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps, cut_off):
-	_, ground_truth1, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed=seed1, plot=False)
-	_, ground_truth2, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, seed=seed2, plot=False)
+def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps, cut_off, variance):
+	_, ground_truth1, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, variance, seed=seed1, plot=False)
+	_, ground_truth2, _ = calculate_target_function(grid_size, deltas, max_jumps, cut_off, variance, seed=seed2, plot=False)
 
 	vmin1 = min(np.min(ground_truth1), -1)  
 	vmax1 = max(np.max(ground_truth1), 1)
