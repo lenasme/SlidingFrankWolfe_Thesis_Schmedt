@@ -8,8 +8,8 @@ from Setup.ground_truth import GroundTruth
 
 
 
-def construct_jump_points(mode, seed, grid_size, deltas, max_jumps, cut_off, u_filepaths, colors=None):
-	#mode string "sfw" oder "fw"
+def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off, u_filepaths, colors=None):
+	
 	original = GroundTruth(grid_size, max_jumps, seed)
 
 	
@@ -49,7 +49,7 @@ def construct_jump_points(mode, seed, grid_size, deltas, max_jumps, cut_off, u_f
 	
 	
 	plt.tight_layout()
-	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_gradient_support_mode{mode}_seed{seed}_cutoff{cut_off}.png", dpi=300)
+	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_gradient_support_seed{seed}_cutoff{cut_off}.png", dpi=300)
 	plt.show()
 
 
