@@ -617,7 +617,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	plt.ylabel("L1 Error corrected")
 	plt.show()
 
-	with open(f"sfw_l1_errors_corrected__cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+	with open(f"fw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors_mean0, f)
 
 
