@@ -40,8 +40,8 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off, u_filepat
 		with open(filepath, "rb") as f:
 			u = pickle.load(f)
 		for atom in u.atoms:
-			x0, x1 = atom.x_min, atom.x_max
-			y0, y1 = atom.y_min, atom.y_max
+			x0, x1 = atom.support.x_min, atom.support.x_max
+			y0, y1 = atom.support.y_min, atom.support.y_max
 			ax.plot([x0, x1], [y0, y0], color=color, linewidth=1)
 			ax.plot([x0, x1], [y1, y1], color=color, linewidth=1)
 			ax.plot([x0, x0], [y0, y1], color=color, linewidth=1)
