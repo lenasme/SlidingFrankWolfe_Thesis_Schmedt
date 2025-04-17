@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 from Cheeger.compute_cheeger import calculate_target_function
 from Setup.ground_truth import GroundTruth
@@ -7,20 +8,21 @@ from Setup.ground_truth import GroundTruth
 
 
 
-def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
+def construct_jump_points(mode, seed, grid_size, deltas, max_jumps, cut_off, u_filepaths, colors=None):
+	#mode string "sfw" oder "fw"
 	original = GroundTruth(grid_size, max_jumps, seed)
 
-	# Einen Satz Jump-Points aus einer Delta-Bin erzeugen
-	jump_points = original.get_jump_points_bin(deltas)[0]  # [points_x, points_y]
+	
+	jump_points = original.get_jump_points_bin(deltas)[0]  
 
 	# Visualisierung
-	fig, ax = plt.subplots(figsize=(5, 5))
+	fig, ax = plt.subplots(figsize=(6, 6))
 	ax.set_xlim(0, grid_size)
 	ax.set_ylim(0, grid_size)
 	ax.set_aspect('equal')
 	ax.invert_yaxis()  # (0,0) oben links
-
-	# Vertikale Linien (Jumps in x)
+	ax.axis('off')
+	
 	for y in jump_points[0]:
 		ax.axhline(y, color='black', linestyle='-', linewidth=1)
 
@@ -29,11 +31,28 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off):
 		ax.axvline(x, color='black', linestyle='-', linewidth=1)
 
 	# Titel, Layout und Anzeige
-	ax.axis('off')
+	if colors is None:
+		cmap = plt.get_cmap("tab10")
+		colors = [cmap(i) for i in range(len(u_filepaths))]
+
+   
+	for filepath, color in zip(u_filepaths, colors):
+		with open(filepath, "rb") as f:
+			u = pickle.load(f)
+		for atom in u.atoms:
+			x0, x1 = atom.x_min, atom.x_max
+			y0, y1 = atom.y_min, atom.y_max
+			ax.plot([x0, x1], [y0, y0], color=color, linewidth=1)
+			ax.plot([x0, x1], [y1, y1], color=color, linewidth=1)
+			ax.plot([x0, x0], [y0, y1], color=color, linewidth=1)
+			ax.plot([x1, x1], [y0, y1], color=color, linewidth=1)
+	
 	
 	plt.tight_layout()
-	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_seed{seed}.png", dpi=300)
+	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_gradient_support_mode{mode}_seed{seed}_cutoff{cut_off}.png", dpi=300)
 	plt.show()
+
+
 
 
 def construction_of_two_ground_truths(seed1, seed2, grid_size, deltas, max_jumps, cut_off, variance):
