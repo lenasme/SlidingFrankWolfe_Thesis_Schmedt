@@ -663,7 +663,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
 	plt.close()
 
-	with open(f"simplefunction_sfw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
+	with open(f"simplefunction_fw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
 
 
