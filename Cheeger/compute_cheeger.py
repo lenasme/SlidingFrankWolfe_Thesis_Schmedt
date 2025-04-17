@@ -620,7 +620,9 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	with open(f"fw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors_mean0, f)
 
-
+	print("number of rectangles", u.num_atoms)
+	number_of_atoms = u.num_atoms
+	np.save("number_of_rectangels_iteration20_cutoff{cutoff}_seed{seed}.npy", number_of_atoms)
 
 
 
@@ -883,3 +885,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 	with open(f"sfw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors_mean0, f)
+	
+	print("number of rectangles", u.num_atoms)
+	number_of_atoms = u.num_atoms
+	np.save("number_of_rectangels_iteration20_cutoff{cutoff}_seed{seed}.npy", number_of_atoms)
