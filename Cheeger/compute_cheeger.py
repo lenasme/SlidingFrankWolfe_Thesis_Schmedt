@@ -543,6 +543,13 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			data = u.construct_image_matrix_sf(plot=False)
 			diff = -data + ground_truth
 
+			offset = np.mean(diff)
+			u_corrected = data + offset
+			error_corrected = -u_corrected + ground_truth
+
+			
+			
+
 			# Rekonstruiertes Bild speichern
 			plt.figure()
 			plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
@@ -560,6 +567,15 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
 			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
 			plt.close()
+
+			plt.figure()
+			plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			plt.axis('off')
+			plt.tight_layout()
+			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
+			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_corrected_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
+			plt.close()
+
 
 
 		plt.figure()
