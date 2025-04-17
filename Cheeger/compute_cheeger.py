@@ -622,7 +622,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 	print("number of rectangles", u.num_atoms)
 	number_of_atoms = u.num_atoms
-	np.save("number_of_rectangels_iteration20_cutoff{cutoff}_seed{seed}.npy", number_of_atoms)
+	np.save(f"number_of_rectangels_iteration20_cutoff{cut_off}_seed{seed}.npy", number_of_atoms)
 
 
 
@@ -888,4 +888,4 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	
 	print("number of rectangles", u.num_atoms)
 	number_of_atoms = u.num_atoms
-	np.save("number_of_rectangels_iteration20_cutoff{cutoff}_seed{seed}.npy", number_of_atoms)
+	np.save(f"number_of_rectangels_iteration20_cutoff{cut_off}_seed{seed}.npy", number_of_atoms)
