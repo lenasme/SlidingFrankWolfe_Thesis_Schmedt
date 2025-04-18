@@ -666,6 +666,9 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	with open(f"simplefunction_fw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
 
+	with open(f"objective_ffw_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
+		pickle.dump(objective_whole_iteration, f)
+
 
 
 
@@ -967,3 +970,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 	with open(f"simplefunction_sfw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
+
+	with open(f"objective_sfw_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
+		pickle.dump(objective_whole_iteration, f)
