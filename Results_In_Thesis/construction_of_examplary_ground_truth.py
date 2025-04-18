@@ -24,11 +24,11 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off, u_filepat
 	ax.axis('off')
 	
 	for y in jump_points[0]:
-		ax.axhline(y, color='black', linestyle='-', linewidth=1)
+		ax.axhline(y, color='black', linestyle='-', linewidth=1.5)
 
 	# Horizontale Linien (Jumps in y)
 	for x in jump_points[1]:
-		ax.axvline(x, color='black', linestyle='-', linewidth=1)
+		ax.axvline(x, color='black', linestyle='-', linewidth=1.5)
 
 	# Titel, Layout und Anzeige
 	if colors is None:
