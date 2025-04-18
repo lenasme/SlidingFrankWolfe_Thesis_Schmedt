@@ -52,7 +52,7 @@ def construct_jump_points(seed, grid_size, deltas, max_jumps, cut_off, u_filepat
 		if proxy:
 			proxy.set_label(label)
 	
-	ax.legend(loc='lower left', fontsize='small', frameon=True)
+	ax.legend(loc='lower left', fontsize='medium', frameon=True)
 	plt.tight_layout()
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\ground_truth_jump_points_gradient_support_seed{seed}_cutoff{cut_off}.png", dpi=300)
 	plt.show()
