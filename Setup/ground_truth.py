@@ -516,6 +516,8 @@ def compute_objective_ground_truth(grid_size, max_jumps, seed, deltas, reg_param
 
             value = values[ int((xmax-xmin)/2),int((ymax-ymin)/2)]
 
+            print(value)
+
             perimeter = 2 * ((xmax - xmin)+(ymax - ymin)) * np.abs(value)
             objective += perimeter
 
