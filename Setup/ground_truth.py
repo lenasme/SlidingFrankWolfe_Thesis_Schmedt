@@ -492,6 +492,32 @@ def construction_of_example_source(grid_size, deltas, max_jumps, seed, plot=Fals
     return ground_truth
 
 
+def compute_objective_ground_truth(grid_size, max_jumps, seed, deltas, reg_param):
+
+    objective = 0
+    original = GroundTruth(grid_size, max_jumps, seed )
+
+    jump_points = original.get_jump_points_bin(deltas)[0]  
+    values =  original.get_image_vanishing_integral(jump_points)
+
+    horizontal_points = [0] + sorted(jump_points[0]) + [grid_size]
+    vertical_points = [0] + sorted(jump_points[1]) + [grid_size]
+
+    # Erstelle die Rechtecke
+    
+    for i in range(len(horizontal_points) - 1):
+        for j in range(len(vertical_points) - 1):
+            xmin = horizontal_points[i]
+            xmax = horizontal_points[i + 1]
+            ymin = vertical_points[j]
+            ymax = vertical_points[j + 1]
+
+            value = values[ (xmax-xmin)/2,(ymax-ymin)/2]
+
+            perimeter = 2 * ((xmax - xmin)+(ymax - ymin)) * np.abs(value)
+            objective += perimeter
+
+    return reg_param * objective
 
 
 
