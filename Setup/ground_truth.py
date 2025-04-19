@@ -498,7 +498,7 @@ def compute_objective_ground_truth(grid_size, max_jumps, seed, deltas, reg_param
     original = GroundTruth(grid_size, max_jumps, seed )
 
     jump_points = original.get_jump_points_bin(deltas)[0]  
-    values =  original.get_image_vanishing_integral(jump_points)
+    values, _ =  original.get_image_vanishing_integral(jump_points)
 
     horizontal_points = [0] + sorted(jump_points[0]) + [grid_size]
     vertical_points = [0] + sorted(jump_points[1]) + [grid_size]
