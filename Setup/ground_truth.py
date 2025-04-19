@@ -514,7 +514,7 @@ def compute_objective_ground_truth(grid_size, max_jumps, seed, deltas, reg_param
 
             print(xmin,xmax,ymin,ymax)
 
-            value = values[ int((xmax-xmin)/2 * grid_size) ,int((ymax-ymin)/2 * grid_size)]
+            value = values[ int((xmax+xmin)/2 ) ,int((ymax+ymin)/2 )]
 
             print(value)
 
