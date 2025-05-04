@@ -37,11 +37,9 @@ class RectangularSet:
 		x_grid, y_grid = np.meshgrid(x, y)
 		z_grid = np.flipud(eta)
 
-		#for i in range(x_grid.shape[0]):
-		#	for j in range(x_grid.shape[1]):
-			#	z_grid[i, j] = eta(grid_size * np.array([x_grid[i, j], y_grid[i, j]]))
+
 		v_abs_max = np.max(np.abs(z_grid))
-		#print("Min z_grid:", np.min(z_grid), "Max z_grid:", np.max(z_grid))
+		
 
 		im = ax.contourf(x_grid, y_grid, z_grid, levels=30, cmap='bwr', vmin=-v_abs_max, vmax=v_abs_max)
 
@@ -53,7 +51,7 @@ class RectangularSet:
 		ax.plot(x_curve, y_curve, color='black')
 
 		ax.axis('equal')
-		ax.axis('on') #vorher off
+		ax.axis('on') 
 	
 
 		ax.set_xlim(0, grid_size)
@@ -63,14 +61,8 @@ class RectangularSet:
 		plt.show()
 
 
-
-
-
-
-
-
 	
-	""" Berechnung von Bausteinen für min \ frac{Per(E)}{abs(\int_E \eta)}"""
+	""" Computation of components of min \ frac{Per(E)}{abs(\int_E \eta)}"""
 
 	
 	
@@ -97,18 +89,18 @@ class RectangularSet:
 	def compute_integral(self, cut_off, weights, grid_size):
 		"""
 		  \int_{x_min} ^{x_max} \int_{y_min} ^{y_max} \sum_{k,j = -\Phi}^{\Phi} w_{k,j} e^{2 \pi i (k j)*(x y)} dy dx 
-		  S.8 in Notizen für Formel
+
 
 		"""
 
-		weights[0,0] = 0 #sichert Nullintegral
+		weights[0,0] = 0 #ensures vanishing integral
 
 		res = 0
 		for k in range (- cut_off, cut_off +1 ):
 			for l in range (- cut_off, cut_off + 1):
 
 				if k == 0 and l == 0:
-					res += weights[0,0]* 1/grid_size**2 * (self.y_max - self.y_min)*(self.x_max - self.x_min) #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
+					res += weights[0,0]* 1/grid_size**2 * (self.y_max - self.y_min)*(self.x_max - self.x_min) 
 				
 				elif k == 0: 
 					res += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size*2*np.pi*1j *l)* (self.x_max * (np.exp(2*np.pi*1j*((l*self.y_max)/grid_size)) -  np.exp(2*np.pi*1j*((l*self.y_min)/grid_size)) )
@@ -126,9 +118,7 @@ class RectangularSet:
 
 	def compute_integral_gradient(self, cut_off, weights, grid_size):
 		"""
-		Ableitung von compute_integral, Beibehaltung der Fallunterscheidung
-		S.11-13 in Notizen für Formel
-		Speicherung des Gradienten in der Reihenfolge x_min, x_max, y_min, y_max
+		Saves the gradient of compute_integral in order of x_min, x_max, y_min, y_max
 
 		"""
 		weights[0,0] = 0
@@ -141,7 +131,7 @@ class RectangularSet:
 					gradient[0] += 0
 					gradient[1] += 0
 					gradient[2] += 0
-					gradient[3] += 0 #Absicherung, dass tatsächlich Nullintegral, da w_00 eh 0 ist, ändert diese abkürzung nichts
+					gradient[3] += 0 
 
 				elif k == 0 and l != 0: 
 					gradient[0] += weights[(k+grid_size) % grid_size, (l+grid_size) % grid_size] / (grid_size * 2*np.pi*1j*l ) *(np.exp( 2*np.pi* 1j * ( l * self.y_min)/ grid_size )  - np.exp( 2*np.pi* 1j * ( l * self.y_max)/ grid_size ) )
@@ -187,7 +177,7 @@ class RectangularSet:
 	
 	def compute_objective_wrapper(self, x, cut_off, weights, grid_size):
 		
-		"""brauche ich, um es in scipy.optimize.minimize einbinden kann"""
+		"""needed for scipy.optimize.minimize """
 		
 		self.x_min = x[0]
 		self.x_max = x[1]
@@ -211,15 +201,13 @@ class RectangularSet:
 	
 	def objective_gradient_wrapper(self, x, cut_off, weights, grid_size):
 		""""
-		brauche ich, um es in scipy.optimize.minimize einbinden kann
+		needed for scipy.optimize.minimize 
 		"""
 		self.x_min = x[0]
 		self.x_max = x[1]
 		self.y_min = x[2]
 		self.y_max = x[3]
 		gradient = np.real(self.compute_objective_gradient(cut_off, weights, grid_size))
-
-		
 
 		return np.ascontiguousarray(gradient, dtype=np.float64)
 
