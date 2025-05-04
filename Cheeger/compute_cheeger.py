@@ -238,10 +238,9 @@ def sliding_step(u,  target_function_f, reg_param):
 
 
 def standard_optimization( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
-	save_iterations = [ 20]
-	l1_errors = []
-	l1_errors_mean0 = []
 	
+	l1_errors = []
+
 
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
@@ -309,7 +308,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 		plt.figure()
 		plt.plot(objective_whole_iteration)
-		plt.title("Objective development each iteration")
+		plt.title("Overall Objective Development")
 		plt.show()
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
@@ -319,11 +318,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		l1_error = np.sum(np.abs(-data + ground_truth))
 		l1_error_normalized = l1_error / (grid_size * grid_size)
 
-		offset = np.mean(- data + ground_truth)
-		u_corrected = data + offset
-		l1_error_corrected = np.sum(np.abs(-u_corrected + ground_truth)) /(grid_size * grid_size)
 		
-		l1_errors_mean0.append(l1_error_corrected)
 		l1_errors.append(l1_error_normalized)
 
 
@@ -339,29 +334,21 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	with open(f"fw_l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors, f)
 
-	plt.figure()
-	plt.plot(l1_errors_mean0)
-	plt.title("L1 Error per Iteration corrected")
-	plt.xlabel("Iteration")
-	plt.ylabel("L1 Error corrected")
-	plt.show()
-
-	with open(f"fw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
-		pickle.dump(l1_errors_mean0, f)
+	
 
 	print("number of rectangles", u.num_atoms)
 	number_of_atoms = u.num_atoms
 	np.save(f"fw_number_of_rectangels_iteration20_cutoff{cut_off}_seed{seed}.npy", number_of_atoms)
 
-	vmin = min(np.min(ground_truth), -1)   # oder andere sinnvolle Schranke
+	vmin = min(np.min(ground_truth), -1) 
 	vmax = max(np.max(ground_truth), 1)
 	vmax_diff = np.max(np.abs(ground_truth))
 	data = u.construct_image_matrix_sf(plot=False)
 	diff = -data + ground_truth
 
-	offset = np.mean(diff)
-	u_corrected = data + offset
-	error_corrected = -u_corrected + ground_truth
+	#offset = np.mean(diff)
+	#u_corrected = data + offset
+	#error_corrected = -u_corrected + ground_truth
 
 			
 			
@@ -384,13 +371,13 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
 	plt.close()
 
-	plt.figure()
-	plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
-	plt.axis('off')
-	plt.tight_layout()
+	#plt.figure()
+	#plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+	#plt.axis('off')
+	#plt.tight_layout()
 	#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
-	plt.close()
+	#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
+	#plt.close()
 
 	with open(f"simplefunction_fw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
