@@ -22,7 +22,7 @@ from .rectangular_set import RectangularSet, construct_rectangular_set_from01, e
 from Setup.ground_truth import GroundTruth, construction_of_example_source
 from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
-from .optimizer_debugging import run_fine_optimization
+from .fine_optimization_rectangle import run_fine_optimization
 
 from SlidingFrankWolfe.simple_function import IndicatorFunction, SimpleFunction #, objective_wrapper_sliding, gradient_wrapper_sliding
 
