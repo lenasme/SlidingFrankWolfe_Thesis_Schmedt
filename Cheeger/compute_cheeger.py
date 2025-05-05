@@ -343,7 +343,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	#	f.write(latex_command_name)
 
 	#shutil.copy("number_of_atoms_commands.tex", r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument")
-	command_name = f"numberofatomsStandardCutoff_{cut_off_str}_Seed_{seed_str}"
+	command_name = f"numberofatomsStandardCutoff{cut_off_str}Seed{seed_str}"
 	tex_path = "number_of_atoms_commands.tex"
 
 	write_latex_command(command_name, number_of_atoms, tex_path)
@@ -552,7 +552,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	#shutil.copy("number_of_atoms_commands.tex", r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument")
 
 
-	command_name = f"numberofatomsSlidingCutoff_{cut_off_str}_Seed_{seed_str}"
+	command_name = f"numberofatomsSlidingCutoff{cut_off_str}Seed{seed_str}"
 	tex_path = "number_of_atoms_commands.tex"
 
 	write_latex_command(command_name, number_of_atoms, tex_path)
