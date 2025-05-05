@@ -5,5 +5,5 @@ from .compute_cheeger import *
 from .plot_utils import *
 #from .rectangular_set import *
 from .rectangular_set import *
-from .optimizer_debugging import *
+from .fine_optimization_rectangle import *
 from .tools import *
