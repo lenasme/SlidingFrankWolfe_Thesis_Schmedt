@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-from Cheeger.compute_cheeger import calculate_target_function
+from Setup.target_function import calculate_target_function
 from Setup.ground_truth import GroundTruth
 
 

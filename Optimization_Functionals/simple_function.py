@@ -376,18 +376,3 @@ class SimpleFunction:
 			self.atoms[i].support.y_max = x[4 *len(self.atoms) + i]
 
 		return self.compute_objective_sliding( target_function_f, reg_param)
-	
-
-
-
-	
-
-		
-
-	
-
-
-
-  
- 
-	
