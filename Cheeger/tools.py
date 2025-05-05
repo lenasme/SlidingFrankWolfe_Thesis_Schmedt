@@ -4,6 +4,8 @@ import triangle
 
 import matplotlib.pyplot as plt
 from numba import jit, prange
+import re
+import os
 
 
 @jit(nopython=True)
@@ -575,3 +577,34 @@ def extract_contour(u):
             mask[k-1] = False
 
     return np.array(path_vertices[:-1])
+
+
+
+def write_latex_command(command_name, number_of_atoms, tex_file_path):
+    new_line = f"\\newcommand{{\\{command_name}}}{{{number_of_atoms}}}\n"
+
+    # Falls Datei noch nicht existiert: einfach neu anlegen
+    if not os.path.exists(tex_file_path):
+        with open(tex_file_path, "w") as f:
+            f.write(new_line)
+        return
+
+    # Datei einlesen und prüfen, ob die Zeile schon existiert
+    with open(tex_file_path, "r") as f:
+        lines = f.readlines()
+
+    pattern = re.compile(rf"\\newcommand{{\\{re.escape(command_name)}}}{{.*}}")
+    replaced = False
+
+    for i, line in enumerate(lines):
+        if pattern.match(line):
+            lines[i] = new_line
+            replaced = True
+            break
+
+    if not replaced:
+        lines.append(new_line)
+
+    # Datei wieder zurückschreiben
+    with open(tex_file_path, "w") as f:
+        f.writelines(lines)
