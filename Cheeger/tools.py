@@ -8,179 +8,178 @@ import re
 import os
 
 
-@jit(nopython=True)
-def winding(x, vertices):
-    """
-    Compute the winding number of a closed polygonal curve described by its vertices around the point x. This number is
-    zero if and only if x is outside the polygon.
+#@jit(nopython=True)
+#def winding(x, vertices):
+   # """
+   # Compute the winding number of a closed polygonal curve described by its vertices around the point x. This number is
+   # zero if and only if x is outside the polygon.
 
-    Parameters
-    ----------
-    x : array, shape (2,)
-        Point around which the winding number is computed
-    vertices : array, shape (N, 2)
-        Coordinates of the curve's vertices
+   # Parameters
+    #----------
+   # x : array, shape (2,)
+   #     Point around which the winding number is computed
+   # vertices : array, shape (N, 2)
+   #     Coordinates of the curve's vertices
+# Returns
+   # -------
+  #  wn : float
+  #      The winding number
 
-    Returns
-    -------
-    wn : float
-        The winding number
+   # """
+   # wn = 0
 
-    """
-    wn = 0
+   # for i_current in range(len(vertices)):
+     #   if i_current != len(vertices) - 1:
+      #      i_next = i_current + 1
+     #   else:
+      #      i_next = 0
 
-    for i_current in range(len(vertices)):
-        if i_current != len(vertices) - 1:
-            i_next = i_current + 1
-        else:
-            i_next = 0
+      #  det = (vertices[i_next, 0] - vertices[i_current, 0]) * (x[1] - vertices[i_current, 1])
+      #  det -= (vertices[i_next, 1] - vertices[i_current, 1]) * (x[0] - vertices[i_current, 0])
 
-        det = (vertices[i_next, 0] - vertices[i_current, 0]) * (x[1] - vertices[i_current, 1])
-        det -= (vertices[i_next, 1] - vertices[i_current, 1]) * (x[0] - vertices[i_current, 0])
+      #  if det > 0 and vertices[i_current, 1] <= x[1] < vertices[i_next, 1]:
+      #      wn += 1
 
-        if det > 0 and vertices[i_current, 1] <= x[1] < vertices[i_next, 1]:
-            wn += 1
+    #    if det < 0 and vertices[i_next, 1] < x[1] < vertices[i_current, 1]:
+     #       wn += -1
 
-        if det < 0 and vertices[i_next, 1] < x[1] < vertices[i_current, 1]:
-            wn += -1
-
-    return wn
+   # return wn
 
 
-def resample(curve, num_points=None, point_density=None):
-    """
-    Resample a closed polygonal chain
+#def resample(curve, num_points=None, point_density=None):
+  #  """
+  #  Resample a closed polygonal chain
 
-    Parameters
-    ----------
-    curve : array, shape (N, 2)
-        Curve to be resampled, described by the list of its vertices. The last vertex should not be equal to the first
-        one (the input array should be a minimal description of the closed polygonal chain)
-    num_points : int
-        Number of vertices of the output curve
+   # Parameters
+   # ----------
+  #  curve : array, shape (N, 2)
+  #      Curve to be resampled, described by the list of its vertices. The last vertex should not be equal to the first
+  #      one (the input array should be a minimal description of the closed polygonal chain)
+  #  num_points : int
+   #     Number of vertices of the output curve
 
-    Returns
-    -------
-    array, shape (num_points, 2)
-        Resampled curve
+   # Returns
+  #  -------
+  #  array, shape (num_points, 2)
+   #     Resampled curve
 
-    """
-    assert (num_points is None) != (point_density is None)
+   # """
+  #  assert (num_points is None) != (point_density is None)
 
-    periodized_curve = np.concatenate([curve, [curve[0]]])
+  #  periodized_curve = np.concatenate([curve, [curve[0]]])
 
     # computation of the curvilinear absicssa
-    curvabs = np.concatenate([[0], np.cumsum(np.abs(periodized_curve[1:] - periodized_curve[:-1]).sum(axis=1))])
-    curve_length = curvabs[-1]
-    curvabs = curvabs / curvabs[-1]
+  #  curvabs = np.concatenate([[0], np.cumsum(np.abs(periodized_curve[1:] - periodized_curve[:-1]).sum(axis=1))])
+  #  curve_length = curvabs[-1]
+   # curvabs = curvabs / curvabs[-1]
 
-    if point_density is not None:
-        actual_num_points = int(point_density * curve_length)
-    else:
-        actual_num_points = num_points
-
+  #  if point_density is not None:
+  #      actual_num_points = int(point_density * curve_length)
+  #  else:
+   #     actual_num_points = num_points
+#
     # linear interpolation
-    new_x = np.interp(np.arange(actual_num_points) / actual_num_points, curvabs, periodized_curve[:, 0])
-    new_y = np.interp(np.arange(actual_num_points) / actual_num_points, curvabs, periodized_curve[:, 1])
+ #  new_x = np.interp(np.arange(actual_num_points) / actual_num_points, curvabs, periodized_curve[:, 0])
+ #   new_y = np.interp(np.arange(actual_num_points) / actual_num_points, curvabs, periodized_curve[:, 1])
 
-    return np.stack([new_x, new_y], axis=1)
+  #  return np.stack([new_x, new_y], axis=1)
 
 
-def triangulate(vertices, max_triangle_area=None, split_boundary=False, plot_result=False):
-    """
-    Triangulate the interior of a closed polygonal curve using the triangle library (Python wrapper around Shewchuk's
-    Triangle mesh generator)
+#def triangulate(vertices, max_triangle_area=None, split_boundary=False, plot_result=False):
+  #  """
+  #  Triangulate the interior of a closed polygonal curve using the triangle library (Python wrapper around Shewchuk's
+  #  Triangle mesh generator)
+#
+  #  Parameters
+  #  ----------
+  #  vertices : array, shape (N, 2)
+  #      Coordinates of the curve's vertices
+  #  max_triangle_area : None or float
+  #      Maximum area allowed for triangles, see Shewchuk's Triangle mesh generator, defaut None (no constraint)
+  #  split_boundary : bool
+  #      Whether to allow boundary segments to be splitted or not, defaut False
+  #  plot_result : bool
+  #      If True, the resulting triangulation is shown along with the input, defaut False
 
-    Parameters
-    ----------
-    vertices : array, shape (N, 2)
-        Coordinates of the curve's vertices
-    max_triangle_area : None or float
-        Maximum area allowed for triangles, see Shewchuk's Triangle mesh generator, defaut None (no constraint)
-    split_boundary : bool
-        Whether to allow boundary segments to be splitted or not, defaut False
-    plot_result : bool
-        If True, the resulting triangulation is shown along with the input, defaut False
+  #  Returns
+  # -------
+  #  raw_mesh : dict
+  #      Output mesh, see the documentation of the triangle library
 
-    Returns
-    -------
-    raw_mesh : dict
-        Output mesh, see the documentation of the triangle library
-
-    """
+  #  """
     # vertices and segments define a planar straight line graph (vertices are assumed to be given ordered)
-    segments = np.array([[i, (i + 1) % len(vertices)] for i in range(len(vertices))])
-    triangle_input = dict(vertices=vertices, segments=segments)
+   # segments = np.array([[i, (i + 1) % len(vertices)] for i in range(len(vertices))])
+   # triangle_input = dict(vertices=vertices, segments=segments)
 
-    opts = 'qpe'
+  #  opts = 'qpe'
 
-    if max_triangle_area is not None:
-        opts = opts + 'a{}'.format(max_triangle_area)
+ #   if max_triangle_area is not None:
+  #      opts = opts + 'a{}'.format(max_triangle_area)
 
-    if not split_boundary:
-        opts = opts + 'Y'
+  #  if not split_boundary:
+  #      opts = opts + 'Y'
 
-    raw_mesh = triangle.triangulate(triangle_input, opts)
+  #  raw_mesh = triangle.triangulate(triangle_input, opts)
 
-    if plot_result:
-        triangle.compare(plt, triangle_input, raw_mesh)
-        plt.show()
+ #   if plot_result:
+ #       triangle.compare(plt, triangle_input, raw_mesh)
+  #      plt.show()
 
-    return raw_mesh
+ #   return raw_mesh
 
-def triangulate_combined(vertices_inner, vertices_outer, max_triangle_area=None, split_boundary=False, plot_result=False):
-    """
-    Triangulate the interior of a closed polygonal curve using the triangle library (Python wrapper around Shewchuk's
-    Triangle mesh generator)
+#def triangulate_combined(vertices_inner, vertices_outer, max_triangle_area=None, split_boundary=False, plot_result=False):
+   # """
+   # Triangulate the interior of a closed polygonal curve using the triangle library (Python wrapper around Shewchuk's
+   # Triangle mesh generator)
 
-    Parameters
-    ----------
-    vertices : array, shape (N, 2)
-        Coordinates of the curve's vertices
-    max_triangle_area : None or float
-        Maximum area allowed for triangles, see Shewchuk's Triangle mesh generator, defaut None (no constraint)
-    split_boundary : bool
-        Whether to allow boundary segments to be splitted or not, defaut False
-    plot_result : bool
-        If True, the resulting triangulation is shown along with the input, defaut False
+   # Parameters
+  #  ----------
+  #  vertices : array, shape (N, 2)
+  #      Coordinates of the curve's vertices
+  #  max_triangle_area : None or float
+  #      Maximum area allowed for triangles, see Shewchuk's Triangle mesh generator, defaut None (no constraint)
+  #  split_boundary : bool
+  #      Whether to allow boundary segments to be splitted or not, defaut False
+  #  plot_result : bool
+ #       If True, the resulting triangulation is shown along with the input, defaut False
+#
+ #   Returns
+ #   -------
+ #   raw_mesh : dict
+  #      Output mesh, see the documentation of the triangle library
 
-    Returns
-    -------
-    raw_mesh : dict
-        Output mesh, see the documentation of the triangle library
+  #  """
+ #   print("Shape von vertices_inner:", vertices_inner.shape)
+ #   print("vertices outer", vertices_outer)
+ #   print("Shape von vertices_outer:", vertices_outer.shape)
 
-    """
-    print("Shape von vertices_inner:", vertices_inner.shape)
-    print("vertices outer", vertices_outer)
-    print("Shape von vertices_outer:", vertices_outer.shape)
+ #   combined_vertices = np.vstack([vertices_inner, vertices_outer])
 
-    combined_vertices = np.vstack([vertices_inner, vertices_outer])
+ #   num_inner = len(vertices_inner)
+ #   num_outer = len(vertices_outer)
 
-    num_inner = len(vertices_inner)
-    num_outer = len(vertices_outer)
-
-    inner_segments = [[i, (i + 1) % num_inner] for i in range(num_inner)]
-    outer_segments = [[num_inner + i, num_inner + (i + 1) % num_outer] for i in range(num_outer)]
+ #   inner_segments = [[i, (i + 1) % num_inner] for i in range(num_inner)]
+ #   outer_segments = [[num_inner + i, num_inner + (i + 1) % num_outer] for i in range(num_outer)]
     #connecting_segments = [[i, num_inner + i] for i in range(num_outer)]
     
-    segments = np.array(inner_segments + outer_segments) #+ connecting_segments)
-    triangle_input = dict(vertices=combined_vertices, segments=segments)
+ #   segments = np.array(inner_segments + outer_segments) #+ connecting_segments)
+ #   triangle_input = dict(vertices=combined_vertices, segments=segments)
 
-    opts = 'qpeu'
+ #   opts = 'qpeu'
 
-    if max_triangle_area is not None:
-        opts = opts + 'a{}'.format(max_triangle_area)
+   # if max_triangle_area is not None:
+   #     opts = opts + 'a{}'.format(max_triangle_area)
 
-    if not split_boundary:
-        opts = opts + 'Y'
+ #   if not split_boundary:
+ #       opts = opts + 'Y'
 
-    raw_mesh = triangle.triangulate(triangle_input, opts)
+ #   raw_mesh = triangle.triangulate(triangle_input, opts)
 
-    if plot_result:
-        triangle.compare(plt, triangle_input, raw_mesh)
-        plt.show()
+ #   if plot_result:
+ #      triangle.compare(plt, triangle_input, raw_mesh)
+ #       plt.show()
 
-    return raw_mesh
+ #   return raw_mesh
 
 
 @jit(nopython=True)
@@ -208,7 +207,7 @@ def find_threshold(y):
            Series A, Springer, 2016, 158 (1), pp.575-585.
 
     """
-    # y = np.sort(np.abs(x))[::-1]
+
     j = len(y)
     stop = False
 
@@ -226,39 +225,39 @@ def find_threshold(y):
     return res
 
 
-@jit(nopython=True)
-def find_threshold_bis(y):
-    v = [y[0]]
-    tilde_v = []
-    rho = y[0] - 1
-    for n in range(1, len(y)):
-        if y[n] > rho:
-            rho += (y[n] - rho) / (len(v) + 1)
-            if rho > y[n] - 1:
-                v.append(y[n])
-            else:
-                for x in v:
-                    tilde_v.append(x)
-                v = [y[n]]
-                rho = y[n] - 1
-    if len(tilde_v) > 0:
-        for x in tilde_v:
-            if x > rho:
-                v.append(x)
-                rho += (x - rho) / len(v)
-    convergence = False
-    while not convergence:
-        i = 0
-        convergence = True
-        while i < len(v):
-            if v[i] > rho:
-                i += 1
-            else:
-                rho += (rho - v[i]) / len(v)
-                del v[i]
-                i = len(v)
-                convergence = False
-    return rho
+#@jit(nopython=True)
+#def find_threshold_bis(y):
+ #   v = [y[0]]
+ #   tilde_v = []
+ #   rho = y[0] - 1
+    #for n in range(1, len(y)):
+      #  if y[n] > rho:
+          #  rho += (y[n] - rho) / (len(v) + 1)
+          #  if rho > y[n] - 1:
+          #      v.append(y[n])
+          #  else:
+             #   for x in v:
+             #      tilde_v.append(x)
+              #  v = [y[n]]
+             #   rho = y[n] - 1
+  #  if len(tilde_v) > 0:
+     #   for x in tilde_v:
+      #      if x > rho:
+       #         v.append(x)
+   #             rho += (x - rho) / len(v)
+   # convergence = False
+   # while not convergence:
+     #   i = 0
+     #   convergence = True
+      #  while i < len(v):
+         #   if v[i] > rho:
+          #      i += 1
+          #  else:
+         #       rho += (rho - v[i]) / len(v)
+          #      del v[i]
+          #      i = len(v)
+        #        convergence = False
+   # return rho
 
 
 @jit(nopython=True, parallel=True)
@@ -307,20 +306,6 @@ def proj_one_one_unit_ball(x):
     return res
 
 
-# def proj_one_one_unit_ball_bis(x):
-#     norm_row_x = np.linalg.norm(x, ord=1, axis=-1)
-#     norm_x = np.sum(norm_row_x)
-#
-#     if norm_x > 1:
-#         res = np.zeros_like(x)
-#         thresh = find_threshold_bis(norm_row_x.ravel())
-#         proj_one_one_unit_ball_aux(x, norm_row_x, thresh, res)
-#     else:
-#         res = x
-#
-#     return res
-
-
 def prox_inf_inf_norm(x, tau):
     """
     Proximal map of the (2, infinity) norm
@@ -361,7 +346,6 @@ def prox_dot_prod(x, tau, a):
     return x - tau * a
 
 
-# TODO: deal with the case where the solution is a sum of two indicators of disjoint simple sets
 def postprocess_indicator(x):
     """
     Post process a piecewise constant function on a mesh to get an indicator function of a union of cells
@@ -379,27 +363,21 @@ def postprocess_indicator(x):
     """
     res = np.zeros_like(x)
 
-    # the values of x should concentrate around two values
     _, bins = np.histogram(x, bins=2)
 
-    # find the indices where x is clusters around each of the two values
     i1 = np.where(x < bins[1])
     i2 = np.where(x > bins[1])
 
-    # mean of the values in each cluster
     mean1 = np.mean(x[i1])
     mean2 = np.mean(x[i2])
 
-    # the smallest of the means (in absolute value) is shrinked to zero
     if abs(mean1) < abs(mean2):
         res[i1] = 0
         res[i2] = mean2
     else:
         res[i2] = 0
         res[i1] = mean1
-
-    # the output indicator function is normalized to have unit total variation
-    #res /= np.sum(np.linalg.norm(grad(res), axis=-1))
+  
     res /= np.sum(np.abs(grad(res)).sum(axis=-1))
     return res
 
@@ -420,7 +398,6 @@ def grad(u):
     update_grad(u, res)
     return res
 
-# hier eventuell prüfen, ob das für meine Anwendung so bleiben kann oder geändert werden muss... -div(phi)
 
 @jit(nopython=True, parallel=True)
 def update_adj_grad(phi, res):
@@ -528,22 +505,14 @@ def extract_contour(u):
         for j in range(n+1):
             if np.abs(grad_v[i, j, 0]) > 0:
                 
-                #x, y = -1 + i * h, -1 + (j - 1) * h
-                
                 x, y =  i * h,  (j - 1) * h
                 
-                #print(f"h: {h}")
-                #print(f"x, y: ({x}, {y})")
                 
                 edges.append([[x, y], [x, y + h]])
             if np.abs(grad_v[i, j, 1]) > 0:
-                
-                #x, y = - 1 + (i - 1) * h, -1 + j * h
 
                 x, y =  (i - 1) * h,  j * h
 
-                #print(f"h: {h}")
-                #print(f"x, y: ({x}, {y})")
                 edges.append([[x, y], [x + h, y]])
 
     edges = np.array(edges)
