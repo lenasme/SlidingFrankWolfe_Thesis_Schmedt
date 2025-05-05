@@ -8,7 +8,7 @@ from Optimization_Functionals.rectangular_set import RectangularSet, construct_r
 
 
 
-def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True):
+def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=False):
    
 	h = grid_size / grid_size_coarse
 	eta_bar = np.zeros((grid_size_coarse, grid_size_coarse))
@@ -34,9 +34,12 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
 	
 	initial_rectangular_set = construct_rectangular_set_from01(boundary_vertices, grid_size)
 	initial_coordinates = initial_rectangular_set.coordinates
-	if plot == True:
+	
+	if plot == True: 
 		print("Rectangle created by outer boundary vertices of Primal-Dual result:")
 		initial_rectangular_set.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
+
+	
 
 	x_min, x_max, y_min, y_max = initial_rectangular_set.coordinates[0], initial_rectangular_set.coordinates[1], initial_rectangular_set.coordinates[2], initial_rectangular_set.coordinates[3]
 
@@ -48,9 +51,10 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
 	if objective_tab[-1] < 0:
 		return initial_rectangular_set
 
+	
+	print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result:")
+	optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 	if plot == True:
-		print("Optimal Rectangle initialized by outer boundary vertices of Primal-Dual result:")
-		optimal_rectangle.plot_rectangular_set(np.fft.ifft2(truncated_operator_applied_on_ground_truth).real, grid_size)
 		print(f"initiale Koordinaten: {initial_coordinates}")
 		print(f"optimale Koordinaten: {optimal_rectangle.coordinates}")
 		print(f"Verschiebung: {optimal_rectangle.coordinates - initial_coordinates}")
@@ -60,7 +64,7 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
 
 
 def fit_weights(u, target_function_f, reg_param, plot=False):
-	print("Vorheriges Objective:", u.compute_objective_sliding(target_function_f, reg_param))
+	
 	def objective_scipy(a_vec):
 		# Update objective for scipy
 		for i in range(u.num_atoms):
@@ -135,7 +139,7 @@ def sliding_step(u,  target_function_f, reg_param):
 		
 
 
-	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds, method='L-BFGS-B', options={'gtol': 1e-3,'maxiter': 100, 'disp': True }, callback = callback)
+	result = minimize( fun = u.objective_wrapper_sliding, x0 = initial_parameters, args =(target_function_f, reg_param),jac = u.gradient_wrapper_sliding, bounds =bounds, method='L-BFGS-B', options={'gtol': 1e-3,'maxiter': 150, 'disp': True }, callback = callback)
 
 
 	if not result.success:
@@ -153,5 +157,5 @@ def sliding_step(u,  target_function_f, reg_param):
 		u.atoms[i].weight = new_weights[i]
 		u.atoms[i].support.coordinates = (new_x_mins[i], new_x_maxs[i], new_y_mins[i], new_y_maxs[i])
 
-	u.remove_small_atoms(threshold = 1e-3)
+	u.remove_small_atoms(threshold = 0.015)
 	return u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values

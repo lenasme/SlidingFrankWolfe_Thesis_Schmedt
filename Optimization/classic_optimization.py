@@ -27,7 +27,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = False) + target_function_f
 
-		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=False)
 
 		
 		u.extend_support(optimal_rectangle)

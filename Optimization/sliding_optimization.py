@@ -28,7 +28,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = False) + target_function_f
 
-		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
+		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=False)
 
 		u.extend_support(optimal_rectangle)
 		
@@ -37,6 +37,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 
 		if plot == True:
+			print("Result before sliding step:")
 
 			fig, ax = plt.subplots(1, 3, figsize=(18, 6))
 
@@ -74,17 +75,17 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		if plot == True:
 
-			plt.figure()
-			plt.plot(objective_development)
-			plt.title("Objective")
-			plt.show()
+			#plt.figure()
+			#plt.plot(objective_development)
+			#plt.title("Objective")
+			#plt.show()
 
-			plt.figure()
-			plt.plot(gradient_development)
-			plt.title("Gradient")
-			plt.show()
+			#plt.figure()
+			#plt.plot(gradient_development)
+			#plt.title("Gradient")
+			#plt.show()
 
-			
+			print("Result after sliding step:")
 
 			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  
 

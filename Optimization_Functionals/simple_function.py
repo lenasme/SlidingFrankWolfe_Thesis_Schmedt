@@ -99,7 +99,7 @@ class SimpleFunction:
 
 			else:
 				removed_count += 1
-		print (f"{removed_count} Atome mit Gewicht < {threshold} entfernt.")
+		print (f"{removed_count} sets with weight < {threshold} deleted.")
 		self.atoms = remaining_atoms
 		
 
