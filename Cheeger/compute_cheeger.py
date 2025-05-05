@@ -1,6 +1,6 @@
 import numpy as np
 #import cvxpy as cp
-
+import shutil
 import pickle
 
 import copy
@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 from .rectangular_set import RectangularSet, construct_rectangular_set_from01
 from Setup.ground_truth import  construction_of_example_source
-from .tools import run_primal_dual, extract_contour
+from .tools import run_primal_dual, extract_contour, write_latex_command
 from .plot_utils import plot_primal_dual_results
 from .fine_optimization_rectangle import run_fine_optimization
 
@@ -338,9 +338,17 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 	cut_off_str = str(cut_off)
 	seed_str = str(seed)
-	latex_command_name = f"\\newcommand{{\\numberofatomsStandardCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
-	with open("number_of_atoms_commands.tex", "a") as f:
-		f.write(latex_command_name)
+	#latex_command_name = f"\\newcommand{{\\numberofatomsStandardCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
+	#with open("number_of_atoms_commands.tex", "a") as f:
+	#	f.write(latex_command_name)
+
+	#shutil.copy("number_of_atoms_commands.tex", r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument")
+	command_name = f"numberofatomsStandardCutoff{cut_off_str}Seed{seed_str}"
+	tex_path = "number_of_atoms_commands.tex"
+
+	write_latex_command(command_name, number_of_atoms, tex_path)
+
+	shutil.copy(tex_path, r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument")
 
 
 	vmin = min(np.min(ground_truth), -1) 
@@ -537,6 +545,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	latex_command_name = f"\\newcommand{{\\numberofatomsSlidingCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
 	with open("number_of_atoms_commands.tex", "a") as f:
 		f.write(latex_command_name)
+
+	number_of_atoms = u.num_atoms
+	np.save(f"fw_number_of_rectangels_iteration20_cutoff{cut_off}_seed{seed}.npy", number_of_atoms)
+
+	shutil.copy("number_of_atoms_commands.tex", r"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument")
+
 
 
 	vmin = min(np.min(ground_truth), -1)  
