@@ -345,39 +345,25 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 	vmax_diff = np.max(np.abs(ground_truth))
 	data = u.construct_image_matrix_sf(plot=False)
 	diff = -data + ground_truth
-
-	#offset = np.mean(diff)
-	#u_corrected = data + offset
-	#error_corrected = -u_corrected + ground_truth
-
 			
 			
 
-	# Rekonstruiertes Bild speichern
+	# save reconstructed image
 	plt.figure()
 	plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
 	plt.axis('off')
 	plt.tight_layout()
-	#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_reconstruction_cutoff{cut_off}_seed{seed}.png", dpi=300)
 	plt.close()
 
-	# Differenzbild speichern
+	# save image of differences
 	plt.figure()
 	plt.imshow(diff, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
 	plt.axis('off')
 	plt.tight_layout()
-	#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
 	plt.close()
 
-	#plt.figure()
-	#plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
-	#plt.axis('off')
-	#plt.tight_layout()
-	#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-	#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\fw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
-	#plt.close()
 
 	with open(f"simplefunction_fw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
@@ -390,52 +376,42 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid_size_coarse, cut_off, reg_param, seed, max_iter_primal_dual = 10000, plot=True):
 	
-	save_iterations = [ 20]
+	#save_iterations = [ 20]
 	l1_errors = []
-	l1_errors_mean0 = []
+	#l1_errors_mean0 = []
 	atoms = []
 	u = SimpleFunction(atoms, grid_size, cut_off)
 
 	objective_whole_iteration = []
-	objective_overall_development = []
+	#objective_overall_development = []
 	iteration = 0
 	max_iter = 21
 
 	convergence = False
 
 	objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
-	objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+	#objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 	while not convergence and iteration < max_iter:   
-	#while iteration < max_iter:   
-
+	
 		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
 
 		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
-		
-		#if np.abs(optimal_rectangle.compute_integral (cut_off, 1/reg_param * weights_in_eta, grid_size)) <= optimal_rectangle.compute_anisotropic_perimeter():
-		 #   print("Optimierung erfolgreich")
-		#    return u
-			
-		
-		
-		
 		u.extend_support(optimal_rectangle)
 		
 		
 		fit_weights(u,  target_function_f, reg_param)
 
-		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		#objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
 		
 
 
 		if plot == True:
 
-			fig, ax = plt.subplots(1, 4, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+			fig, ax = plt.subplots(1, 3, figsize=(18, 6))
 
-			# Linker Plot mit Funktionsaufruf
 			data = u.construct_image_matrix_sf(plot=False) 
 			vmin = min(np.min(data), np.min(ground_truth))
 			vmax = max(np.max(data), np.max(ground_truth))
@@ -456,13 +432,6 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			fig.colorbar(im3, ax = ax[2])
 			ax[2].set_title("Difference")
 
-			offset = np.mean(- data + ground_truth)
-			u_corrected = data + offset
-			error_corrected = -u_corrected + ground_truth
-			im4 = ax[3].imshow(error_corrected, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
-			fig.colorbar(im4, ax = ax[2])
-			ax[3].set_title("Difference corrected")
-
 			plt.tight_layout()
 
 			plt.show()
@@ -471,22 +440,22 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		
 		v = copy.deepcopy(u)
 
-		pr = cProfile.Profile()
-		pr.enable()
+		#pr = cProfile.Profile()
+		#pr.enable()
 
 		u, objective_development, gradient_development, x_min_values, x_max_values, y_min_values, y_max_values = sliding_step(u, target_function_f, reg_param)
 
-		pr.disable()
+		#pr.disable()
 
 		# Ergebnisse sortiert nach Laufzeit
-		s = io.StringIO()
-		ps = pstats.Stats(pr, stream=s).sort_stats('cumtime')  # Alternativ 'tottime'
-		ps.print_stats(30)  # Zeige die Top 30 Zeitfresser
-		print(s.getvalue())
+		#s = io.StringIO()
+		#ps = pstats.Stats(pr, stream=s).sort_stats('cumtime')  # Alternativ 'tottime'
+		#ps.print_stats(30)  # Zeige die Top 30 Zeitfresser
+		#print(s.getvalue())
 
-		for i in range((u.num_atoms)):
+		#for i in range((u.num_atoms)):
 			
-			print("koordinaten von u", u.atoms[i].support.coordinates)
+			#print("koordinaten von u", u.atoms[i].support.coordinates)
 
 
 		if plot == True:
@@ -503,7 +472,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 			
 
-			fig, ax = plt.subplots(1, 4, figsize=(18, 6))  # 1 Zeile, 2 Spalten
+			fig, ax = plt.subplots(1, 3, figsize=(18, 6))  # 1 Zeile, 2 Spalten
 
 			# Linker Plot mit Funktionsaufruf
 			data = u.construct_image_matrix_sf(plot=False) 
@@ -526,12 +495,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			fig.colorbar(im3, ax = ax[2])
 			ax[2].set_title("Difference")
 
-			offset = np.mean(- data + ground_truth)
-			u_corrected = data + offset
-			error_corrected = -u_corrected + ground_truth
-			im4 = ax[3].imshow(error_corrected, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
-			fig.colorbar(im4, ax = ax[2])
-			ax[3].set_title("Difference")
+			#offset = np.mean(- data + ground_truth)
+			#u_corrected = data + offset
+			#error_corrected = -u_corrected + ground_truth
+			#im4 = ax[3].imshow(error_corrected, cmap = 'bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			#fig.colorbar(im4, ax = ax[2])
+			#ax[3].set_title("Difference")
 
 			plt.tight_layout()
 
@@ -548,46 +517,46 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 			plt.title("Differenz zwischen Funktionen")
 			plt.show()
 
-		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		#objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 		
 		#fit_weights(u, grid_size, cut_off, reg_param, target_function_f)
 		fit_weights(u, target_function_f, reg_param)
 
-		if iteration in save_iterations:
-			vmin = min(np.min(ground_truth), -1)  
-			vmax = max(np.max(ground_truth), 1)
-			vmax_diff = np.max(np.abs(ground_truth))
-			data = u.construct_image_matrix_sf(plot=False)
-			diff = -data + ground_truth
-			offset = np.mean(diff)
-			u_corrected = data + offset
-			error_corrected = -u_corrected + ground_truth
+		#if iteration in save_iterations:
+			#vmin = min(np.min(ground_truth), -1)  
+			#vmax = max(np.max(ground_truth), 1)
+			#vmax_diff = np.max(np.abs(ground_truth))
+			##data = u.construct_image_matrix_sf(plot=False)
+			#diff = -data + ground_truth
+			#offset = np.mean(diff)
+			#u_corrected = data + offset
+			#error_corrected = -u_corrected + ground_truth
 
 			# Rekonstruiertes Bild speichern
-			plt.figure()
-			plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
-			plt.axis('off')
-			plt.tight_layout()
+			#plt.figure()
+			#plt.imshow(data, cmap='bwr', vmin=vmin, vmax=vmax)
+			#plt.axis('off')
+			#plt.tight_layout()
 			#plt.savefig(f"reconstruction_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
-			plt.close()
+			#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_reconstruction_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
+			#plt.close()
 
 			# Differenzbild speichern
-			plt.figure()
-			plt.imshow(diff, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
-			plt.axis('off')
-			plt.tight_layout()
+			#plt.figure()
+			#plt.imshow(diff, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			#plt.axis('off')
+			#plt.tight_layout()
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
-			plt.close()
+			#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
+			#plt.close()
 
-			plt.figure()
-			plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
-			plt.axis('off')
-			plt.tight_layout()
+			#plt.figure()
+			#plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+			#plt.axis('off')
+			#plt.tight_layout()
 			#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-			plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_corrected_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
-			plt.close()
+			#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_corrected_difference_iter{iteration}_cutoff{cut_off}_seed{seed}.png", dpi=300)
+			#plt.close()
 
 
 
@@ -596,12 +565,12 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		#fit_weights(u, target_function_f, reg_param)
 
 		objective_whole_iteration.append(u.compute_objective_sliding( target_function_f, reg_param))
-		objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
+		#objective_overall_development.append(u.compute_objective_sliding( target_function_f, reg_param))
 
-		plt.figure()
-		plt.plot(objective_overall_development)
-		plt.title("Objective overall development")
-		plt.show()
+		#plt.figure()
+		#plt.plot(objective_overall_development)
+		#plt.title("Objective overall development")
+		#plt.show()
 
 
 		plt.figure()
@@ -612,13 +581,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 		data = u.construct_image_matrix_sf(plot=False)
 		
 		l1_error = np.sum(np.abs(-data + ground_truth))
-		offset = np.mean(- data + ground_truth)
-		u_corrected = data + offset
-		l1_error_corrected = np.sum(np.abs(-u_corrected + ground_truth)) /(grid_size * grid_size)
+		#offset = np.mean(- data + ground_truth)
+		#u_corrected = data + offset
+		#l1_error_corrected = np.sum(np.abs(-u_corrected + ground_truth)) /(grid_size * grid_size)
 		l1_error_normalized = l1_error / (grid_size * grid_size)
 
 		l1_errors.append(l1_error_normalized)
-		l1_errors_mean0.append(l1_error_corrected)
+		#l1_errors_mean0.append(l1_error_corrected)
 
 		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
 
@@ -635,15 +604,15 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	with open(f"sfw_l1_errors_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(l1_errors, f)
 
-	plt.figure()
-	plt.plot(l1_errors_mean0)
-	plt.title("L1 Error per Iteration corrected")
-	plt.xlabel("Iteration")
-	plt.ylabel("L1 Error corrected")
-	plt.show()
+	#plt.figure()
+	#plt.plot(l1_errors_mean0)
+	#plt.title("L1 Error per Iteration corrected")
+	#plt.xlabel("Iteration")
+	#plt.ylabel("L1 Error corrected")
+	#plt.show()
 
-	with open(f"sfw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
-		pickle.dump(l1_errors_mean0, f)
+	#with open(f"sfw_l1_errors_corrected_cutoff{cut_off}_seed{seed}.pkl", "wb") as f:
+		#pickle.dump(l1_errors_mean0, f)
 	
 	print("number of rectangles", u.num_atoms)
 	number_of_atoms = u.num_atoms
@@ -654,9 +623,9 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	vmax_diff = np.max(np.abs(ground_truth))
 	data = u.construct_image_matrix_sf(plot=False)
 	diff = -data + ground_truth
-	offset = np.mean(diff)
-	u_corrected = data + offset
-	error_corrected = -u_corrected + ground_truth
+	#offset = np.mean(diff)
+	#u_corrected = data + offset
+	#error_corrected = -u_corrected + ground_truth
 
 	# Rekonstruiertes Bild speichern
 	plt.figure()
@@ -676,13 +645,13 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
 	plt.close()
 
-	plt.figure()
-	plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
-	plt.axis('off')
-	plt.tight_layout()
+	#plt.figure()
+	#plt.imshow(error_corrected, cmap='bwr', vmin=-vmax_diff, vmax=vmax_diff)
+	#plt.axis('off')
+	#plt.tight_layout()
 	#plt.savefig(f"difference_iter{iteration}_cutoff{cut_off}.png", dpi=300)
-	plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
-	plt.close()
+	#plt.savefig(fr"C:\Lena\Universität\Inhaltlich\Master\AMasterarbeit\Masterarbeit_Dokument\sfw_corrected_difference_cutoff{cut_off}_seed{seed}.png", dpi=300)
+	#plt.close()
 
 	with open(f"simplefunction_sfw_u_cutoff_{cut_off}_seed{seed}.pkl", "wb") as f:
 		pickle.dump(u, f)
