@@ -1,11 +1,7 @@
 import numpy as np
-#import quadpy
-#import triangle
 
-#import matplotlib.pyplot as plt
 from numba import jit, prange
-#import re
-#import os
+
 
 
 @jit(nopython=True)
@@ -49,41 +45,6 @@ def find_threshold(y):
     res = (partial_sum - 1) / (j + 1)
 
     return res
-
-
-#@jit(nopython=True)
-#def find_threshold_bis(y):
- #   v = [y[0]]
- #   tilde_v = []
- #   rho = y[0] - 1
-    #for n in range(1, len(y)):
-      #  if y[n] > rho:
-          #  rho += (y[n] - rho) / (len(v) + 1)
-          #  if rho > y[n] - 1:
-          #      v.append(y[n])
-          #  else:
-             #   for x in v:
-             #      tilde_v.append(x)
-              #  v = [y[n]]
-             #   rho = y[n] - 1
-  #  if len(tilde_v) > 0:
-     #   for x in tilde_v:
-      #      if x > rho:
-       #         v.append(x)
-   #             rho += (x - rho) / len(v)
-   # convergence = False
-   # while not convergence:
-     #   i = 0
-     #   convergence = True
-      #  while i < len(v):
-         #   if v[i] > rho:
-          #      i += 1
-          #  else:
-         #       rho += (rho - v[i]) / len(v)
-          #      del v[i]
-          #      i = len(v)
-        #        convergence = False
-   # return rho
 
 
 @jit(nopython=True, parallel=True)
@@ -300,7 +261,7 @@ def run_primal_dual(grid_size, eta_bar, max_iter=10000, convergence_tol=None, ve
         update_grad(2 * u - former_u, grad_buffer)
         phi = prox_inf_inf_norm(phi + sigma * grad_buffer, sigma)
 
-        former_u = np.copy(u)  # TODO: check copy
+        former_u = np.copy(u)  
         update_adj_grad(phi, adj_grad_buffer)
         u = prox_dot_prod(u - tau * adj_grad_buffer, tau, eta_bar_pad)
         iter += 1
@@ -320,8 +281,7 @@ def extract_contour(u):
     v = postprocess_indicator(u)
 
     n = v.shape[0] - 2
-    
-    #h = 2 / n
+   
     
     h = 1 / n
     grad_v = grad(v)
