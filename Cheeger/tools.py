@@ -583,8 +583,8 @@ def extract_contour(u):
 def write_latex_command(command_name, number_of_atoms, tex_file_path):
     new_line = f"\\newcommand{{\\{command_name}}}{{{number_of_atoms}}}\n"
 
-    # Falls Datei noch nicht existiert: einfach neu anlegen
     if not os.path.exists(tex_file_path):
+        print(f"Datei {tex_file_path} existiert nicht, wird neu erstellt.")
         with open(tex_file_path, "w") as f:
             f.write(new_line)
         return
@@ -597,7 +597,9 @@ def write_latex_command(command_name, number_of_atoms, tex_file_path):
     replaced = False
 
     for i, line in enumerate(lines):
+        print(f"Prüfe Zeile: {line.strip()}")
         if pattern.match(line):
+            print(f"Gefunden: {line.strip()}")
             lines[i] = new_line
             replaced = True
             break
