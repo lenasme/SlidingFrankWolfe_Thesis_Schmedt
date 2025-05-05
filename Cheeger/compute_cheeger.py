@@ -338,7 +338,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 	cut_off_str = str(cut_off)
 	seed_str = str(seed)
-	latex_command_name = f"\\newcommand{{\\numberofatomsCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
+	latex_command_name = f"\\newcommand{{\\numberofatomsStandardCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
 	with open("number_of_atoms_commands.tex", "a") as f:
 		f.write(latex_command_name)
 
@@ -529,6 +529,15 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 	print("number of rectangles", u.num_atoms)
 	number_of_atoms = u.num_atoms
 	np.save(f"sfw_number_of_rectangels_iteration20_cutoff{cut_off}_seed{seed}.npy", number_of_atoms)
+
+
+
+	cut_off_str = str(cut_off)
+	seed_str = str(seed)
+	latex_command_name = f"\\newcommand{{\\numberofatomsSlidingCutoff{cut_off_str}Seed{seed_str}}}{{{number_of_atoms}}}\n"
+	with open("number_of_atoms_commands.tex", "a") as f:
+		f.write(latex_command_name)
+
 
 	vmin = min(np.min(ground_truth), -1)  
 	vmax = max(np.max(ground_truth), 1)
