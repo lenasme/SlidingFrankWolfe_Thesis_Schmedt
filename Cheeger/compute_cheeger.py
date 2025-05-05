@@ -123,15 +123,6 @@ def compute_cheeger_set(truncated_operator_applied_on_ground_truth, grid_size, g
 	return optimal_rectangle
 
 
-#def fourier_image_rectangle(rectangular_set, grid_size, cut_off):
-	new_indicator_function = IndicatorFunction(rectangular_set, grid_size)
-	
-
-	fourier_image = new_indicator_function.compute_truncated_frequency_image(cut_off, plot = False)
-
-	return fourier_image
-
-
 
 def fit_weights(u, target_function_f, reg_param, plot=False):
 	print("Vorheriges Objective:", u.compute_objective_sliding(target_function_f, reg_param))
@@ -253,7 +244,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 
 	while not convergence and iteration < max_iter:   
 
-		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
+		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = False) + target_function_f
 
 		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
@@ -389,7 +380,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 	while not convergence and iteration < max_iter:   
 	
-		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = True) + target_function_f
+		weights_in_eta = - u.compute_truncated_frequency_image_sf( plot = False) + target_function_f
 
 		optimal_rectangle = compute_cheeger_set(weights_in_eta, grid_size, grid_size_coarse, cut_off, max_iter_primal_dual = 10000, plot=True)
 
