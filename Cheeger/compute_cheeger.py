@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 from .rectangular_set import RectangularSet, construct_rectangular_set_from01
 from Setup.ground_truth import  construction_of_example_source
-from .tools import run_primal_dual, extract_contour, write_latex_command
+from .tools import run_primal_dual, extract_contour
 from .plot_utils import plot_primal_dual_results
 from .fine_optimization_rectangle import run_fine_optimization
 
