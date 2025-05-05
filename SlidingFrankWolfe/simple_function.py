@@ -5,10 +5,6 @@ import matplotlib.pyplot as plt
 
 from numba import jit
 
-#from Cheeger.rectangular_set import RectangularSet
-
-
-
 
 class IndicatorFunction:
 	def __init__(self, rectangular_set, grid_size, weight = 1):
@@ -132,7 +128,7 @@ class SimpleFunction:
 
 	
 	
-	def compute_truncated_frequency_image_sf(self, plot = True):
+	def compute_truncated_frequency_image_sf(self, plot = False):
 		image = self.construct_image_matrix_sf(plot = plot)
 		fourier_image = np.fft.fft2(image)
 		freqs_x= np.fft.fftfreq(self.grid_size, d=1 / self.grid_size)
