@@ -2,7 +2,7 @@
 
 This repository contains the implementation of the numerical experiments presented in the Master's thesis *"Application of the Sliding Frank-Wolfe Algorithm on TV-Regularized Optimization Problems"* by Lena Schmedt.
 
-The goal is to reconstruct a ground truth — a linear combination of rectangular characteristic functions — from its truncated Fourier data.
+The goal is to reconstruct a ground truth — a linear combination of rectangular characteristic functions — from its truncated Fourier image.
 To do so the classic Frank-Wolfe Algorithm as well as its sliding modification are used.
 
 ## Code Sources
