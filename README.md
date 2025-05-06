@@ -7,4 +7,5 @@ To do so the classic Frank-Wolfe Algorithm as well as its sliding modification a
 
 ## Code Sources
 
-Note, that the implementation of the Setup of a valid ground truth is based on the Code presented in https://github.com/hollerm/ani_tv_recovery 
+Note, that the implementation of the Setup of a valid ground truth is based on the Code presented in https://github.com/hollerm/ani_tv_recovery, which was published in association with the paper 
+M. Holler and B. Wirth. Exact reconstruction and reconstruction from noisy data with anisotropic total variation. To appear in SIAM Journal on Mathematical Analysis, 2023. https://arxiv.org/abs/2207.04757
