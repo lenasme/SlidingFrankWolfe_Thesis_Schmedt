@@ -134,7 +134,7 @@ def optimization_with_sliding ( ground_truth, target_function_f, grid_size, grid
 
 		l1_errors.append(l1_error_normalized)
 
-		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
+		convergence = np.abs(objective_whole_iteration[-2] - objective_whole_iteration[-1]) / objective_whole_iteration[-2] < 5e-3
 
 
 		iteration += 1
