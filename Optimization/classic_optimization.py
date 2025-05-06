@@ -79,7 +79,7 @@ def standard_optimization( ground_truth, target_function_f, grid_size, grid_size
 		plt.title("Overall Objective Development")
 		plt.show()
 
-		convergence = ((objective_whole_iteration[-2] - objective_whole_iteration[-1] ) < 10 )
+		convergence = np.abs(objective_whole_iteration[-2] - objective_whole_iteration[-1]) / objective_whole_iteration[-2] < 5e-3
 
 		data = u.construct_image_matrix_sf(plot=False)
 		
