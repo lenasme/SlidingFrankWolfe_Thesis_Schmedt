@@ -1,4 +1,4 @@
-##The Frank-Wolfe algorithm for inverse problems with anisotropic TV regularization
+# The Frank-Wolfe algorithm for inverse problems with anisotropic TV regularization
 
 This repository contains the implementation of the numerical experiments presented in the Master's thesis *"The Frank-Wolfe algorithm for inverse problems with anisotropic TV regularization"* by Lena Schmedt.
 
